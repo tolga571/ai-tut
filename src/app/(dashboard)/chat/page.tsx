@@ -14,15 +14,6 @@ export default async function ChatPage() {
 
   return (
     <div className="h-screen bg-gray-950 text-white flex flex-col">
-      <header className="px-6 py-4 glass-nav border-b border-white/5 flex items-center justify-between z-10">
-        <div className="font-bold text-xl bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-          AiTut Chat
-        </div>
-        <div className="text-sm text-gray-400">
-          Öğrenilen dil: <span className="text-white font-medium">{(session.user as any).targetLang?.toUpperCase() || 'EN'}</span>
-        </div>
-      </header>
-
       <main className="flex-1 overflow-hidden relative">
         <ChatInterface user={session.user} />
       </main>
