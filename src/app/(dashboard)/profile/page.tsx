@@ -6,18 +6,18 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 
 const LANGUAGES = [
-  { code: "tr", label: "Türkçe" },
-  { code: "en", label: "İngilizce" },
-  { code: "de", label: "Almanca" },
-  { code: "fr", label: "Fransızca" },
-  { code: "es", label: "İspanyolca" },
-  { code: "it", label: "İtalyanca" },
-  { code: "pt", label: "Portekizce" },
-  { code: "ru", label: "Rusça" },
-  { code: "zh", label: "Çince" },
-  { code: "ja", label: "Japonca" },
-  { code: "ar", label: "Arapça" },
-  { code: "ko", label: "Korece" },
+  { code: "tr", label: "🇹🇷 Türkçe" },
+  { code: "en", label: "🇬🇧 İngilizce" },
+  { code: "de", label: "🇩🇪 Almanca" },
+  { code: "fr", label: "🇫🇷 Fransızca" },
+  { code: "es", label: "🇪🇸 İspanyolca" },
+  { code: "it", label: "🇮🇹 İtalyanca" },
+  { code: "pt", label: "🇵🇹 Portekizce" },
+  { code: "ru", label: "🇷🇺 Rusça" },
+  { code: "zh", label: "🇨🇳 Çince" },
+  { code: "ja", label: "🇯🇵 Japonca" },
+  { code: "ar", label: "🇸🇦 Arapça" },
+  { code: "ko", label: "🇰🇷 Korece" },
 ];
 
 export default function ProfilePage() {
