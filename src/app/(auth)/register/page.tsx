@@ -79,8 +79,9 @@ export default function RegisterPage() {
 
         if (json.planStatus === "active") {
           clearInterval(pollRef.current!);
+          // JWT token'daki planStatus'u güncelle — middleware bunu okur
+          await updateSession({ planStatus: "active" });
           toast.success("Plan aktif edildi! Hoş geldiniz.");
-          await updateSession();
           router.push("/chat");
           return;
         }
