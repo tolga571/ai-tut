@@ -19,71 +19,19 @@ type Conversation = {
   messages: Message[];
 };
 
-// Language names keyed by [nativeLang][targetLang]
-const LANG_NAMES: Record<string, Record<string, string>> = {
-  tr: { en: "İngilizce", tr: "Türkçe", de: "Almanca", fr: "Fransızca", es: "İspanyolca", it: "İtalyanca", pt: "Portekizce", ru: "Rusça", zh: "Çince", ja: "Japonca", ko: "Korece", ar: "Arapça" },
-  en: { en: "English", tr: "Turkish", de: "German", fr: "French", es: "Spanish", it: "Italian", pt: "Portuguese", ru: "Russian", zh: "Chinese", ja: "Japanese", ko: "Korean", ar: "Arabic" },
-  de: { en: "Englisch", tr: "Türkisch", de: "Deutsch", fr: "Französisch", es: "Spanisch", it: "Italienisch", pt: "Portugiesisch", ru: "Russisch", zh: "Chinesisch", ja: "Japanisch", ko: "Koreanisch", ar: "Arabisch" },
-  fr: { en: "Anglais", tr: "Turc", de: "Allemand", fr: "Français", es: "Espagnol", it: "Italien", pt: "Portugais", ru: "Russe", zh: "Chinois", ja: "Japonais", ko: "Coréen", ar: "Arabe" },
-  es: { en: "Inglés", tr: "Turco", de: "Alemán", fr: "Francés", es: "Español", it: "Italiano", pt: "Portugués", ru: "Ruso", zh: "Chino", ja: "Japonés", ko: "Coreano", ar: "Árabe" },
-  it: { en: "Inglese", tr: "Turco", de: "Tedesco", fr: "Francese", es: "Spagnolo", it: "Italiano", pt: "Portoghese", ru: "Russo", zh: "Cinese", ja: "Giapponese", ko: "Coreano", ar: "Arabo" },
-  pt: { en: "Inglês", tr: "Turco", de: "Alemão", fr: "Francês", es: "Espanhol", it: "Italiano", pt: "Português", ru: "Russo", zh: "Chinês", ja: "Japonês", ko: "Coreano", ar: "Árabe" },
-  ru: { en: "Английский", tr: "Турецкий", de: "Немецкий", fr: "Французский", es: "Испанский", it: "Итальянский", pt: "Португальский", ru: "Русский", zh: "Китайский", ja: "Японский", ko: "Корейский", ar: "Арабский" },
-  zh: { en: "英语", tr: "土耳其语", de: "德语", fr: "法语", es: "西班牙语", it: "意大利语", pt: "葡萄牙语", ru: "俄语", zh: "中文", ja: "日语", ko: "韩语", ar: "阿拉伯语" },
-  ja: { en: "英語", tr: "トルコ語", de: "ドイツ語", fr: "フランス語", es: "スペイン語", it: "イタリア語", pt: "ポルトガル語", ru: "ロシア語", zh: "中国語", ja: "日本語", ko: "韓国語", ar: "アラビア語" },
-  ko: { en: "영어", tr: "터키어", de: "독일어", fr: "프랑스어", es: "스페인어", it: "이탈리아어", pt: "포르투갈어", ru: "러시아어", zh: "중국어", ja: "일본어", ko: "한국어", ar: "아랍어" },
-  ar: { en: "الإنجليزية", tr: "التركية", de: "الألمانية", fr: "الفرنسية", es: "الإسبانية", it: "الإيطالية", pt: "البرتغالية", ru: "الروسية", zh: "الصينية", ja: "اليابانية", ko: "الكورية", ar: "العربية" },
-};
-
-// Placeholder template keyed by nativeLang — {lang} is replaced with the localized target language name
-const PLACEHOLDER_TEMPLATE: Record<string, string> = {
-  tr: "{lang} pratik yapmak için bir şeyler yaz",
-  en: "Write something to practice {lang}",
-  de: "Schreib etwas, um {lang} zu üben",
-  fr: "Écris quelque chose pour pratiquer le {lang}",
-  es: "Escribe algo para practicar {lang}",
-  it: "Scrivi qualcosa per praticare il {lang}",
-  pt: "Escreva algo para praticar {lang}",
-  ru: "Напишите что-нибудь для практики {lang}",
-  zh: "写点什么来练习{lang}",
-  ja: "{lang}を練習するために何か書いてください",
-  ko: "{lang} 연습을 위해 무언가 써보세요",
-  ar: "اكتب شيئاً لممارسة {lang}",
-};
-
-// Input box placeholder template keyed by nativeLang
-const INPUT_PLACEHOLDER_TEMPLATE: Record<string, string> = {
-  tr: "{lang} dilinde bir şeyler yaz...",
-  en: "Write something in {lang}...",
-  de: "Schreib etwas auf {lang}...",
-  fr: "Écris quelque chose en {lang}...",
-  es: "Escribe algo en {lang}...",
-  it: "Scrivi qualcosa in {lang}...",
-  pt: "Escreva algo em {lang}...",
-  ru: "Напишите что-нибудь на {lang}...",
-  zh: "用{lang}写点什么...",
-  ja: "{lang}で何か書いてください...",
-  ko: "{lang}로 무언가 써보세요...",
-  ar: "اكتب شيئاً بـ{lang}...",
+// Target language names in Turkish
+const LANG_TR: Record<string, string> = {
+  en: "İngilizce", tr: "Türkçe", de: "Almanca", fr: "Fransızca",
+  es: "İspanyolca", it: "İtalyanca", pt: "Portekizce", ru: "Rusça",
+  zh: "Çince", ja: "Japonca", ko: "Korece", ar: "Arapça",
 };
 
 export default function ChatInterface({ user }: { user: any }) {
-  const nativeLang = user?.nativeLang?.toLowerCase() ?? "tr";
   const targetLang = user?.targetLang?.toLowerCase() ?? "en";
-  const targetLangLocalized =
-    LANG_NAMES[nativeLang]?.[targetLang] ??
-    LANG_NAMES["tr"]?.[targetLang] ??
-    targetLang.toUpperCase();
-  const welcomePlaceholder = (PLACEHOLDER_TEMPLATE[nativeLang] ?? PLACEHOLDER_TEMPLATE["tr"]).replace("{lang}", targetLangLocalized);
-  const inputPlaceholder = (INPUT_PLACEHOLDER_TEMPLATE[nativeLang] ?? INPUT_PLACEHOLDER_TEMPLATE["tr"]).replace("{lang}", targetLangLocalized);
-
-  // Header label: "Öğrenilen dil" in native language
-  const LEARNING_LABEL: Record<string, string> = {
-    tr: "Öğrenilen dil", en: "Learning", de: "Lernsprache", fr: "Langue apprise",
-    es: "Idioma aprendido", it: "Lingua appresa", pt: "Idioma aprendido",
-    ru: "Изучаемый язык", zh: "学习语言", ja: "学習言語", ko: "학습 언어", ar: "اللغة المتعلَّمة",
-  };
-  const learningLabel = LEARNING_LABEL[nativeLang] ?? LEARNING_LABEL["tr"];
+  const targetLangName = LANG_TR[targetLang] ?? targetLang.toUpperCase();
+  const welcomePlaceholder = `${targetLangName} öğrenmek için bir şeyler yaz`;
+  const inputPlaceholder = `${targetLangName} dilinde bir şeyler yaz...`;
+  const learningLabel = "Öğrenilen dil";
 
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeConvId, setActiveConvId] = useState<string | null>(null);
@@ -250,7 +198,7 @@ export default function ChatInterface({ user }: { user: any }) {
           AiTut Chat
         </div>
         <div className="text-sm text-gray-400">
-          {learningLabel}: <span className="text-white font-medium">{targetLangLocalized}</span>
+          {learningLabel}: <span className="text-white font-medium">{targetLangName}</span>
         </div>
       </header>
       <div className="flex flex-1 overflow-hidden">
