@@ -22,8 +22,8 @@ const nextConfig = {
     const csp = [
       `default-src 'self'`,
 
-      // script-src: kendi scriptler + Paddle CDN + Localize.js
-      `script-src 'self' 'unsafe-inline' 'unsafe-eval' ${paddleScriptDomains}${isDev ? " http://localhost:*" : ""}`,
+      // script-src: kendi scriptler + Paddle CDN + Localize.js + Cloudflare Insights (Railway inject ediyor)
+      `script-src 'self' 'unsafe-inline' 'unsafe-eval' ${paddleScriptDomains} https://static.cloudflareinsights.com${isDev ? " http://localhost:*" : ""}`,
 
       // style-src
       `style-src 'self' 'unsafe-inline' https://cdn.paddle.com https://sandbox-cdn.paddle.com`,
@@ -40,8 +40,8 @@ const nextConfig = {
       // frame-ancestors: bu sayfanın içine kim frame edebilir
       `frame-ancestors 'self' ${paddleFrameDomains}`,
 
-      // connect-src: API çağrıları + Paddle API + Localize
-      `connect-src 'self' https://*.paddle.com https://global.localizecdn.com${isDev ? " http://localhost:* ws://localhost:*" : ""}`,
+      // connect-src: API çağrıları + Paddle API + Localize + Cloudflare
+      `connect-src 'self' https://*.paddle.com https://global.localizecdn.com https://cloudflareinsights.com${isDev ? " http://localhost:* ws://localhost:*" : ""}`,
 
       // worker-src (Next.js HMR için)
       isDev ? "worker-src 'self' blob:" : "worker-src 'self' blob:",
