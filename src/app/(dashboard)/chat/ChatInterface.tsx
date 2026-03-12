@@ -392,14 +392,8 @@ export default function ChatInterface({ user }: { user: any }) {
 
         {/* Input */}
         <div className="absolute bottom-0 left-0 right-0 px-4 pb-5 pt-3 bg-gradient-to-t from-gray-950 via-gray-950/90 to-transparent">
-          <div className="max-w-2xl mx-auto flex items-end gap-3">
-            {/* Coach avatar (outside input box) */}
-            <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-xs font-semibold text-white shadow-lg border border-white/10">
-              Coach
-            </div>
-
-            {/* Input box */}
-            <div className="flex-1 bg-gray-900 border border-gray-700/50 rounded-2xl shadow-2xl backdrop-blur-2xl transition-all focus-within:border-blue-500/50 focus-within:ring-1 focus-within:ring-blue-500/20">
+          <div className="max-w-2xl mx-auto">
+            <div className="bg-gray-900 border border-gray-700/50 rounded-2xl shadow-2xl backdrop-blur-2xl transition-all focus-within:border-blue-500/50 focus-within:ring-1 focus-within:ring-blue-500/20">
               <form onSubmit={sendMessage} className="flex items-center px-2 py-2">
                 <input
                   ref={inputRef}
