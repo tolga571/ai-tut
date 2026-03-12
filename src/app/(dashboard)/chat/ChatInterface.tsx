@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { UserMenu } from "@/components/UserMenu";
 
 type Message = {
   id: string;
@@ -197,8 +198,11 @@ export default function ChatInterface({ user }: { user: any }) {
         <div className="font-bold text-xl bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
           AiTut Chat
         </div>
-        <div className="text-sm text-gray-400">
-          {learningLabel}: <span className="text-white font-medium">{targetLangName}</span>
+        <div className="flex items-center gap-4">
+          <div className="text-sm text-gray-400">
+            {learningLabel}: <span className="text-white font-medium">{targetLangName}</span>
+          </div>
+          <UserMenu user={user} />
         </div>
       </header>
       <div className="flex flex-1 overflow-hidden">

@@ -16,6 +16,7 @@ const geistMono = localFont({
 });
 
 import { Navbar } from "@/components/Navbar";
+import { LayoutWrapper } from "@/components/LayoutWrapper";
 
 export const metadata: Metadata = {
   title: "AiTut",
@@ -33,9 +34,9 @@ export default function RootLayout({
       >
         <AuthProvider>
           <Navbar />
-          <div className="pt-16">
+          <LayoutWrapper>
             {children}
-          </div>
+          </LayoutWrapper>
           <Toaster position="bottom-right" />
         </AuthProvider>
       </body>
