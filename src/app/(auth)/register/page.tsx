@@ -15,6 +15,7 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
   const [userId, setUserId] = useState<string | null>(null);
+  const userIdRef = useRef<string | null>(null);
   const [paddle, setPaddle] = useState<Paddle | undefined>();
   const [awaitingActivation, setAwaitingActivation] = useState(false);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -26,6 +27,7 @@ export default function RegisterPage() {
       const user = session.user as any;
       if (user.planStatus === "inactive") {
         setUserId(user.id);
+        userIdRef.current = user.id;
         setData((prev) => ({ ...prev, name: user.name || "", email: user.email || "" }));
         setStep(2);
       } else if (user.planStatus === "active") {
@@ -46,7 +48,7 @@ export default function RegisterPage() {
       token,
       eventCallback: (event: any) => {
         if (event.name === "checkout.completed") {
-          startActivationPolling();
+          if (userIdRef.current) startActivationPolling(userIdRef.current);
         }
       },
     })
@@ -63,21 +65,20 @@ export default function RegisterPage() {
     };
   }, []);
 
-  const startActivationPolling = () => {
+  const startActivationPolling = (currentUserId: string) => {
     setAwaitingActivation(true);
-    const toastId = toast.loading("Ödeme doğrulanıyor, lütfen bekleyin…");
     let attempts = 0;
-    const maxAttempts = 20; // 40 saniye
+    const maxAttempts = 30; // 60 saniye
 
     pollRef.current = setInterval(async () => {
       attempts++;
       try {
-        const res = await fetch("/api/user/plan-status");
+        // userId query param ile session gerektirmeden kontrol et
+        const res = await fetch(`/api/user/plan-status?userId=${currentUserId}`);
         const json = await res.json();
 
         if (json.planStatus === "active") {
           clearInterval(pollRef.current!);
-          toast.dismiss(toastId);
           toast.success("Plan aktif edildi! Hoş geldiniz.");
           await updateSession();
           router.push("/chat");
@@ -89,9 +90,9 @@ export default function RegisterPage() {
 
       if (attempts >= maxAttempts) {
         clearInterval(pollRef.current!);
-        toast.dismiss(toastId);
-        toast.error("Plan aktivasyonu zaman aşımına uğradı. Lütfen giriş yapın.");
+        toast.error("Ödeme doğrulandı ancak aktivasyon gecikti. Lütfen giriş yapın.");
         setAwaitingActivation(false);
+        router.push("/login");
       }
     }, 2000);
   };
@@ -116,6 +117,7 @@ export default function RegisterPage() {
       }
 
       setUserId(json.userId);
+      userIdRef.current = json.userId;
 
       // Otomatik giriş yap — ödeme sonrası oturum açık olsun
       const signInResult = await signIn("credentials", {
