@@ -79,9 +79,7 @@ export default function RegisterPage() {
 
         if (json.planStatus === "active") {
           clearInterval(pollRef.current!);
-          await updateSession({ planStatus: "active" });
           toast.success("Plan aktif edildi! Hoş geldiniz.");
-          // Full page reload — middleware'in yeni JWT cookie'yi okuması için
           window.location.href = "/chat";
           return;
         }

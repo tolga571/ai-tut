@@ -12,13 +12,6 @@ export default async function ChatPage() {
     redirect("/login");
   }
 
-  // NOTE: For MVP, we pass the user data to the client component.
-  // In a real app we might redirect to /pricing if planStatus is inactive.
-  if ((session.user as any).planStatus !== "active") {
-    // redirect("/pricing");
-    // keeping it unlocked for now to allow testing before paddle integration
-  }
-
   return (
     <div className="h-screen bg-gray-950 text-white flex flex-col">
       <header className="px-6 py-4 glass-nav border-b border-white/5 flex items-center justify-between z-10">
