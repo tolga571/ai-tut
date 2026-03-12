@@ -120,16 +120,23 @@ export async function GET(req: Request) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    // Get the most recent conversation and messages for MVP
-    const conv = await prisma.conversation.findFirst({
-      where: { userId: (session.user as any).id },
-      orderBy: { createdAt: "desc" },
-      include: {
-        messages: {
-          orderBy: { createdAt: "asc" }
-        }
-      }
-    });
+    const userId = (session.user as any).id;
+    const { searchParams } = new URL(req.url);
+    const conversationId = searchParams.get("id");
+
+    let conv;
+    if (conversationId) {
+      conv = await prisma.conversation.findFirst({
+        where: { id: conversationId, userId },
+        include: { messages: { orderBy: { createdAt: "asc" } } },
+      });
+    } else {
+      conv = await prisma.conversation.findFirst({
+        where: { userId },
+        orderBy: { updatedAt: "desc" },
+        include: { messages: { orderBy: { createdAt: "asc" } } },
+      });
+    }
 
     return NextResponse.json(conv || { messages: [] });
   } catch (error) {

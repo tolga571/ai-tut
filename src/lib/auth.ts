@@ -52,9 +52,10 @@ export const authOptions: NextAuthOptions = {
         // Fetch latest user data including plan status and native/target languages
         const dbUser = await prisma.user.findUnique({
           where: { id: token.id as string },
-          select: { planStatus: true, nativeLang: true, targetLang: true }
+          select: { name: true, planStatus: true, nativeLang: true, targetLang: true }
         });
         if (dbUser) {
+          session.user.name = dbUser.name;
           (session.user as any).planStatus = dbUser.planStatus;
           (session.user as any).nativeLang = dbUser.nativeLang;
           (session.user as any).targetLang = dbUser.targetLang;
@@ -77,5 +78,5 @@ export const authOptions: NextAuthOptions = {
     }
   },
   secret: process.env.NEXTAUTH_SECRET || "aitut-random-secret-for-dev-environment-123",
-  debug: true,
+  debug: process.env.NODE_ENV === "development",
 }
