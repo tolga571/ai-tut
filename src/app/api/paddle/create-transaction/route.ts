@@ -30,9 +30,7 @@ export async function POST(req: Request) {
         items: [{ price_id: priceId, quantity: 1 }],
         customer: { email },
         custom_data: { userId },
-        checkout: {
-          url: successUrl,
-        },
+        return_url: successUrl, // This is the correct field for success redirect
       }),
     });
 
@@ -46,13 +44,15 @@ export async function POST(req: Request) {
       );
     }
 
+    const checkoutUrl = data?.data?.url;
     const transactionId = data?.data?.id;
-    if (!transactionId) {
-      console.error("[PADDLE] No transaction ID in response:", data);
-      return NextResponse.json({ error: "Transaction ID not returned by Paddle" }, { status: 500 });
+
+    if (!checkoutUrl || !transactionId) {
+      console.error("[PADDLE] No checkout URL or transaction ID in response:", data);
+      return NextResponse.json({ error: "Checkout URL not returned by Paddle" }, { status: 500 });
     }
 
-    return NextResponse.json({ transactionId });
+    return NextResponse.json({ checkoutUrl, transactionId });
   } catch (error) {
     console.error("[PADDLE_CREATE_TRANSACTION_ERROR]", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

@@ -394,7 +394,10 @@ export default function ChatInterface({ user }: { user: any }) {
         <div className="absolute bottom-0 left-0 right-0 px-4 pb-5 pt-3 bg-gradient-to-t from-gray-950 via-gray-950/90 to-transparent">
           <div className="max-w-2xl mx-auto">
             <div className="bg-gray-900 border border-gray-700/50 rounded-2xl shadow-2xl backdrop-blur-2xl transition-all focus-within:border-blue-500/50 focus-within:ring-1 focus-within:ring-blue-500/20">
-              <form onSubmit={sendMessage} className="flex items-center px-2 py-2">
+              <form onSubmit={sendMessage} className="flex items-center px-2 py-2 gap-2">
+                <span className="inline-flex items-center justify-center px-3 py-1 rounded-xl bg-white/5 border border-white/10 text-xs font-medium text-gray-300 whitespace-nowrap">
+                  Coach
+                </span>
                 <input
                   ref={inputRef}
                   type="text"
