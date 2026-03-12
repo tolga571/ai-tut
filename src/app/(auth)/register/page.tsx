@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signIn, useSession } from "next-auth/react";
@@ -16,9 +16,12 @@ export default function RegisterPage() {
   const [step, setStep] = useState(1);
   const [userId, setUserId] = useState<string | null>(null);
   const [paddle, setPaddle] = useState<Paddle | undefined>();
+  const [awaitingActivation, setAwaitingActivation] = useState(false);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Zaten giriş yapmış kullanıcıları yönlendir
   useEffect(() => {
+    if (awaitingActivation) return; // ödeme sonrası polling sırasında useEffect'i durdur
     if (session?.user) {
       const user = session.user as any;
       if (user.planStatus === "inactive") {
@@ -29,7 +32,7 @@ export default function RegisterPage() {
         router.push("/chat");
       }
     }
-  }, [session, router]);
+  }, [session, router, awaitingActivation]);
 
   // Paddle JS SDK başlat
   useEffect(() => {
@@ -38,12 +41,60 @@ export default function RegisterPage() {
 
     const env = token.startsWith("test_") ? "sandbox" : "production";
 
-    initializePaddle({ environment: env as any, token })
+    initializePaddle({
+      environment: env as any,
+      token,
+      eventCallback: (event: any) => {
+        if (event.name === "checkout.completed") {
+          startActivationPolling();
+        }
+      },
+    })
       .then((instance) => {
         if (instance) setPaddle(instance);
       })
       .catch((err) => console.error("[PADDLE_INIT]", err));
   }, []);
+
+  // Cleanup polling on unmount
+  useEffect(() => {
+    return () => {
+      if (pollRef.current) clearInterval(pollRef.current);
+    };
+  }, []);
+
+  const startActivationPolling = () => {
+    setAwaitingActivation(true);
+    const toastId = toast.loading("Ödeme doğrulanıyor, lütfen bekleyin…");
+    let attempts = 0;
+    const maxAttempts = 20; // 40 saniye
+
+    pollRef.current = setInterval(async () => {
+      attempts++;
+      try {
+        const res = await fetch("/api/user/plan-status");
+        const json = await res.json();
+
+        if (json.planStatus === "active") {
+          clearInterval(pollRef.current!);
+          toast.dismiss(toastId);
+          toast.success("Plan aktif edildi! Hoş geldiniz.");
+          await updateSession();
+          router.push("/chat");
+          return;
+        }
+      } catch {
+        // sessizce devam et
+      }
+
+      if (attempts >= maxAttempts) {
+        clearInterval(pollRef.current!);
+        toast.dismiss(toastId);
+        toast.error("Plan aktivasyonu zaman aşımına uğradı. Lütfen giriş yapın.");
+        setAwaitingActivation(false);
+      }
+    }, 2000);
+  };
 
   // Adım 1: Kayıt + otomatik giriş
   const handleDetailsSubmit = async (e: React.FormEvent) => {
@@ -116,12 +167,9 @@ export default function RegisterPage() {
         return;
       }
 
-      const successUrl = `${window.location.origin}/chat`;
-
       paddle.Checkout.open({
         transactionId: json.transactionId,
         settings: {
-          successUrl,
           displayMode: "overlay",
           theme: "dark",
         },
@@ -156,6 +204,15 @@ export default function RegisterPage() {
       setLoading(false);
     }
   };
+
+  if (awaitingActivation) {
+    return (
+      <div className="min-h-screen bg-gray-950 flex flex-col items-center justify-center gap-4">
+        <span className="w-10 h-10 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
+        <p className="text-gray-400 text-sm">Ödeme doğrulanıyor…</p>
+      </div>
+    );
+  }
 
   if (step === 2) {
     return (

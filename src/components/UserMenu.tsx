@@ -26,8 +26,7 @@ export function UserMenu({ user }: UserMenuProps) {
 
   const handleSignOut = async () => {
     try {
-      await signOut({ callbackUrl: "/" });
-      toast.success("Signed out successfully");
+      await signOut({ callbackUrl: `${window.location.origin}/login` });
     } catch (error) {
       toast.error("Failed to sign out");
     }

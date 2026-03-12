@@ -239,7 +239,7 @@ export default function ProfilePage() {
           <h2 className="text-lg font-semibold text-white mb-1">Oturum</h2>
           <p className="text-sm text-gray-400 mb-4">Hesabınızdan güvenli çıkış yapın</p>
           <button
-            onClick={() => signOut({ callbackUrl: "/" })}
+            onClick={() => signOut({ callbackUrl: `${window.location.origin}/login` })}
             className="px-5 py-2.5 bg-red-600/20 hover:bg-red-600/30 border border-red-500/30 rounded-xl text-sm font-medium text-red-400 hover:text-red-300 transition-all"
           >
             Çıkış Yap
