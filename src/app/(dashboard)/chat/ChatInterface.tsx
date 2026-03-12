@@ -27,9 +27,16 @@ const LANG_TR: Record<string, string> = {
   zh: "Çince", ja: "Japonca", ko: "Korece", ar: "Arapça",
 };
 
+const LANG_FLAG: Record<string, string> = {
+  en: "🇬🇧", tr: "🇹🇷", de: "🇩🇪", fr: "🇫🇷",
+  es: "🇪🇸", it: "🇮🇹", pt: "🇵🇹", ru: "🇷🇺",
+  zh: "🇨🇳", ja: "🇯🇵", ko: "🇰🇷", ar: "🇸🇦",
+};
+
 export default function ChatInterface({ user }: { user: any }) {
   const targetLang = user?.targetLang?.toLowerCase() ?? "en";
   const targetLangName = LANG_TR[targetLang] ?? targetLang.toUpperCase();
+  const targetLangFlag = LANG_FLAG[targetLang] ?? "";
   const welcomePlaceholder = `${targetLangName} öğrenmek için bir şeyler yaz`;
   const inputPlaceholder = `${targetLangName} dilinde bir şeyler yaz...`;
   const learningLabel = "Öğrenilen dil";
@@ -200,7 +207,7 @@ export default function ChatInterface({ user }: { user: any }) {
         </div>
         <div className="flex items-center gap-4">
           <div className="text-sm text-gray-400">
-            {learningLabel}: <span className="text-white font-medium">{targetLangName}</span>
+            {learningLabel}: <span className="text-white font-medium">{targetLangFlag} {targetLangName}</span>
           </div>
           <UserMenu user={user} />
         </div>
