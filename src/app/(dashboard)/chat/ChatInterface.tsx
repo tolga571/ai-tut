@@ -19,7 +19,23 @@ type Conversation = {
   messages: Message[];
 };
 
+const LANG_LABELS: Record<string, string> = {
+  en: "İngilizce",
+  tr: "Türkçe",
+  de: "Almanca",
+  fr: "Fransızca",
+  es: "İspanyolca",
+  it: "İtalyanca",
+  pt: "Portekizce",
+  ru: "Rusça",
+  zh: "Çince",
+  ja: "Japonca",
+  ko: "Korece",
+  ar: "Arapça",
+};
+
 export default function ChatInterface({ user }: { user: any }) {
+  const targetLangLabel = LANG_LABELS[user?.targetLang?.toLowerCase()] ?? user?.targetLang?.toUpperCase() ?? "İngilizce";
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeConvId, setActiveConvId] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -307,9 +323,7 @@ export default function ChatInterface({ user }: { user: any }) {
                 </div>
                 <p className="text-lg font-medium text-gray-300">Konuşmaya başla</p>
                 <p className="text-sm text-center">
-                  {user?.targetLang
-                    ? `${user.targetLang.toUpperCase()} pratik yapmak için bir şeyler yaz`
-                    : "Bir şeyler yazarak pratiğe başla"}
+                  {`${targetLangLabel} pratik yapmak için bir şeyler yaz`}
                 </p>
               </div>
             )}
@@ -368,7 +382,7 @@ export default function ChatInterface({ user }: { user: any }) {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder={`${user?.targetLang?.toUpperCase() || "EN"} dilinde bir şeyler yaz...`}
+                  placeholder={`${targetLangLabel} dilinde bir şeyler yaz...`}
                   className="flex-1 bg-transparent border-none text-white focus:ring-0 placeholder-gray-500 px-4 text-base h-12 outline-none"
                   autoComplete="off"
                   disabled={loading}

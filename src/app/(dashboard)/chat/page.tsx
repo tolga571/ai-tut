@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
@@ -24,7 +26,7 @@ export default async function ChatPage() {
           AiTut Chat
         </div>
         <div className="text-sm text-gray-400">
-          Learning: <span className="text-white font-medium uppercase">{(session.user as any).targetLang || 'EN'}</span>
+          Öğrenilen dil: <span className="text-white font-medium">{(session.user as any).targetLang?.toUpperCase() || 'EN'}</span>
         </div>
       </header>
 
