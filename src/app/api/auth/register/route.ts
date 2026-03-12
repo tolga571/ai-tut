@@ -1,22 +1,50 @@
-import { NextResponse } from "next/server"
-import bcrypt from "bcrypt"
-import { prisma } from "@/lib/prisma"
+import { NextResponse } from "next/server";
+import bcrypt from "bcrypt";
+import { prisma } from "@/lib/prisma";
+import { registerSchema } from "@/lib/validations/auth.validation";
+import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
+import { logger } from "@/lib/logger";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { name, email, password } = body;
-
-    if (!email || !password || !name) {
-      return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
+    // Rate limiting
+    const ip = request.headers.get("x-forwarded-for") ?? "unknown";
+    const rateLimitResult = checkRateLimit(`register:${ip}`, RATE_LIMITS.AUTH);
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { success: false, message: "Çok fazla istek. Lütfen daha sonra tekrar deneyin." },
+        { status: 429 }
+      );
     }
 
+    const body = await request.json();
+    const parsed = registerSchema.safeParse(body);
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Geçersiz giriş verileri",
+          errors: parsed.error.issues.map((e) => ({
+            field: e.path.join("."),
+            message: e.message,
+          })),
+        },
+        { status: 400 }
+      );
+    }
+
+    const { name, email, password } = parsed.data;
+
     const existingUser = await prisma.user.findUnique({
-      where: { email }
+      where: { email },
     });
 
     if (existingUser) {
-      return NextResponse.json({ message: "User already exists" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: "Bu e-posta adresi zaten kullanılıyor" },
+        { status: 409 }
+      );
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -27,16 +55,26 @@ export async function POST(request: Request) {
         email,
         password: hashedPassword,
         planStatus: "inactive",
-      }
+      },
     });
 
-    return NextResponse.json({ 
-      message: "User created successfully",
-      userId: user.id 
-    }, { status: 201 });
+    logger.info("User registered", { userId: user.id, email });
 
-  } catch (error: any) {
-    console.error("REGISTER_ERROR", error);
-    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Hesap başarıyla oluşturuldu",
+        userId: user.id,
+      },
+      { status: 201 }
+    );
+  } catch (error) {
+    logger.error("Register error", {
+      error: error instanceof Error ? error.message : "Unknown error",
+    });
+    return NextResponse.json(
+      { success: false, message: "Sunucu hatası" },
+      { status: 500 }
+    );
   }
 }

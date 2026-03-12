@@ -4,25 +4,11 @@ import { useSession, signOut } from "next-auth/react";
 import { useState } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
-
-const LANGUAGES = [
-  { code: "tr", label: "🇹🇷 Türkçe" },
-  { code: "en", label: "🇬🇧 İngilizce" },
-  { code: "de", label: "🇩🇪 Almanca" },
-  { code: "fr", label: "🇫🇷 Fransızca" },
-  { code: "es", label: "🇪🇸 İspanyolca" },
-  { code: "it", label: "🇮🇹 İtalyanca" },
-  { code: "pt", label: "🇵🇹 Portekizce" },
-  { code: "ru", label: "🇷🇺 Rusça" },
-  { code: "zh", label: "🇨🇳 Çince" },
-  { code: "ja", label: "🇯🇵 Japonca" },
-  { code: "ar", label: "🇸🇦 Arapça" },
-  { code: "ko", label: "🇰🇷 Korece" },
-];
+import { LANGUAGES } from "@/constants/languages";
 
 export default function ProfilePage() {
   const { data: session, update: updateSession } = useSession();
-  const user = session?.user as any;
+  const user = session?.user;
 
   const [name, setName] = useState(user?.name || "");
   const [nativeLang, setNativeLang] = useState(user?.nativeLang || "tr");
@@ -151,7 +137,7 @@ export default function ProfilePage() {
               >
                 {LANGUAGES.map((l) => (
                   <option key={l.code} value={l.code} className="bg-gray-800 text-white">
-                    {l.label}
+                    {l.flag} {l.label}
                   </option>
                 ))}
               </select>
@@ -166,7 +152,7 @@ export default function ProfilePage() {
               >
                 {LANGUAGES.map((l) => (
                   <option key={l.code} value={l.code} className="bg-gray-800 text-white">
-                    {l.label}
+                    {l.flag} {l.label}
                   </option>
                 ))}
               </select>

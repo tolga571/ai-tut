@@ -1,19 +1,50 @@
 import { NextResponse } from "next/server";
+import { createTransactionSchema } from "@/lib/validations/paddle.validation";
+import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
+import { logger } from "@/lib/logger";
 
 export async function POST(req: Request) {
   try {
-    const { priceId, userId, email } = await req.json();
-
-    if (!priceId || !userId || !email) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    // Rate limiting
+    const ip = req.headers.get("x-forwarded-for") ?? "unknown";
+    const rateLimitResult = checkRateLimit(`paddle:${ip}`, RATE_LIMITS.PADDLE);
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { success: false, error: "Çok fazla istek. Lütfen daha sonra tekrar deneyin." },
+        { status: 429 }
+      );
     }
+
+    const body = await req.json();
+    const parsed = createTransactionSchema.safeParse(body);
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Geçersiz veri",
+          errors: parsed.error.issues.map((e) => ({
+            field: e.path.join("."),
+            message: e.message,
+          })),
+        },
+        { status: 400 }
+      );
+    }
+
+    const { priceId, userId, email } = parsed.data;
 
     const paddleApiKey = process.env.PADDLE_API_KEY;
     if (!paddleApiKey) {
-      return NextResponse.json({ error: "Paddle API key not configured" }, { status: 500 });
+      logger.error("Paddle API key not configured");
+      return NextResponse.json(
+        { success: false, error: "Ödeme sistemi yapılandırılmamış" },
+        { status: 500 }
+      );
     }
 
-    const isSandbox = paddleApiKey.startsWith("pdl_sdbx") || paddleApiKey.includes("sdbx");
+    const isSandbox =
+      paddleApiKey.startsWith("pdl_sdbx") || paddleApiKey.includes("sdbx");
     const apiUrl = isSandbox
       ? "https://sandbox-api.paddle.com/transactions"
       : "https://api.paddle.com/transactions";
@@ -30,16 +61,22 @@ export async function POST(req: Request) {
         items: [{ price_id: priceId, quantity: 1 }],
         customer: { email },
         custom_data: { userId },
-        return_url: successUrl, // This is the correct field for success redirect
+        return_url: successUrl,
       }),
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("[PADDLE_CREATE_TRANSACTION_ERROR]", data);
+      logger.error("Paddle transaction creation failed", {
+        status: response.status,
+        detail: data.error?.detail,
+      });
       return NextResponse.json(
-        { error: data.error?.detail || "Failed to create transaction" },
+        {
+          success: false,
+          error: data.error?.detail || "İşlem oluşturulamadı",
+        },
         { status: response.status }
       );
     }
@@ -48,13 +85,21 @@ export async function POST(req: Request) {
     const transactionId = data?.data?.id;
 
     if (!checkoutUrl || !transactionId) {
-      console.error("[PADDLE] No checkout URL or transaction ID in response:", data);
-      return NextResponse.json({ error: "Checkout URL not returned by Paddle" }, { status: 500 });
+      logger.error("Paddle response missing checkout URL");
+      return NextResponse.json(
+        { success: false, error: "Ödeme URL'si alınamadı" },
+        { status: 500 }
+      );
     }
 
-    return NextResponse.json({ checkoutUrl, transactionId });
+    return NextResponse.json({ success: true, checkoutUrl, transactionId });
   } catch (error) {
-    console.error("[PADDLE_CREATE_TRANSACTION_ERROR]", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    logger.error("Paddle create transaction error", {
+      error: error instanceof Error ? error.message : "Unknown error",
+    });
+    return NextResponse.json(
+      { success: false, error: "Sunucu hatası" },
+      { status: 500 }
+    );
   }
 }
