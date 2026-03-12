@@ -46,15 +46,21 @@ export async function POST(req: Request) {
       );
     }
 
-    const checkoutUrl = data?.data?.checkout?.url;
-    if (!checkoutUrl) {
-      console.error("[PADDLE] No checkout URL in response:", data);
-      return NextResponse.json({ error: "Checkout URL not returned by Paddle" }, { status: 500 });
+    const transactionId = data?.data?.id;
+    if (!transactionId) {
+      console.error("[PADDLE] No transaction ID in response:", data);
+      return NextResponse.json({ error: "Transaction ID not returned by Paddle" }, { status: 500 });
     }
+
+    // Paddle Billing checkout URL: sandbox-buy.paddle.com/checkout/?ptxn={txn_id}
+    // data.checkout.url is the SUCCESS/return URL (our /chat), NOT the payment page.
+    const checkoutUrl = isSandbox
+      ? `https://sandbox-buy.paddle.com/checkout/?ptxn=${transactionId}`
+      : `https://buy.paddle.com/checkout/?ptxn=${transactionId}`;
 
     return NextResponse.json({
       checkoutUrl,
-      transactionId: data.data.id,
+      transactionId,
     });
   } catch (error) {
     console.error("[PADDLE_CREATE_TRANSACTION_ERROR]", error);
