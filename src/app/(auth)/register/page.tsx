@@ -79,10 +79,10 @@ export default function RegisterPage() {
 
         if (json.planStatus === "active") {
           clearInterval(pollRef.current!);
-          // JWT token'daki planStatus'u güncelle — middleware bunu okur
           await updateSession({ planStatus: "active" });
           toast.success("Plan aktif edildi! Hoş geldiniz.");
-          router.push("/chat");
+          // Full page reload — middleware'in yeni JWT cookie'yi okuması için
+          window.location.href = "/chat";
           return;
         }
       } catch {
@@ -92,8 +92,7 @@ export default function RegisterPage() {
       if (attempts >= maxAttempts) {
         clearInterval(pollRef.current!);
         toast.error("Ödeme doğrulandı ancak aktivasyon gecikti. Lütfen giriş yapın.");
-        setAwaitingActivation(false);
-        router.push("/login");
+        window.location.href = "/login";
       }
     }, 2000);
   };
