@@ -52,16 +52,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Transaction ID not returned by Paddle" }, { status: 500 });
     }
 
-    // Paddle Billing checkout URL uses _ptxn (with underscore) query param.
-    // data.checkout.url in the response = our success URL + ?_ptxn appended, NOT the payment page.
-    const checkoutUrl = isSandbox
-      ? `https://sandbox-buy.paddle.com/checkout/?_ptxn=${transactionId}`
-      : `https://buy.paddle.com/checkout/?_ptxn=${transactionId}`;
-
-    return NextResponse.json({
-      checkoutUrl,
-      transactionId,
-    });
+    return NextResponse.json({ transactionId });
   } catch (error) {
     console.error("[PADDLE_CREATE_TRANSACTION_ERROR]", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

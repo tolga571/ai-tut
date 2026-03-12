@@ -6,6 +6,7 @@ import Link from "next/link";
 import { signIn, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import Pricing from "@/components/Pricing";
+import { initializePaddle, Paddle } from "@paddle/paddle-js";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -14,6 +15,7 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
   const [userId, setUserId] = useState<string | null>(null);
+  const [paddle, setPaddle] = useState<Paddle | undefined>();
 
   // Zaten giriş yapmış kullanıcıları yönlendir
   useEffect(() => {
@@ -29,13 +31,26 @@ export default function RegisterPage() {
     }
   }, [session, router]);
 
+  // Paddle JS SDK başlat
+  useEffect(() => {
+    const token = process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN;
+    if (!token) return;
+
+    const env = token.startsWith("test_") ? "sandbox" : "production";
+
+    initializePaddle({ environment: env as any, token })
+      .then((instance) => {
+        if (instance) setPaddle(instance);
+      })
+      .catch((err) => console.error("[PADDLE_INIT]", err));
+  }, []);
+
   // Adım 1: Kayıt + otomatik giriş
   const handleDetailsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      // 1. Hesabı oluştur
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -51,7 +66,7 @@ export default function RegisterPage() {
 
       setUserId(json.userId);
 
-      // 2. Otomatik giriş yap — ödeme sonrası /chat'e dönerken oturum açık olsun
+      // Otomatik giriş yap — ödeme sonrası oturum açık olsun
       const signInResult = await signIn("credentials", {
         email: data.email,
         password: data.password,
@@ -70,15 +85,20 @@ export default function RegisterPage() {
     }
   };
 
-  // Adım 2: Plan seçimi → server-side Paddle transaction → doğrudan URL redirect
+  // Adım 2: Plan seçimi → Paddle JS SDK overlay
   const handleSelectPlan = async (priceId: string) => {
     if (!userId || !data.email) {
       toast.error("Kullanıcı bilgisi eksik. Lütfen tekrar deneyin.");
       return;
     }
 
+    if (!paddle) {
+      toast.error("Ödeme sistemi yükleniyor, lütfen bekleyin.");
+      return;
+    }
+
     setLoading(true);
-    const toastId = toast.loading("Ödeme sayfasına yönlendiriliyor…");
+    const toastId = toast.loading("Ödeme sayfası hazırlanıyor…");
 
     try {
       const res = await fetch("/api/paddle/create-transaction", {
@@ -90,16 +110,26 @@ export default function RegisterPage() {
       const json = await res.json();
       toast.dismiss(toastId);
 
-      if (!res.ok || !json.checkoutUrl) {
+      if (!res.ok || !json.transactionId) {
         toast.error(json.error || "Ödeme sayfası açılamadı. Lütfen tekrar deneyin.");
+        setLoading(false);
         return;
       }
 
-      // Paddle'ın kendi checkout sayfasına yönlendir (overlay/iframe yok)
-      window.location.href = json.checkoutUrl;
+      const successUrl = `${window.location.origin}/chat`;
+
+      paddle.Checkout.open({
+        transactionId: json.transactionId,
+        settings: {
+          successUrl,
+          displayMode: "overlay",
+          theme: "dark",
+        },
+      });
     } catch {
       toast.dismiss(toastId);
       toast.error("Ödeme başlatılamadı. Lütfen tekrar deneyin.");
+    } finally {
       setLoading(false);
     }
   };
