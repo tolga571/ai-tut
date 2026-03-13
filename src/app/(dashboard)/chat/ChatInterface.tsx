@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { UserMenu } from "@/components/UserMenu";
+import { LANG_LABELS, LANG_FLAGS, type LanguageCode } from "@/constants/languages";
 
 type Message = {
   id: string;
@@ -20,23 +21,19 @@ type Conversation = {
   messages: Message[];
 };
 
-// Target language names in Turkish
-const LANG_TR: Record<string, string> = {
-  en: "İngilizce", tr: "Türkçe", de: "Almanca", fr: "Fransızca",
-  es: "İspanyolca", it: "İtalyanca", pt: "Portekizce", ru: "Rusça",
-  zh: "Çince", ja: "Japonca", ko: "Korece", ar: "Arapça",
-};
+interface ChatUser {
+  id: string;
+  name?: string | null;
+  email?: string | null;
+  targetLang?: string;
+  nativeLang?: string;
+  planStatus?: string;
+}
 
-const LANG_FLAG: Record<string, string> = {
-  en: "🇬🇧", tr: "🇹🇷", de: "🇩🇪", fr: "🇫🇷",
-  es: "🇪🇸", it: "🇮🇹", pt: "🇵🇹", ru: "🇷🇺",
-  zh: "🇨🇳", ja: "🇯🇵", ko: "🇰🇷", ar: "🇸🇦",
-};
-
-export default function ChatInterface({ user }: { user: any }) {
-  const targetLang = user?.targetLang?.toLowerCase() ?? "en";
-  const targetLangName = LANG_TR[targetLang] ?? targetLang.toUpperCase();
-  const targetLangFlag = LANG_FLAG[targetLang] ?? "";
+export default function ChatInterface({ user }: { user: ChatUser }) {
+  const targetLang = (user?.targetLang?.toLowerCase() ?? "en") as LanguageCode;
+  const targetLangName = LANG_LABELS[targetLang] ?? targetLang.toUpperCase();
+  const targetLangFlag = LANG_FLAGS[targetLang] ?? "";
   const welcomePlaceholder = `${targetLangName} öğrenmek için bir şeyler yaz`;
   const inputPlaceholder = `${targetLangName} dilinde bir şeyler yaz...`;
   const learningLabel = "Öğrenilen dil";

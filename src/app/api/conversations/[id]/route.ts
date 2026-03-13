@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { logger } from "@/lib/logger";
 
 export async function DELETE(
   req: Request,
@@ -9,19 +10,24 @@ export async function DELETE(
 ) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return new NextResponse("Unauthorized", { status: 401 });
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { success: false, message: "Yetkisiz erişim" },
+        { status: 401 }
+      );
     }
 
-    const userId = (session.user as any).id;
     const { id } = params;
 
     const conv = await prisma.conversation.findFirst({
-      where: { id, userId },
+      where: { id, userId: session.user.id },
     });
 
     if (!conv) {
-      return new NextResponse("Not Found", { status: 404 });
+      return NextResponse.json(
+        { success: false, message: "Konuşma bulunamadı" },
+        { status: 404 }
+      );
     }
 
     await prisma.message.deleteMany({ where: { conversationId: id } });
@@ -29,7 +35,12 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("[CONVERSATION_DELETE]", error);
-    return new NextResponse("Internal Error", { status: 500 });
+    logger.error("Conversation DELETE error", {
+      error: error instanceof Error ? error.message : "Unknown error",
+    });
+    return NextResponse.json(
+      { success: false, message: "Sunucu hatası" },
+      { status: 500 }
+    );
   }
 }
