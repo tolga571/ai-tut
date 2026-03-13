@@ -46,21 +46,26 @@ export default async function AdminDashboardPage() {
     }),
   ]);
 
-  // Fetch message counts per user via grouped aggregate
-  const messageCounts = await prisma.message.groupBy({
-    by: ["conversationId"],
-    _count: { id: true },
-  });
+  // Both queries depend only on `users` — run in parallel
+  const userIds = users.map((u) => u.id);
+
+  const [messageCounts, convsByUser] = await Promise.all([
+    // Message counts grouped by conversation (across all conversations)
+    prisma.message.groupBy({
+      by: ["conversationId"],
+      _count: { id: true },
+    }),
+    // All conversations belonging to the 50 displayed users
+    prisma.conversation.findMany({
+      where: { userId: { in: userIds } },
+      select: { id: true, userId: true },
+    }),
+  ]);
 
   // Build conversationId → messageCount map, then sum per user
   const convToMsgCount = new Map(
     messageCounts.map((r) => [r.conversationId, r._count.id])
   );
-
-  const convsByUser = await prisma.conversation.findMany({
-    where: { userId: { in: users.map((u) => u.id) } },
-    select: { id: true, userId: true },
-  });
 
   const userMsgCount = new Map<string, number>();
   for (const conv of convsByUser) {
