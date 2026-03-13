@@ -4,24 +4,25 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const queryUserId = searchParams.get("userId");
-
-  // Session ile ya da userId query param ile çalışır
-  if (queryUserId) {
-    const user = await prisma.user.findUnique({
-      where: { id: queryUserId },
-      select: { planStatus: true },
-    });
-    return NextResponse.json({ planStatus: user?.planStatus ?? "inactive" });
-  }
-
   const session = await getServerSession(authOptions);
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const userId = (session.user as any).id;
+  const sessionUserId = (session.user as { id?: string }).id;
+  const { searchParams } = new URL(req.url);
+  const queryUserId = searchParams.get("userId");
+
+  // If userId query param is provided, it must match the session user (prevents enumeration)
+  if (queryUserId && queryUserId !== sessionUserId) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  const userId = queryUserId ?? sessionUserId;
+  if (!userId) {
+    return NextResponse.json({ error: "User ID not found" }, { status: 400 });
+  }
+
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: { planStatus: true },

@@ -1,29 +1,75 @@
 import { NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/prisma";
+import crypto from "crypto";
+
+/**
+ * Verify Paddle webhook signature using HMAC-SHA256.
+ * Header format: "ts=TIMESTAMP;h1=HASH"
+ * Signed payload: "TIMESTAMP:RAW_BODY"
+ */
+function verifyPaddleSignature(
+  rawBody: string,
+  signatureHeader: string,
+  secret: string
+): boolean {
+  const parts = signatureHeader.split(";");
+  const tsPart = parts.find((p) => p.startsWith("ts="));
+  const h1Part = parts.find((p) => p.startsWith("h1="));
+  if (!tsPart || !h1Part) return false;
+
+  const ts = tsPart.slice(3);
+  const h1 = h1Part.slice(3);
+
+  // Reject events older than 5 minutes (replay-attack protection)
+  const timestamp = parseInt(ts, 10);
+  const now = Math.floor(Date.now() / 1000);
+  if (Math.abs(now - timestamp) > 300) return false;
+
+  const signedPayload = `${ts}:${rawBody}`;
+  const expectedHash = crypto
+    .createHmac("sha256", secret)
+    .update(signedPayload)
+    .digest("hex");
+
+  try {
+    return crypto.timingSafeEqual(
+      Buffer.from(h1, "hex"),
+      Buffer.from(expectedHash, "hex")
+    );
+  } catch {
+    return false;
+  }
+}
 
 export async function POST(req: Request) {
   try {
-    const body = await req.text();
-    const signature = req.headers.get("paddle-signature");
+    const webhookSecret = process.env.PADDLE_WEBHOOK_SECRET;
+    if (!webhookSecret) {
+      console.error("[PADDLE_WEBHOOK] PADDLE_WEBHOOK_SECRET not configured");
+      return new NextResponse("Server misconfiguration", { status: 500 });
+    }
 
-    if (!signature) {
-      console.error("[PADDLE_WEBHOOK] Missing paddle-signature header");
+    const rawBody = await req.text();
+    const signatureHeader = req.headers.get("paddle-signature");
+
+    if (!signatureHeader) {
+      return new NextResponse("Missing signature", { status: 401 });
+    }
+
+    const isValid = verifyPaddleSignature(rawBody, signatureHeader, webhookSecret);
+    if (!isValid) {
+      console.error("[PADDLE_WEBHOOK] Signature verification failed");
       return new NextResponse("Invalid signature", { status: 401 });
     }
 
-    const payload = JSON.parse(body);
-    const eventType = payload.event_type;
-
-    console.log("[PADDLE_WEBHOOK] Received event:", eventType);
-    console.log("[PADDLE_WEBHOOK] Data:", JSON.stringify(payload.data, null, 2));
-
+    const payload = JSON.parse(rawBody);
+    const eventType: string = payload.event_type;
     const { custom_data, customer_id } = payload.data ?? {};
-    const userId = custom_data?.userId;
+    const userId: string | undefined = custom_data?.userId;
 
     if (!userId) {
-      console.error("[PADDLE_WEBHOOK] Missing userId in custom_data:", custom_data);
-      // 200 döndür — Paddle tekrar denemesini durdur, ama logla
+      // Return 200 so Paddle doesn't retry — no userId to act on
       return new NextResponse("Missing userId, ignoring", { status: 200 });
     }
 
@@ -34,20 +80,16 @@ export async function POST(req: Request) {
     ) {
       await prisma.user.update({
         where: { id: userId },
-        data: {
-          planStatus: "active",
-          paddleCustomerId: customer_id ?? null,
-        },
+        data: { planStatus: "active", paddleCustomerId: customer_id ?? null },
       });
-      console.log(`[PADDLE_WEBHOOK] Activated plan for user ${userId} via ${eventType}`);
-    } else if (eventType === "subscription.canceled" || eventType === "subscription.past_due") {
+    } else if (
+      eventType === "subscription.canceled" ||
+      eventType === "subscription.past_due"
+    ) {
       await prisma.user.update({
         where: { id: userId },
         data: { planStatus: "inactive" },
       });
-      console.log(`[PADDLE_WEBHOOK] Deactivated plan for user ${userId} via ${eventType}`);
-    } else {
-      console.log(`[PADDLE_WEBHOOK] Unhandled event type: ${eventType}`);
     }
 
     return new NextResponse("OK", { status: 200 });

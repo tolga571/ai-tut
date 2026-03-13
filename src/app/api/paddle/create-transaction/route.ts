@@ -1,11 +1,37 @@
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { createTransactionSchema } from "@/lib/validations";
+import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 
 export async function POST(req: Request) {
   try {
-    const { priceId, userId, email } = await req.json();
+    const session = await getServerSession(authOptions);
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-    if (!priceId || !userId || !email) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    // Rate limit: 10 transaction attempts per IP per 15 minutes
+    const ip = getClientIp(req);
+    if (!checkRateLimit(`create-tx:${ip}`, 10, 15 * 60 * 1000)) {
+      return NextResponse.json(
+        { error: "Too many requests, please try again later" },
+        { status: 429 }
+      );
+    }
+
+    const body = await req.json();
+    const result = createTransactionSchema.safeParse(body);
+    if (!result.success) {
+      return NextResponse.json({ error: "Invalid request data" }, { status: 400 });
+    }
+
+    const { priceId, userId, email } = result.data;
+
+    // Ensure the userId matches the authenticated session
+    const sessionUserId = (session.user as { id?: string }).id;
+    if (userId !== sessionUserId) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const paddleApiKey = process.env.PADDLE_API_KEY;
@@ -30,7 +56,7 @@ export async function POST(req: Request) {
         items: [{ price_id: priceId, quantity: 1 }],
         customer: { email },
         custom_data: { userId },
-        return_url: successUrl, // This is the correct field for success redirect
+        return_url: successUrl,
       }),
     });
 
@@ -48,7 +74,6 @@ export async function POST(req: Request) {
     const transactionId = data?.data?.id;
 
     if (!checkoutUrl || !transactionId) {
-      console.error("[PADDLE] No checkout URL or transaction ID in response:", data);
       return NextResponse.json({ error: "Checkout URL not returned by Paddle" }, { status: 500 });
     }
 
