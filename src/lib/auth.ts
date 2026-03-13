@@ -52,7 +52,7 @@ export const authOptions: NextAuthOptions = {
         // Fetch latest user data including plan status and native/target languages
         const dbUser = await prisma.user.findUnique({
           where: { id: token.id as string },
-          select: { name: true, planStatus: true, nativeLang: true, targetLang: true, cefrLevel: true }
+          select: { name: true, planStatus: true, nativeLang: true, targetLang: true, cefrLevel: true, role: true }
         });
         if (dbUser) {
           session.user.name = dbUser.name;
@@ -60,6 +60,7 @@ export const authOptions: NextAuthOptions = {
           (session.user as any).nativeLang = dbUser.nativeLang;
           (session.user as any).targetLang = dbUser.targetLang;
           (session.user as any).cefrLevel = dbUser.cefrLevel;
+          (session.user as any).role = dbUser.role;
         }
       }
       return session;
@@ -71,6 +72,7 @@ export const authOptions: NextAuthOptions = {
         token.nativeLang = (user as any).nativeLang;
         token.targetLang = (user as any).targetLang;
         token.cefrLevel = (user as any).cefrLevel;
+        token.role = (user as any).role;
       }
       // If we want to support dynamic updates (after payment)
       if (trigger === "update" && session?.planStatus) {

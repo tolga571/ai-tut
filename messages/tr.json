@@ -202,6 +202,55 @@
     "fr": "Fransızca",
     "ja": "Japonca"
   },
+  "admin": {
+    "backToChat": "Sohbete Dön",
+    "backToPosts": "Yazılara Dön",
+    "postsTitle": "Yazıları Yönet",
+    "newPost": "Yeni Yazı",
+    "newPostTitle": "Yazı Oluştur",
+    "editPostTitle": "Yazıyı Düzenle",
+    "postCreated": "Yazı oluşturuldu",
+    "postUpdated": "Yazı güncellendi",
+    "postDeleted": "Yazı silindi",
+    "published": "Yayında",
+    "draft": "Taslak",
+    "premium": "Premium",
+    "edit": "Düzenle",
+    "empty": {
+      "title": "Henüz yazı yok",
+      "description": "İlk blog yazını, sayfanı veya belgenī oluştur."
+    },
+    "categories": {
+      "blog": "Blog",
+      "page": "Sayfa",
+      "document": "Belge"
+    },
+    "form": {
+      "title": "Başlık",
+      "titlePlaceholder": "Yazı başlığı",
+      "slug": "Slug",
+      "slugHint": "URL dostu tanımlayıcı — başlıktan otomatik oluşturulur",
+      "category": "Kategori",
+      "language": "Dil",
+      "content": "İçerik",
+      "contentPlaceholder": "İçeriğinizi buraya yazın...",
+      "published": "Yayımla",
+      "premium": "Premium içerik",
+      "premiumHint": "aktif plan gerektirir",
+      "create": "Yazı Oluştur",
+      "saveChanges": "Değişiklikleri Kaydet",
+      "cancel": "İptal",
+      "delete": "Sil",
+      "confirmDelete": "Silmeyi Onayla",
+      "deleting": "Siliniyor..."
+    },
+    "errors": {
+      "required": "Başlık, slug ve içerik zorunludur",
+      "slugConflict": "Bu slug'a sahip bir yazı zaten mevcut",
+      "saveFailed": "Yazı kaydedilemedi",
+      "deleteFailed": "Yazı silinemedi"
+    }
+  },
   "blogs": {
     "title": "Blog Yazıları",
     "backToChat": "Sohbete Dön",

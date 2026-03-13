@@ -26,6 +26,16 @@ export const languagesSchema = z.object({
   cefrLevel:  z.enum(VALID_CEFR).optional(),
 });
 
+export const postSchema = z.object({
+  title:     z.string().min(1).max(200).trim(),
+  slug:      z.string().min(1).max(200).trim().regex(/^[a-z0-9-]+$/, "Slug must be lowercase letters, numbers, and hyphens"),
+  content:   z.string().min(1).trim(),
+  category:  z.enum(["blog", "page", "document"]),
+  language:  z.enum(VALID_LANGS),
+  published: z.boolean().default(false),
+  isPremium: z.boolean().default(false),
+});
+
 export const createTransactionSchema = z.object({
   priceId: z.string().min(1).max(200),
   userId:  z.string().min(1).max(200),

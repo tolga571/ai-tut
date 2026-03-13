@@ -4,6 +4,7 @@ import { getToken } from "next-auth/jwt";
 import { routing } from "./i18n/routing";
 
 const PROTECTED_PATHS = ["/chat", "/profile", "/onboarding"];
+const ADMIN_PATHS = ["/admin"];
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -24,15 +25,24 @@ export default async function middleware(req: NextRequest) {
     (p) => pathWithoutLocale === p || pathWithoutLocale.startsWith(p + "/")
   );
 
-  if (isProtected) {
+  const isAdmin = ADMIN_PATHS.some(
+    (p) => pathWithoutLocale === p || pathWithoutLocale.startsWith(p + "/")
+  );
+
+  if (isProtected || isAdmin) {
     const token = await getToken({
       req,
       secret: process.env.NEXTAUTH_SECRET,
     });
 
+    const locale = hasLocale ? segments[1] : routing.defaultLocale;
+
     if (!token) {
-      const locale = hasLocale ? segments[1] : routing.defaultLocale;
       return NextResponse.redirect(new URL(`/${locale}/login`, req.url));
+    }
+
+    if (isAdmin && (token as any).role !== "admin") {
+      return NextResponse.redirect(new URL(`/${locale}/chat`, req.url));
     }
   }
 

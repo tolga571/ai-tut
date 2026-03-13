@@ -202,6 +202,55 @@
     "fr": "French",
     "ja": "Japanese"
   },
+  "admin": {
+    "backToChat": "Back to Chat",
+    "backToPosts": "Back to Posts",
+    "postsTitle": "Manage Posts",
+    "newPost": "New Post",
+    "newPostTitle": "Create Post",
+    "editPostTitle": "Edit Post",
+    "postCreated": "Post created",
+    "postUpdated": "Post updated",
+    "postDeleted": "Post deleted",
+    "published": "Published",
+    "draft": "Draft",
+    "premium": "Premium",
+    "edit": "Edit",
+    "empty": {
+      "title": "No posts yet",
+      "description": "Create your first blog, page, or document."
+    },
+    "categories": {
+      "blog": "Blog",
+      "page": "Page",
+      "document": "Document"
+    },
+    "form": {
+      "title": "Title",
+      "titlePlaceholder": "Post title",
+      "slug": "Slug",
+      "slugHint": "URL-friendly identifier — auto-generated from title",
+      "category": "Category",
+      "language": "Language",
+      "content": "Content",
+      "contentPlaceholder": "Write your content here...",
+      "published": "Published",
+      "premium": "Premium content",
+      "premiumHint": "requires active plan",
+      "create": "Create Post",
+      "saveChanges": "Save Changes",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "confirmDelete": "Confirm Delete",
+      "deleting": "Deleting..."
+    },
+    "errors": {
+      "required": "Title, slug, and content are required",
+      "slugConflict": "A post with this slug already exists",
+      "saveFailed": "Failed to save post",
+      "deleteFailed": "Failed to delete post"
+    }
+  },
   "blogs": {
     "title": "Blog Posts",
     "backToChat": "Back to Chat",

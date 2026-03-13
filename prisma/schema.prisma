@@ -22,6 +22,7 @@ model User {
   nativeLang       String         @default("tr")
   targetLang       String         @default("en")
   cefrLevel        String         @default("A1")
+  role             String         @default("user")
   paddleCustomerId String?
   planStatus       String         @default("inactive")
   conversations    Conversation[]
@@ -86,6 +87,7 @@ model Post {
   category  String   // "blog" | "page" | "document"
   language  String   @default("en")
   published Boolean  @default(false)
+  isPremium Boolean  @default(false)
   authorId  String
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
