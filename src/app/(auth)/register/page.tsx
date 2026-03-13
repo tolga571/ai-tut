@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signIn, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
+import { AuthProvider } from "@/components/providers/AuthProvider";
+import { Toaster } from "react-hot-toast";
 
 const PLAN_OPTIONS = [
   {
@@ -31,6 +33,15 @@ const PLAN_OPTIONS = [
 ];
 
 export default function RegisterPage() {
+  return (
+    <AuthProvider>
+      <RegisterContent />
+      <Toaster position="bottom-right" />
+    </AuthProvider>
+  );
+}
+
+function RegisterContent() {
   const router = useRouter();
   const { data: session } = useSession();
   const [data, setData] = useState({ name: "", email: "", password: "" });

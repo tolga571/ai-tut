@@ -8,7 +8,7 @@
     "dark": "Dark"
   },
   "home": {
-    "badge": "Powered by gemini-1.5-flash",
+    "badge": "Powered by gemini-2.5-flash",
     "title": "Fluent conversations,",
     "titleAccent": "powered by AI.",
     "description": "Stop memorizing vocabulary and start speaking. Chat naturally with our bilingual AI tutor and get instant translations and real-time corrections.",
@@ -95,7 +95,8 @@
     "sendError": "Failed to send message. Try again.",
     "loadError": "Failed to load conversation",
     "hideHistory": "Hide history",
-    "showHistory": "Show history"
+    "showHistory": "Show history",
+    "correctionLabel": "Grammar note"
   },
   "profile": {
     "backToChat": "Back to Chat",
@@ -109,6 +110,7 @@
     "languageSettings": "Language Settings",
     "nativeLanguage": "Your Native Language",
     "learningLanguage": "Language You're Learning",
+    "cefrLevel": "Proficiency Level (CEFR)",
     "sameLangWarning": "Native and target language cannot be the same",
     "saveLangs": "Save Language Settings",
     "saving": "Saving...",
@@ -131,14 +133,24 @@
   },
   "onboarding": {
     "title": "Set Up Your Profile",
-    "subtitle": "Choose the language you speak and the one you want to learn.",
-    "nativeLang": "Native Language",
-    "targetLang": "Target Language (I want to learn)",
+    "subtitle": "Tell us what you speak and what you want to learn.",
+    "nativeLang": "I speak",
+    "targetLang": "I want to learn",
+    "cefrTitle": "What's your current level?",
+    "cefrSubtitle": "We'll tailor vocabulary and grammar explanations to your level.",
     "continue": "Continue to Chat",
     "success": "Preferences saved!",
     "errors": {
       "sameLang": "Native and Target languages cannot be the same.",
       "generic": "Something went wrong"
+    },
+    "levels": {
+      "A1": { "label": "A1 — Beginner", "description": "I know a few words and basic phrases" },
+      "A2": { "label": "A2 — Elementary", "description": "I can handle simple everyday sentences" },
+      "B1": { "label": "B1 — Intermediate", "description": "I can discuss familiar topics" },
+      "B2": { "label": "B2 — Upper Intermediate", "description": "I can have fluid, detailed conversations" },
+      "C1": { "label": "C1 — Advanced", "description": "I can use complex, nuanced language" },
+      "C2": { "label": "C2 — Mastery", "description": "Near-native fluency" }
     }
   },
   "pricing": {
@@ -182,18 +194,13 @@
     "signOutError": "Failed to sign out"
   },
   "languages": {
-    "tr": "Turkish",
+    "ar": "Arabic",
     "en": "English",
+    "es": "Spanish",
+    "zh": "Mandarin Chinese",
     "de": "German",
     "fr": "French",
-    "es": "Spanish",
-    "it": "Italian",
-    "pt": "Portuguese",
-    "ru": "Russian",
-    "zh": "Chinese",
-    "ja": "Japanese",
-    "ko": "Korean",
-    "ar": "Arabic"
+    "ja": "Japanese"
   },
   "languageSwitcher": {
     "label": "Language",

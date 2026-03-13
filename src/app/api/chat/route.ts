@@ -7,6 +7,52 @@ import { prisma } from "@/lib/prisma";
 import { chatMessageSchema } from "@/lib/validations";
 import { checkRateLimit } from "@/lib/rateLimit";
 
+const CEFR_GUIDE: Record<string, string> = {
+  A1: "very simple words, 3-5 word sentences, ultra-basic vocabulary, present tense only",
+  A2: "simple sentences, basic vocabulary, present and past tense, common expressions",
+  B1: "everyday language, varied vocabulary, multiple tenses, can introduce idioms",
+  B2: "clear complex language, wide vocabulary, natural expressions, phrasal verbs welcome",
+  C1: "sophisticated language, advanced idioms, nuanced grammar, academic or professional style",
+  C2: "near-native mastery, any register, subtle nuance, complex structures",
+};
+
+function buildSystemPrompt(
+  targetLang: string,
+  nativeLang: string,
+  cefrLevel: string
+): string {
+  const cefrHint = CEFR_GUIDE[cefrLevel] ?? CEFR_GUIDE["A1"];
+  return `You are an enthusiastic, encouraging language tutor helping a student learn ${targetLang}.
+Their native language is ${nativeLang} and their current proficiency is CEFR level ${cefrLevel} (${cefrHint}).
+
+PERSONALITY:
+- Be warm, friendly, and motivating — like a patient native-speaker friend
+- Show genuine curiosity: ask one engaging follow-up question at the end of EVERY response
+- Celebrate effort and small wins ("Great try!", "Nice sentence!")
+- Use examples and relatable contexts to make language stick
+- If the student seems stuck, offer a hint or rephrase
+
+RESPONSE FORMAT:
+You MUST return ONLY a valid JSON object. No markdown, no extra text:
+{
+  "content": "<your reply entirely in ${targetLang}>",
+  "translation": "<exact ${nativeLang} translation of content>",
+  "correction": "<if the student made a grammar/spelling mistake: write ONLY the correction here in this format: ✏️ [original mistake] → [corrected form] — [short grammar rule explanation in ${nativeLang}]. Leave EMPTY STRING if no mistake.>"
+}
+
+CONTENT RULES:
+- Write the full reply in ${targetLang} at CEFR ${cefrLevel} level
+- Keep replies concise (2-4 sentences) unless more depth is clearly needed
+- ALWAYS end with one curious follow-up question in ${targetLang}
+- Never translate inside "content" — the "translation" field handles that
+
+CORRECTION RULES:
+- Only correct clear grammar or spelling mistakes, not stylistic choices
+- Bold the error with ✏️ marker in the correction field
+- Explain the rule briefly and encouragingly in ${nativeLang}
+- If no mistake, set "correction" to "" (empty string)`;
+}
+
 export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);
@@ -14,7 +60,6 @@ export async function POST(req: Request) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    // Rate limit: 30 messages per user per minute
     const userId = (session.user as { id?: string }).id ?? "";
     if (!checkRateLimit(`chat:${userId}`, 30, 60 * 1000)) {
       return NextResponse.json(
@@ -31,17 +76,23 @@ export async function POST(req: Request) {
     }
 
     const { message, conversationId } = result.data;
-    const user = session.user as { id?: string; targetLang?: string; nativeLang?: string };
+    const user = session.user as {
+      id?: string;
+      targetLang?: string;
+      nativeLang?: string;
+      cefrLevel?: string;
+    };
+
+    const targetLang = user.targetLang ?? "en";
+    const nativeLang = user.nativeLang ?? "en";
+    const cefrLevel  = user.cefrLevel  ?? "A1";
 
     let currentConvId = conversationId;
 
     if (!currentConvId) {
-      const conv = await prisma.conversation.create({
-        data: { userId },
-      });
+      const conv = await prisma.conversation.create({ data: { userId } });
       currentConvId = conv.id;
     } else {
-      // Verify the conversation belongs to this user
       const conv = await prisma.conversation.findFirst({
         where: { id: currentConvId, userId },
       });
@@ -66,22 +117,9 @@ export async function POST(req: Request) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-
-    const systemPrompt = `Sen bir dil öğretmenisin. Karşındaki kullanıcı ${user.targetLang || "İngilizce"} öğreniyor, anadili ise ${user.nativeLang || "Türkçe"}.
-Her yanıtında:
-1. Önce HEDEF DİL'de (${user.targetLang}) doğal ve kısa bir cümle kur.
-2. Hemen altında ANA DİL'e (${user.nativeLang}) çevirisini ver.
-3. Kullanıcı hata yaparsa nazikçe düzelt. Seviyesine uygun konuş.
-
-Yanıtını KESİNLİKLE GEÇERLİ BİR JSON FORMATINDA ver. Sadece JSON objesi döndür:
-{
-  "content": "[hedef dildeki öğretici / doğal cümle veya karşılık (ör. İngilizce)]",
-  "translation": "[bu cümlenin anadildeki çevirisi (ör. Türkçe)]"
-}`;
-
     const model = genAI.getGenerativeModel({
       model: "gemini-2.5-flash",
-      systemInstruction: systemPrompt,
+      systemInstruction: buildSystemPrompt(targetLang, nativeLang, cefrLevel),
       generationConfig: { responseMimeType: "application/json" },
     });
 
@@ -92,7 +130,11 @@ Yanıtını KESİNLİKLE GEÇERLİ BİR JSON FORMATINDA ver. Sadece JSON objesi 
           text:
             msg.role === "user"
               ? msg.content
-              : JSON.stringify({ content: msg.content, translation: msg.translation }),
+              : JSON.stringify({
+                  content: msg.content,
+                  translation: msg.translation,
+                  correction: msg.correction ?? "",
+                }),
         },
       ],
     }));
@@ -101,19 +143,20 @@ Yanıtını KESİNLİKLE GEÇERLİ BİR JSON FORMATINDA ver. Sadece JSON objesi 
     const aiResult = await chat.sendMessage(message);
     const aiResponseText = aiResult.response.text();
 
-    let parsedResult: { content: string; translation: string };
+    let parsedResult: { content: string; translation: string; correction?: string };
     try {
       parsedResult = JSON.parse(aiResponseText);
     } catch {
-      parsedResult = { content: aiResponseText, translation: "" };
+      parsedResult = { content: aiResponseText, translation: "", correction: "" };
     }
 
     const savedAiMsg = await prisma.message.create({
       data: {
         conversationId: currentConvId,
         role: "ai",
-        content: parsedResult.content,
+        content:    parsedResult.content,
         translation: parsedResult.translation || "",
+        correction:  parsedResult.correction  || "",
       },
     });
 

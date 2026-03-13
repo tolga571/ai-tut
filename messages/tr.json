@@ -8,7 +8,7 @@
     "dark": "Koyu"
   },
   "home": {
-    "badge": "Powered by gemini-1.5-flash",
+    "badge": "gemini-2.5-flash ile güçlendirildi",
     "title": "Akıcı konuşmalar,",
     "titleAccent": "AI ile güçlendirilmiş.",
     "description": "Kelime ezberlemeyi bırakın, konuşmaya başlayın. İki dilli AI öğretmenimizle doğal sohbet edin, anlık çeviriler ve gerçek zamanlı düzeltmeler alın.",
@@ -50,22 +50,22 @@
       "select": "Seç",
       "plans": {
         "base": {
-          "name": "Base Plan",
-          "priceValue": "5$",
+          "name": "Temel Plan",
+          "priceValue": "$5",
           "priceSuffix": "/ ay",
           "description": "AI öğretmen yolculuğuna temel özelliklerle başla."
         },
         "middle": {
-          "name": "Middle Plan",
-          "priceValue": "15$",
+          "name": "Orta Plan",
+          "priceValue": "$15",
           "priceSuffix": "/ ay",
-          "description": "Gelişmiş düzeltmeler ve daha uzun seanslarla seviyeni artır."
+          "description": "Gelişmiş düzeltmeler ve daha uzun oturumlarla seviye atla."
         },
         "ultra": {
           "name": "Ultra Plan",
-          "priceValue": "40$",
+          "priceValue": "$40",
           "priceSuffix": "/ ay",
-          "description": "Her şeyi aç: profesyonel geri bildirim, hız ve yakında gelecek premium araçlar."
+          "description": "Her şeyin kilidini aç: profesyonel geri bildirim, hız ve premium araçlar."
         }
       }
     },
@@ -81,42 +81,44 @@
     }
   },
   "chat": {
-    "newChat": "Yeni Chat",
-    "noConversations": "Henüz konuşma yok",
-    "startHint": "Bir mesaj göndererek başlayın",
-    "startChat": "Konuşmaya başla",
+    "newChat": "Yeni Sohbet",
+    "noConversations": "Henüz sohbet yok",
+    "startHint": "Mesaj göndererek başla",
+    "startChat": "Sohbet etmeye başla",
     "welcomeMsg": "{lang} öğrenmek için bir şeyler yaz",
     "inputPlaceholder": "{lang} dilinde bir şeyler yaz...",
-    "learningLabel": "Öğrenilen dil",
-    "deleteConfirm": "Bu konuşmayı silmek istediğinize emin misiniz?",
-    "deleted": "Konuşma silindi",
+    "learningLabel": "Öğreniyor",
+    "deleteConfirm": "Bu sohbeti silmek istediğinden emin misin?",
+    "deleted": "Sohbet silindi",
     "deleteError": "Silinemedi",
     "genericError": "Bir hata oluştu",
-    "sendError": "Mesaj gönderilemedi. Tekrar deneyin.",
-    "loadError": "Konuşma yüklenemedi",
+    "sendError": "Mesaj gönderilemedi. Tekrar dene.",
+    "loadError": "Sohbet yüklenemedi",
     "hideHistory": "Geçmişi gizle",
-    "showHistory": "Geçmişi göster"
+    "showHistory": "Geçmişi göster",
+    "correctionLabel": "Dilbilgisi notu"
   },
   "profile": {
-    "backToChat": "Chat'e Dön",
+    "backToChat": "Sohbete Dön",
     "title": "Profil Ayarları",
     "personalInfo": "Kişisel Bilgiler",
     "fullName": "Ad Soyad",
-    "namePlaceholder": "Adınız",
+    "namePlaceholder": "Adın",
     "save": "Kaydet",
     "email": "E-posta Adresi",
     "emailNote": "E-posta adresi değiştirilemez",
     "languageSettings": "Dil Ayarları",
-    "nativeLanguage": "Ana Diliniz",
-    "learningLanguage": "Öğrendiğiniz Dil",
-    "sameLangWarning": "Ana dil ve hedef dil aynı olamaz",
+    "nativeLanguage": "Anadilim",
+    "learningLanguage": "Öğrendiğim Dil",
+    "cefrLevel": "Yeterlilik Seviyesi (CEFR)",
+    "sameLangWarning": "Anadil ve hedef dil aynı olamaz",
     "saveLangs": "Dil Ayarlarını Kaydet",
-    "saving": "Kaydediliyor…",
+    "saving": "Kaydediliyor...",
     "planStatus": "Plan Durumu",
     "activePlan": "Aktif Plan",
-    "freeTier": "Ücretsiz Tier",
+    "freeTier": "Ücretsiz",
     "fullAccess": "Tüm özelliklere erişiminiz var",
-    "limitedAccess": "Sınırlı erişim — plan seçerek devam edin",
+    "limitedAccess": "Sınırlı erişim — devam etmek için yükseltin",
     "upgrade": "Yükselt",
     "session": "Oturum",
     "signOutDesc": "Hesabınızdan güvenli çıkış yapın",
@@ -126,35 +128,45 @@
       "nameUpdated": "İsim güncellendi",
       "updateFailed": "Güncelleme başarısız",
       "langSaved": "Dil ayarları güncellendi",
-      "sameLang": "Ana dil ve hedef dil aynı olamaz"
+      "sameLang": "Anadil ve hedef dil aynı olamaz"
     }
   },
   "onboarding": {
-    "title": "Profilinizi Ayarlayın",
-    "subtitle": "Konuştuğunuz dili ve öğrenmek istediğinizi seçin.",
-    "nativeLang": "Ana Diliniz",
-    "targetLang": "Öğreneceğiniz Dil",
+    "title": "Profilini Ayarla",
+    "subtitle": "Konuştuğun dili ve öğrenmek istediğin dili seç.",
+    "nativeLang": "Konuştuğum dil",
+    "targetLang": "Öğrenmek istediğim dil",
+    "cefrTitle": "Mevcut seviyen nedir?",
+    "cefrSubtitle": "Kelime hazinesi ve dilbilgisi açıklamalarını seviyene göre ayarlayacağız.",
     "continue": "Sohbete Geç",
     "success": "Tercihler kaydedildi!",
     "errors": {
-      "sameLang": "Ana dil ve hedef dil aynı olamaz.",
-      "generic": "Bir şeyler yanlış gitti"
+      "sameLang": "Anadil ve hedef dil aynı olamaz.",
+      "generic": "Bir şeyler ters gitti"
+    },
+    "levels": {
+      "A1": { "label": "A1 — Başlangıç", "description": "Birkaç kelime ve temel ifade biliyorum" },
+      "A2": { "label": "A2 — Temel", "description": "Basit günlük cümleler kurabilirim" },
+      "B1": { "label": "B1 — Orta", "description": "Tanıdık konuları tartışabilirim" },
+      "B2": { "label": "B2 — Orta-Üstü", "description": "Akıcı, ayrıntılı sohbetler yapabilirim" },
+      "C1": { "label": "C1 — İleri", "description": "Karmaşık, nüanslı dil kullanabilirim" },
+      "C2": { "label": "C2 — Ustalık", "description": "Anadil konuşanına yakın akıcılık" }
     }
   },
   "pricing": {
     "title": "Basit, şeffaf fiyatlandırma",
-    "subtitle": "AI destekli geri bildirimlerle hedef dilinizde akıcı konuşmalar yapın.",
-    "monthly": "Aylık fatura",
-    "annual": "Yıllık fatura",
-    "choosePlan": "Planınızı Seçin",
-    "planSubtitle": "Öğrenme yolculuğunuza uygun planı seçin",
+    "subtitle": "Yapay zeka destekli geri bildirimlerle hedef dilinizde akıcı konuşmaların kilidini açın.",
+    "monthly": "Aylık ödeme",
+    "annual": "Yıllık ödeme",
+    "choosePlan": "Planını Seç",
+    "planSubtitle": "Öğrenme yolculuğuna uyan planı seç",
     "selected": "Seçildi",
-    "selectPlan": "Planı Seç",
-    "guarantee": "Tüm planlar 14 günlük para iade garantisi içerir. İstediğinizde iptal edin.",
+    "selectPlan": "Plan Seç",
+    "guarantee": "Tüm planlar 14 günlük para iade garantisi içerir. İstediğiniz zaman iptal edin.",
     "recommended": "Önerilen",
     "errors": {
       "loginRequired": "Abone olmak için önce giriş yapın",
-      "notConfigured": "Ödeme sistemi henüz yapılandırılmamış. (Paddle Token eksik)"
+      "notConfigured": "Ödeme sistemi henüz yapılandırılmadı. (Paddle Token eksik)"
     },
     "plans": {
       "standardMonthly": {
@@ -182,18 +194,13 @@
     "signOutError": "Çıkış yapılamadı"
   },
   "languages": {
-    "tr": "Türkçe",
+    "ar": "Arapça",
     "en": "İngilizce",
+    "es": "İspanyolca",
+    "zh": "Mandarin Çincesi",
     "de": "Almanca",
     "fr": "Fransızca",
-    "es": "İspanyolca",
-    "it": "İtalyanca",
-    "pt": "Portekizce",
-    "ru": "Rusça",
-    "zh": "Çince",
-    "ja": "Japonca",
-    "ko": "Korece",
-    "ar": "Arapça"
+    "ja": "Japonca"
   },
   "languageSwitcher": {
     "label": "Dil",

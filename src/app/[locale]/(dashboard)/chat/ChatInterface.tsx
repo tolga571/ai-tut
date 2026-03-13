@@ -5,12 +5,14 @@ import { Link } from "@/i18n/navigation";
 import toast from "react-hot-toast";
 import { UserMenu } from "@/components/UserMenu";
 import { useTranslations, useLocale } from "next-intl";
+import { LANG_FLAG } from "@/constants/languages";
 
 type Message = {
   id: string;
   role: "user" | "ai";
   content: string;
   translation?: string;
+  correction?: string;
   createdAt?: string;
 };
 
@@ -19,12 +21,6 @@ type Conversation = {
   createdAt: string;
   updatedAt: string;
   messages: Message[];
-};
-
-const LANG_FLAG: Record<string, string> = {
-  en: "🇬🇧", tr: "🇹🇷", de: "🇩🇪", fr: "🇫🇷",
-  es: "🇪🇸", it: "🇮🇹", pt: "🇵🇹", ru: "🇷🇺",
-  zh: "🇨🇳", ja: "🇯🇵", ko: "🇰🇷", ar: "🇸🇦",
 };
 
 export default function ChatInterface({ user }: { user: { name?: string | null; email?: string | null; targetLang?: string; nativeLang?: string } }) {
@@ -331,13 +327,21 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
                         {msg.content}
                       </div>
                     ) : (
-                      <div className="bg-gray-800/90 backdrop-blur border border-gray-700/50 px-5 py-3.5 rounded-2xl rounded-tl-sm shadow-lg overflow-hidden group transition-all">
-                        <p className="text-[16px] leading-relaxed text-blue-50">{msg.content}</p>
-                        {msg.translation && (
-                          <div className="mt-3 pt-3 border-t border-white/5">
-                            <p className="text-[14px] leading-relaxed text-gray-400 font-light group-hover:text-gray-300 transition-colors">
-                              {msg.translation}
-                            </p>
+                      <div className="space-y-2 w-full">
+                        <div className="bg-gray-800/90 backdrop-blur border border-gray-700/50 px-5 py-3.5 rounded-2xl rounded-tl-sm shadow-lg overflow-hidden group transition-all">
+                          <p className="text-[16px] leading-relaxed text-blue-50">{msg.content}</p>
+                          {msg.translation && (
+                            <div className="mt-3 pt-3 border-t border-white/5">
+                              <p className="text-[14px] leading-relaxed text-gray-400 font-light group-hover:text-gray-300 transition-colors">
+                                {msg.translation}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                        {msg.correction && (
+                          <div className="flex items-start gap-2 px-3 py-2.5 bg-amber-500/10 border border-amber-500/20 rounded-xl">
+                            <span className="text-amber-400 text-sm flex-shrink-0 mt-0.5">✏️</span>
+                            <p className="text-xs text-amber-300/90 leading-relaxed">{msg.correction}</p>
                           </div>
                         )}
                       </div>

@@ -20,11 +20,15 @@ export async function POST(req: Request) {
       return new NextResponse(message, { status: 400 });
     }
 
-    const { targetLang, nativeLang } = result.data;
+    const { targetLang, nativeLang, cefrLevel } = result.data;
 
     const updatedUser = await prisma.user.update({
       where: { id: sessionUserId },
-      data: { targetLang, nativeLang },
+      data: {
+        targetLang,
+        nativeLang,
+        ...(cefrLevel ? { cefrLevel } : {}),
+      },
     });
 
     return NextResponse.json(updatedUser);

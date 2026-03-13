@@ -21,6 +21,7 @@ model User {
   password         String?
   nativeLang       String         @default("tr")
   targetLang       String         @default("en")
+  cefrLevel        String         @default("A1")
   paddleCustomerId String?
   planStatus       String         @default("inactive")
   conversations    Conversation[]
@@ -46,6 +47,7 @@ model Message {
   role           String
   content        String
   translation    String?
+  correction     String?
   createdAt      DateTime     @default(now())
 }
 

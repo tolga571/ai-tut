@@ -5,8 +5,7 @@ import { useRouter } from "@/i18n/navigation";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
-
-const LANGUAGE_CODES = ["en", "es", "fr", "de", "it", "pt", "tr", "ja", "zh", "ru", "ko", "ar"] as const;
+import { SUPPORTED_LANG_CODES, CEFR_LEVELS, type CefrLevel } from "@/constants/languages";
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -14,8 +13,9 @@ export default function OnboardingPage() {
   const t = useTranslations("onboarding");
   const tLangs = useTranslations("languages");
   const [loading, setLoading] = useState(false);
-  const [nativeLang, setNativeLang] = useState("tr");
-  const [targetLang, setTargetLang] = useState("en");
+  const [nativeLang, setNativeLang] = useState("en");
+  const [targetLang, setTargetLang] = useState("es");
+  const [cefrLevel, setCefrLevel] = useState<CefrLevel>("A1");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,10 +29,10 @@ export default function OnboardingPage() {
       const res = await fetch("/api/user/languages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nativeLang, targetLang }),
+        body: JSON.stringify({ nativeLang, targetLang, cefrLevel }),
       });
 
-      if (!res.ok) throw new Error("Failed to save languages");
+      if (!res.ok) throw new Error("Failed to save preferences");
 
       await update();
       toast.success(t("success"));
@@ -50,7 +50,7 @@ export default function OnboardingPage() {
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/10 blur-[100px] rounded-full mix-blend-screen pointer-events-none" />
 
       <div className="w-full max-w-lg z-10 glass-panel border border-white/5 rounded-3xl p-8 shadow-2xl bg-gray-900/50 backdrop-blur-xl">
-        <div className="text-center mb-10">
+        <div className="text-center mb-8">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent mb-3">
             {t("title")}
           </h1>
@@ -58,7 +58,8 @@ export default function OnboardingPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
-          <div className="space-y-6">
+          {/* Language pair */}
+          <div className="space-y-4">
             <div className="group">
               <label className="block text-sm font-medium text-gray-300 mb-2 transition-colors group-hover:text-blue-400">
                 {t("nativeLang")}
@@ -69,7 +70,7 @@ export default function OnboardingPage() {
                   onChange={(e) => setNativeLang(e.target.value)}
                   className="w-full appearance-none px-4 py-3 bg-gray-950/50 border border-gray-800 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 text-white transition-all outline-none"
                 >
-                  {LANGUAGE_CODES.map((code) => (
+                  {SUPPORTED_LANG_CODES.map((code) => (
                     <option key={code} value={code}>{tLangs(code)}</option>
                   ))}
                 </select>
@@ -91,7 +92,7 @@ export default function OnboardingPage() {
                   onChange={(e) => setTargetLang(e.target.value)}
                   className="w-full appearance-none px-4 py-3 bg-gray-950/50 border border-gray-800 rounded-xl focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 text-white transition-all outline-none"
                 >
-                  {LANGUAGE_CODES.map((code) => (
+                  {SUPPORTED_LANG_CODES.map((code) => (
                     <option key={code} value={code}>{tLangs(code)}</option>
                   ))}
                 </select>
@@ -104,9 +105,37 @@ export default function OnboardingPage() {
             </div>
           </div>
 
+          {/* CEFR level selection */}
+          <div>
+            <p className="text-sm font-semibold text-gray-200 mb-1">{t("cefrTitle")}</p>
+            <p className="text-xs text-gray-500 mb-4">{t("cefrSubtitle")}</p>
+            <div className="grid grid-cols-2 gap-3">
+              {CEFR_LEVELS.map((level) => {
+                const levelData = t.raw(`levels.${level}`) as { label: string; description: string };
+                return (
+                  <button
+                    key={level}
+                    type="button"
+                    onClick={() => setCefrLevel(level)}
+                    className={`text-left px-4 py-3 rounded-xl border-2 transition-all focus:outline-none ${
+                      cefrLevel === level
+                        ? "border-blue-500 bg-blue-500/10 shadow-[0_4px_20px_rgba(59,130,246,0.25)]"
+                        : "border-gray-800 bg-gray-900/40 hover:border-gray-700"
+                    }`}
+                  >
+                    <p className={`text-sm font-semibold ${cefrLevel === level ? "text-blue-300" : "text-gray-300"}`}>
+                      {levelData.label}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-0.5 leading-snug">{levelData.description}</p>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || nativeLang === targetLang}
             className="w-full py-4 px-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-xl font-medium shadow-[0_0_20px_rgba(79,70,229,0.3)] transform transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {loading ? (
