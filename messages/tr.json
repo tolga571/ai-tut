@@ -202,6 +202,29 @@
     "fr": "Fransızca",
     "ja": "Japonca"
   },
+  "adminDashboard": {
+    "title": "Admin Paneli",
+    "backToChat": "Sohbete Dön",
+    "managePosts": "Yazıları Yönet",
+    "metrics": {
+      "totalUsers":    "Toplam Kullanıcı",
+      "recentSignups": "Son Kayıtlar",
+      "totalChats":    "Toplam Sohbet",
+      "totalMessages": "Toplam Mesaj",
+      "last7days":     "son 7 gün"
+    },
+    "table": {
+      "title":    "Kullanıcı Aktivitesi",
+      "showing":  "{count} kullanıcı gösteriliyor",
+      "user":     "Kullanıcı",
+      "joined":   "Katılım",
+      "role":     "Rol",
+      "plan":     "Plan",
+      "chats":    "Sohbet",
+      "messages": "Mesaj",
+      "noName":   "İsim yok"
+    }
+  },
   "admin": {
     "backToChat": "Sohbete Dön",
     "backToPosts": "Yazılara Dön",

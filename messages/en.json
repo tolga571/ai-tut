@@ -202,6 +202,29 @@
     "fr": "French",
     "ja": "Japanese"
   },
+  "adminDashboard": {
+    "title": "Admin Dashboard",
+    "backToChat": "Back to Chat",
+    "managePosts": "Manage Posts",
+    "metrics": {
+      "totalUsers":    "Total Users",
+      "recentSignups": "Recent Signups",
+      "totalChats":    "Total Chats",
+      "totalMessages": "Total Messages",
+      "last7days":     "last 7 days"
+    },
+    "table": {
+      "title":    "User Activity",
+      "showing":  "Showing {count} users",
+      "user":     "User",
+      "joined":   "Joined",
+      "role":     "Role",
+      "plan":     "Plan",
+      "chats":    "Chats",
+      "messages": "Messages",
+      "noName":   "No name"
+    }
+  },
   "admin": {
     "backToChat": "Back to Chat",
     "backToPosts": "Back to Posts",
