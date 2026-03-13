@@ -202,6 +202,33 @@
     "fr": "Fransızca",
     "ja": "Japonca"
   },
+  "blogs": {
+    "title": "Blog Yazıları",
+    "backToChat": "Sohbete Dön",
+    "unknownAuthor": "Bilinmiyor",
+    "empty": {
+      "title": "Henüz blog yazısı yok",
+      "description": "Dil öğrenme makaleleri için yakında tekrar kontrol edin."
+    }
+  },
+  "pages": {
+    "title": "Sayfalar",
+    "backToChat": "Sohbete Dön",
+    "unknownAuthor": "Bilinmiyor",
+    "empty": {
+      "title": "Henüz sayfa yok",
+      "description": "Statik içerik sayfaları burada görünecek."
+    }
+  },
+  "documents": {
+    "title": "Belgeler",
+    "backToChat": "Sohbete Dön",
+    "unknownAuthor": "Bilinmiyor",
+    "empty": {
+      "title": "Henüz belge yok",
+      "description": "Öğrenme belgeleri ve kaynaklar burada görünecek."
+    }
+  },
   "languageSwitcher": {
     "label": "Dil",
     "en": "EN",

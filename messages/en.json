@@ -202,6 +202,33 @@
     "fr": "French",
     "ja": "Japanese"
   },
+  "blogs": {
+    "title": "Blog Posts",
+    "backToChat": "Back to Chat",
+    "unknownAuthor": "Unknown",
+    "empty": {
+      "title": "No blog posts yet",
+      "description": "Check back soon for language learning articles."
+    }
+  },
+  "pages": {
+    "title": "Pages",
+    "backToChat": "Back to Chat",
+    "unknownAuthor": "Unknown",
+    "empty": {
+      "title": "No pages yet",
+      "description": "Static content pages will appear here."
+    }
+  },
+  "documents": {
+    "title": "Documents",
+    "backToChat": "Back to Chat",
+    "unknownAuthor": "Unknown",
+    "empty": {
+      "title": "No documents yet",
+      "description": "Learning documents and resources will appear here."
+    }
+  },
   "languageSwitcher": {
     "label": "Language",
     "en": "EN",
