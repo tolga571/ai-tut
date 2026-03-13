@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
 import { UserMenu } from "./UserMenu";
 
 export function Navbar() {
   const { data: session, status } = useSession();
   const pathname = usePathname();
+  const { theme, setTheme } = useTheme();
 
   // Dashboard pages have their own header — hide global navbar
   if (pathname?.startsWith("/chat") || pathname?.startsWith("/profile")) {
@@ -29,6 +31,21 @@ export function Navbar() {
           </Link>
 
           <div className="flex items-center gap-4">
+            {/* Theme toggle */}
+            <button
+              type="button"
+              aria-label="Temayı değiştir"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="w-9 h-9 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-xs text-gray-200 hover:bg-white/10 transition-colors"
+            >
+              <span className="hidden md:inline">
+                {theme === "dark" ? "Light" : "Dark"}
+              </span>
+              <span className="md:hidden">
+                {theme === "dark" ? "☀" : "☾"}
+              </span>
+            </button>
+
             {status === "loading" ? (
               <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />
             ) : session ? (
