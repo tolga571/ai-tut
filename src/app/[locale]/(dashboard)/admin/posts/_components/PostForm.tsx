@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "@/i18n/navigation";
 import toast from "react-hot-toast";
-import { SUPPORTED_LANG_CODES } from "@/constants/languages";
+import { LEARNING_LANGUAGES, DOC_LANG_CODES } from "@/constants/languages";
 import { useTranslations } from "next-intl";
 
 const CATEGORIES = ["blog", "page", "document"] as const;
@@ -151,7 +151,20 @@ export default function PostForm({ initialData }: PostFormProps) {
           <label className={labelCls}>{t("form.category")}</label>
           <select
             value={form.category}
-            onChange={(e) => set("category", e.target.value)}
+            onChange={(e) => {
+              const newCat = e.target.value as Category;
+              setForm((prev) => ({
+                ...prev,
+                category: newCat,
+                // Reset language to a valid default when switching category tier
+                language:
+                  newCat === "document" && !(DOC_LANG_CODES as readonly string[]).includes(prev.language)
+                    ? "en"
+                    : newCat !== "document" && (DOC_LANG_CODES as readonly string[]).includes(prev.language)
+                    ? prev.language // doc langs are valid learning langs too
+                    : prev.language,
+              }));
+            }}
             className={`${inputCls} cursor-pointer`}
           >
             {CATEGORIES.map((c) => (
@@ -168,11 +181,17 @@ export default function PostForm({ initialData }: PostFormProps) {
             onChange={(e) => set("language", e.target.value)}
             className={`${inputCls} cursor-pointer`}
           >
-            {SUPPORTED_LANG_CODES.map((code) => (
-              <option key={code} value={code} className="bg-gray-800">
-                {tLangs(code)}
-              </option>
-            ))}
+            {form.category === "document"
+              ? DOC_LANG_CODES.map((code) => (
+                  <option key={code} value={code} className="bg-gray-800">
+                    {tLangs(code)}
+                  </option>
+                ))
+              : LEARNING_LANGUAGES.map((lang) => (
+                  <option key={lang.code} value={lang.code} className="bg-gray-800">
+                    {lang.nameEn}
+                  </option>
+                ))}
           </select>
         </div>
       </div>

@@ -19,9 +19,10 @@ export function Navbar() {
     return null;
   }
 
-  const switchLocale = () => {
-    const newLocale = locale === "en" ? "tr" : "en";
-    router.replace(pathname, { locale: newLocale });
+  const UI_LOCALES = ["ar", "de", "en", "es", "fr", "ja", "zh"] as const;
+
+  const handleLocaleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    router.replace(pathname, { locale: e.target.value });
   };
 
   return (
@@ -40,14 +41,18 @@ export function Navbar() {
 
           <div className="flex items-center gap-3">
             {/* Language switcher */}
-            <button
-              type="button"
-              onClick={switchLocale}
-              className="w-9 h-9 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-xs font-semibold text-gray-200 hover:bg-white/10 transition-colors"
-              aria-label="Switch language"
+            <select
+              value={locale}
+              onChange={handleLocaleChange}
+              aria-label="Switch UI language"
+              className="h-9 px-2 rounded-full border border-white/10 bg-gray-900 text-xs font-semibold text-gray-200 hover:bg-white/10 transition-colors cursor-pointer focus:outline-none"
             >
-              {locale === "en" ? "TR" : "EN"}
-            </button>
+              {UI_LOCALES.map((l) => (
+                <option key={l} value={l} className="bg-gray-900">
+                  {l.toUpperCase()}
+                </option>
+              ))}
+            </select>
 
             {/* Theme toggle */}
             <button

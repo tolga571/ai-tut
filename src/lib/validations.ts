@@ -1,9 +1,7 @@
 import { z } from "zod";
-import { SUPPORTED_LANG_CODES, CEFR_LEVELS } from "@/constants/languages";
+import { CEFR_LEVELS, DOC_LANG_CODES } from "@/constants/languages";
 
-// Cast satisfies the Zod enum tuple requirement [T, ...T[]]
-const VALID_LANGS = SUPPORTED_LANG_CODES as unknown as [string, ...string[]];
-const VALID_CEFR  = CEFR_LEVELS        as unknown as [string, ...string[]];
+const VALID_CEFR = CEFR_LEVELS as unknown as [string, ...string[]];
 
 export const registerSchema = z.object({
   name:     z.string().min(2).max(100).trim(),
@@ -21,8 +19,8 @@ export const profileSchema = z.object({
 });
 
 export const languagesSchema = z.object({
-  targetLang: z.enum(VALID_LANGS),
-  nativeLang: z.enum(VALID_LANGS),
+  targetLang: z.string().min(2).max(10).trim(),
+  nativeLang: z.string().min(2).max(10).trim(),
   cefrLevel:  z.enum(VALID_CEFR).optional(),
 });
 
@@ -31,9 +29,20 @@ export const postSchema = z.object({
   slug:      z.string().min(1).max(200).trim().regex(/^[a-z0-9-]+$/, "Slug must be lowercase letters, numbers, and hyphens"),
   content:   z.string().min(1).trim(),
   category:  z.enum(["blog", "page", "document"]),
-  language:  z.enum(VALID_LANGS),
+  language:  z.string().min(2).max(10).trim(),
   published: z.boolean().default(false),
   isPremium: z.boolean().default(false),
+}).superRefine((data, ctx) => {
+  if (
+    data.category === "document" &&
+    !(DOC_LANG_CODES as readonly string[]).includes(data.language)
+  ) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: `Documents must use one of: ${DOC_LANG_CODES.join(", ")}`,
+      path: ["language"],
+    });
+  }
 });
 
 export const createTransactionSchema = z.object({

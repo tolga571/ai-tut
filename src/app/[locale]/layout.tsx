@@ -23,14 +23,16 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <NextIntlClientProvider messages={messages}>
-      <ThemeProvider>
-        <AuthProvider>
-          <Navbar />
-          <LayoutWrapper>{children}</LayoutWrapper>
-          <Toaster position="bottom-right" />
-        </AuthProvider>
-      </ThemeProvider>
-    </NextIntlClientProvider>
+    <div dir={locale === "ar" ? "rtl" : "ltr"}>
+      <NextIntlClientProvider messages={messages}>
+        <ThemeProvider>
+          <AuthProvider>
+            <Navbar />
+            <LayoutWrapper>{children}</LayoutWrapper>
+            <Toaster position="bottom-right" />
+          </AuthProvider>
+        </ThemeProvider>
+      </NextIntlClientProvider>
+    </div>
   );
 }

@@ -1,0 +1,335 @@
+{
+  "nav": {
+    "pricing": "Preise",
+    "login": "Anmelden",
+    "register": "Loslegen",
+    "goToChat": "Zum Chat",
+    "light": "Hell",
+    "dark": "Dunkel"
+  },
+  "home": {
+    "badge": "Powered by gemini-2.5-flash",
+    "title": "Flüssige Gespräche,",
+    "titleAccent": "unterstützt durch KI.",
+    "description": "Hör auf, Vokabeln auswendig zu lernen, und fang an zu sprechen. Chatte natürlich mit unserem zweisprachigen KI-Tutor und erhalte sofortige Übersetzungen und Echtzeit-Korrekturen.",
+    "cta": "Jetzt starten"
+  },
+  "login": {
+    "title": "Willkommen zurück",
+    "subtitle": "Melde dich bei AiTut an und lerne weiter",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "submit": "Anmelden",
+    "noAccount": "Noch kein Konto?",
+    "createAccount": "Konto erstellen",
+    "success": "Erfolgreich angemeldet!"
+  },
+  "register": {
+    "stepLabel": "Schritt 2",
+    "title": "Konto erstellen",
+    "step1": "Schritt 1: Deine Daten",
+    "name": "Vollständiger Name",
+    "namePlaceholder": "Dein Name",
+    "email": "E-Mail",
+    "emailPlaceholder": "du@beispiel.de",
+    "password": "Passwort",
+    "submit": "Weiter — Plan wählen",
+    "hasAccount": "Hast du bereits ein Konto?",
+    "signIn": "Anmelden",
+    "activating": "Zahlung wird überprüft...",
+    "paymentPreparing": "Zahlungsseite wird vorbereitet...",
+    "paymentSuccess": "Plan aktiviert! Willkommen.",
+    "activationTimeout": "Zahlung bestätigt, Aktivierung verzögert. Bitte anmelden.",
+    "devSkip": "[DEV] Zahlung überspringen — Plan aktivieren",
+    "planStep": {
+      "title": "Wähle deinen Plan",
+      "subtitle": "Wähle den Plan, der zu deinen Lernzielen passt.",
+      "note": "Du wirst nach der Planauswahl direkt zum Chat weitergeleitet.",
+      "cta": "Zum Chat",
+      "selected": "Ausgewählt",
+      "select": "Auswählen",
+      "plans": {
+        "base": {
+          "name": "Basisplan",
+          "priceValue": "5 $",
+          "priceSuffix": "/ Monat",
+          "description": "Starte deine KI-Tutor-Reise mit den Grundlagen."
+        },
+        "middle": {
+          "name": "Mittelplan",
+          "priceValue": "15 $",
+          "priceSuffix": "/ Monat",
+          "description": "Verbessere dich mit erweiterten Korrekturen und längeren Sitzungen."
+        },
+        "ultra": {
+          "name": "Ultraplan",
+          "priceValue": "40 $",
+          "priceSuffix": "/ Monat",
+          "description": "Schalte alles frei: Profi-Feedback, Geschwindigkeit und Premium-Tools."
+        }
+      }
+    },
+    "errors": {
+      "register": "Registrierung fehlgeschlagen",
+      "generic": "Ein unerwarteter Fehler ist aufgetreten.",
+      "userInfo": "Benutzerinformationen fehlen. Bitte versuche es erneut.",
+      "paymentLoading": "Zahlungssystem wird geladen, bitte warten.",
+      "paymentFailed": "Zahlungsseite konnte nicht geöffnet werden. Bitte erneut versuchen.",
+      "paymentStart": "Zahlung konnte nicht gestartet werden. Bitte erneut versuchen.",
+      "devActivate": "Plan konnte nicht aktiviert werden.",
+      "devGeneric": "Ein Fehler ist aufgetreten."
+    }
+  },
+  "chat": {
+    "newChat": "Neuer Chat",
+    "noConversations": "Noch keine Gespräche",
+    "startHint": "Starte mit einer Nachricht",
+    "startChat": "Chatten beginnen",
+    "welcomeMsg": "Schreibe etwas, um {lang} zu lernen",
+    "inputPlaceholder": "Schreibe etwas auf {lang}...",
+    "learningLabel": "Lerne",
+    "deleteConfirm": "Möchtest du dieses Gespräch wirklich löschen?",
+    "deleted": "Gespräch gelöscht",
+    "deleteError": "Konnte nicht gelöscht werden",
+    "genericError": "Ein Fehler ist aufgetreten",
+    "sendError": "Nachricht konnte nicht gesendet werden. Versuche es erneut.",
+    "loadError": "Gespräch konnte nicht geladen werden",
+    "hideHistory": "Verlauf ausblenden",
+    "showHistory": "Verlauf anzeigen",
+    "correctionLabel": "Grammatikhinweis"
+  },
+  "profile": {
+    "backToChat": "Zurück zum Chat",
+    "title": "Profileinstellungen",
+    "personalInfo": "Persönliche Daten",
+    "fullName": "Vollständiger Name",
+    "namePlaceholder": "Dein Name",
+    "save": "Speichern",
+    "email": "E-Mail-Adresse",
+    "emailNote": "E-Mail-Adresse kann nicht geändert werden",
+    "languageSettings": "Spracheinstellungen",
+    "nativeLanguage": "Deine Muttersprache",
+    "learningLanguage": "Sprache, die du lernst",
+    "cefrLevel": "Sprachniveau (GER)",
+    "sameLangWarning": "Muttersprache und Zielsprache können nicht gleich sein",
+    "saveLangs": "Spracheinstellungen speichern",
+    "saving": "Speichern...",
+    "planStatus": "Planstatus",
+    "activePlan": "Aktiver Plan",
+    "freeTier": "Kostenlose Version",
+    "fullAccess": "Du hast Zugriff auf alle Funktionen",
+    "limitedAccess": "Eingeschränkter Zugriff — upgrade zum Fortfahren",
+    "upgrade": "Upgrade",
+    "session": "Sitzung",
+    "signOutDesc": "Sicher aus deinem Konto abmelden",
+    "signOut": "Abmelden",
+    "errors": {
+      "nameEmpty": "Name darf nicht leer sein",
+      "nameUpdated": "Name aktualisiert",
+      "updateFailed": "Aktualisierung fehlgeschlagen",
+      "langSaved": "Spracheinstellungen aktualisiert",
+      "sameLang": "Muttersprache und Zielsprache können nicht gleich sein"
+    }
+  },
+  "onboarding": {
+    "title": "Profil einrichten",
+    "subtitle": "Sag uns, was du sprichst und was du lernen möchtest.",
+    "nativeLang": "Ich spreche",
+    "targetLang": "Ich möchte lernen",
+    "cefrTitle": "Was ist dein aktuelles Niveau?",
+    "cefrSubtitle": "Wir passen Vokabeln und Grammatikerklärungen an dein Niveau an.",
+    "continue": "Weiter zum Chat",
+    "success": "Einstellungen gespeichert!",
+    "errors": {
+      "sameLang": "Muttersprache und Zielsprache können nicht gleich sein.",
+      "generic": "Etwas ist schiefgelaufen"
+    },
+    "levels": {
+      "A1": { "label": "A1 — Anfänger", "description": "Ich kenne ein paar Wörter und Grundphrasen" },
+      "A2": { "label": "A2 — Grundlegende Kenntnisse", "description": "Ich kann einfache Alltagssätze verstehen" },
+      "B1": { "label": "B1 — Mittelstufe", "description": "Ich kann über vertraute Themen sprechen" },
+      "B2": { "label": "B2 — Gute Mittelstufe", "description": "Ich kann fließend und detailliert kommunizieren" },
+      "C1": { "label": "C1 — Fortgeschritten", "description": "Ich kann komplexe, nuancierte Sprache verwenden" },
+      "C2": { "label": "C2 — Beherrschung", "description": "Nahezu muttersprachliche Kompetenz" }
+    }
+  },
+  "pricing": {
+    "title": "Einfache, transparente Preise",
+    "subtitle": "Erlebe fließende Gespräche in deiner Zielsprache mit KI-gestütztem Feedback.",
+    "monthly": "Monatliche Abrechnung",
+    "annual": "Jährliche Abrechnung",
+    "choosePlan": "Plan wählen",
+    "planSubtitle": "Wähle den Plan, der zu deiner Lernreise passt",
+    "selected": "Ausgewählt",
+    "selectPlan": "Plan auswählen",
+    "guarantee": "Alle Pläne beinhalten eine 14-tägige Geld-zurück-Garantie. Jederzeit kündbar.",
+    "recommended": "Empfohlen",
+    "errors": {
+      "loginRequired": "Bitte erst anmelden, um zu abonnieren",
+      "notConfigured": "Abrechnungssystem noch nicht konfiguriert."
+    },
+    "plans": {
+      "standardMonthly": {
+        "name": "Standard Monatlich",
+        "features": ["Grundlegendes Sprachtraining", "100 KI-Nachrichten/Tag", "Alle Sprachen"]
+      },
+      "standardYearly": {
+        "name": "Standard Jährlich",
+        "features": ["Grundlegendes Sprachtraining", "100 KI-Nachrichten/Tag", "Alle Sprachen", "10 % sparen"]
+      },
+      "proMonthly": {
+        "name": "Pro Monatlich",
+        "features": ["Fortgeschrittenes Training", "Unbegrenzte Nachrichten", "Persönliche Tutoren", "Prioritätssupport"]
+      },
+      "proYearly": {
+        "name": "Pro Jährlich",
+        "features": ["Fortgeschrittenes Training", "Unbegrenzte Nachrichten", "Persönliche Tutoren", "20 % sparen"]
+      }
+    }
+  },
+  "userMenu": {
+    "myProfile": "Mein Profil",
+    "chatHistory": "Chatverlauf",
+    "signOut": "Abmelden",
+    "signOutError": "Abmelden fehlgeschlagen"
+  },
+  "languages": {
+    "ar": "Arabisch",
+    "en": "Englisch",
+    "es": "Spanisch",
+    "zh": "Mandarin-Chinesisch",
+    "de": "Deutsch",
+    "fr": "Französisch",
+    "ja": "Japanisch"
+  },
+  "adminDashboard": {
+    "title": "Admin-Dashboard",
+    "backToChat": "Zurück zum Chat",
+    "managePosts": "Beiträge verwalten",
+    "metrics": {
+      "totalUsers":    "Gesamtbenutzer",
+      "recentSignups": "Neue Anmeldungen",
+      "totalChats":    "Gesamte Chats",
+      "totalMessages": "Gesamte Nachrichten",
+      "last7days":     "letzte 7 Tage"
+    },
+    "table": {
+      "title":    "Benutzeraktivität",
+      "showing":  "{count} Benutzer werden angezeigt",
+      "user":     "Benutzer",
+      "joined":   "Beigetreten",
+      "role":     "Rolle",
+      "plan":     "Plan",
+      "chats":    "Chats",
+      "messages": "Nachrichten",
+      "noName":   "Kein Name"
+    }
+  },
+  "admin": {
+    "backToChat": "Zurück zum Chat",
+    "backToPosts": "Zurück zu Beiträgen",
+    "postsTitle": "Beiträge verwalten",
+    "newPost": "Neuer Beitrag",
+    "newPostTitle": "Beitrag erstellen",
+    "editPostTitle": "Beitrag bearbeiten",
+    "postCreated": "Beitrag erstellt",
+    "postUpdated": "Beitrag aktualisiert",
+    "postDeleted": "Beitrag gelöscht",
+    "published": "Veröffentlicht",
+    "draft": "Entwurf",
+    "premium": "Premium",
+    "edit": "Bearbeiten",
+    "empty": {
+      "title": "Noch keine Beiträge",
+      "description": "Erstelle deinen ersten Blog, deine erste Seite oder ein Dokument."
+    },
+    "categories": {
+      "blog": "Blog",
+      "page": "Seite",
+      "document": "Dokument"
+    },
+    "form": {
+      "title": "Titel",
+      "titlePlaceholder": "Beitragstitel",
+      "slug": "Slug",
+      "slugHint": "URL-freundlicher Bezeichner — wird automatisch aus dem Titel generiert",
+      "category": "Kategorie",
+      "language": "Sprache",
+      "content": "Inhalt",
+      "contentPlaceholder": "Schreibe hier deinen Inhalt...",
+      "published": "Veröffentlicht",
+      "premium": "Premium-Inhalt",
+      "premiumHint": "erfordert aktiven Plan",
+      "create": "Beitrag erstellen",
+      "saveChanges": "Änderungen speichern",
+      "cancel": "Abbrechen",
+      "delete": "Löschen",
+      "confirmDelete": "Löschen bestätigen",
+      "deleting": "Wird gelöscht..."
+    },
+    "errors": {
+      "required": "Titel, Slug und Inhalt sind erforderlich",
+      "slugConflict": "Ein Beitrag mit diesem Slug existiert bereits",
+      "saveFailed": "Beitrag konnte nicht gespeichert werden",
+      "deleteFailed": "Beitrag konnte nicht gelöscht werden"
+    }
+  },
+  "blogs": {
+    "title": "Blogbeiträge",
+    "backToChat": "Zurück zum Chat",
+    "backToBlogs": "Zurück zu Blogbeiträgen",
+    "unknownAuthor": "Unbekannt",
+    "by": "Von",
+    "notFound": "Beitrag nicht gefunden",
+    "notFoundDesc": "Dieser Beitrag wurde möglicherweise entfernt oder der Link ist falsch.",
+    "empty": {
+      "title": "Noch keine Blogbeiträge",
+      "description": "Bald findest du hier Artikel zum Sprachlernen."
+    }
+  },
+  "pages": {
+    "title": "Seiten",
+    "backToChat": "Zurück zum Chat",
+    "backToPages": "Zurück zu Seiten",
+    "unknownAuthor": "Unbekannt",
+    "by": "Von",
+    "notFound": "Seite nicht gefunden",
+    "notFoundDesc": "Diese Seite wurde möglicherweise entfernt oder der Link ist falsch.",
+    "empty": {
+      "title": "Noch keine Seiten",
+      "description": "Statische Inhaltsseiten erscheinen hier."
+    }
+  },
+  "documents": {
+    "title": "Dokumente",
+    "backToChat": "Zurück zum Chat",
+    "backToDocs": "Zurück zu Dokumenten",
+    "unknownAuthor": "Unbekannt",
+    "by": "Von",
+    "premium": "Premium",
+    "premiumNote": "Upgrade auf einen aktiven Plan, um auf dieses Dokument zuzugreifen.",
+    "upgrade": "Upgrade",
+    "sourceLang": "Ausgangssprache",
+    "viewingIn": "Benutzeroberfläche in",
+    "translationNote": "Dieses Dokument wurde ursprünglich auf {lang} verfasst. Übersetzungen sind noch nicht verfügbar.",
+    "loginRequired": "Anmelden um dieses Dokument zu lesen",
+    "loginDesc": "Dieses Dokument erfordert ein Konto. Bitte melde dich an, um fortzufahren.",
+    "signIn": "Anmelden",
+    "notFound": "Dokument nicht gefunden",
+    "notFoundDesc": "Dieses Dokument wurde möglicherweise entfernt oder der Link ist falsch.",
+    "empty": {
+      "title": "Noch keine Dokumente",
+      "description": "Lernmaterialien und Ressourcen erscheinen hier."
+    }
+  },
+  "languageSwitcher": {
+    "label": "Sprache",
+    "ar": "AR",
+    "de": "DE",
+    "en": "EN",
+    "es": "ES",
+    "fr": "FR",
+    "ja": "JA",
+    "zh": "ZH"
+  }
+}

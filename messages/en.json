@@ -277,7 +277,11 @@
   "blogs": {
     "title": "Blog Posts",
     "backToChat": "Back to Chat",
+    "backToBlogs": "Back to Blogs",
     "unknownAuthor": "Unknown",
+    "by": "By",
+    "notFound": "Post not found",
+    "notFoundDesc": "This post may have been removed or the link is incorrect.",
     "empty": {
       "title": "No blog posts yet",
       "description": "Check back soon for language learning articles."
@@ -286,7 +290,11 @@
   "pages": {
     "title": "Pages",
     "backToChat": "Back to Chat",
+    "backToPages": "Back to Pages",
     "unknownAuthor": "Unknown",
+    "by": "By",
+    "notFound": "Page not found",
+    "notFoundDesc": "This page may have been removed or the link is incorrect.",
     "empty": {
       "title": "No pages yet",
       "description": "Static content pages will appear here."
@@ -295,10 +303,20 @@
   "documents": {
     "title": "Documents",
     "backToChat": "Back to Chat",
+    "backToDocs": "Back to Documents",
     "unknownAuthor": "Unknown",
+    "by": "By",
     "premium": "Premium",
     "premiumNote": "Upgrade to an active plan to access this document.",
     "upgrade": "Upgrade",
+    "sourceLang": "Source language",
+    "viewingIn": "Viewing UI in",
+    "translationNote": "This document was originally written in {lang}. Translated versions are not yet available.",
+    "loginRequired": "Sign in to view this document",
+    "loginDesc": "This document requires an account. Please sign in to continue.",
+    "signIn": "Sign In",
+    "notFound": "Document not found",
+    "notFoundDesc": "This document may have been removed or the link is incorrect.",
     "empty": {
       "title": "No documents yet",
       "description": "Learning documents and resources will appear here."
@@ -306,7 +324,12 @@
   },
   "languageSwitcher": {
     "label": "Language",
+    "ar": "AR",
+    "de": "DE",
     "en": "EN",
-    "tr": "TR"
+    "es": "ES",
+    "fr": "FR",
+    "ja": "JA",
+    "zh": "ZH"
   }
 }

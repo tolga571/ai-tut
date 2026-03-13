@@ -1,0 +1,335 @@
+{
+  "nav": {
+    "pricing": "价格",
+    "login": "登录",
+    "register": "开始使用",
+    "goToChat": "前往聊天",
+    "light": "浅色",
+    "dark": "深色"
+  },
+  "home": {
+    "badge": "由 gemini-2.5-flash 驱动",
+    "title": "流畅对话，",
+    "titleAccent": "由AI驱动。",
+    "description": "停止死记硬背词汇，开始开口说话。与我们的双语AI导师自然对话，获得即时翻译和实时纠错。",
+    "cta": "马上开始"
+  },
+  "login": {
+    "title": "欢迎回来",
+    "subtitle": "登录AiTut并继续学习",
+    "email": "电子邮件",
+    "password": "密码",
+    "submit": "登录",
+    "noAccount": "还没有账号？",
+    "createAccount": "创建账号",
+    "success": "登录成功！"
+  },
+  "register": {
+    "stepLabel": "第2步",
+    "title": "创建账号",
+    "step1": "第1步：您的信息",
+    "name": "全名",
+    "namePlaceholder": "您的姓名",
+    "email": "电子邮件",
+    "emailPlaceholder": "you@example.com",
+    "password": "密码",
+    "submit": "继续 — 选择方案",
+    "hasAccount": "已有账号？",
+    "signIn": "登录",
+    "activating": "正在验证付款...",
+    "paymentPreparing": "正在准备付款页面...",
+    "paymentSuccess": "方案已激活！欢迎。",
+    "activationTimeout": "付款已确认但激活延迟。请登录。",
+    "devSkip": "[开发] 跳过付款 — 激活方案",
+    "planStep": {
+      "title": "选择您的方案",
+      "subtitle": "选择符合您学习目标的方案。",
+      "note": "选择方案后，您将直接进入聊天体验。",
+      "cta": "前往聊天",
+      "selected": "已选择",
+      "select": "选择",
+      "plans": {
+        "base": {
+          "name": "基础方案",
+          "priceValue": "$5",
+          "priceSuffix": "/ 月",
+          "description": "以基础功能开始您的AI导师之旅。"
+        },
+        "middle": {
+          "name": "中级方案",
+          "priceValue": "$15",
+          "priceSuffix": "/ 月",
+          "description": "通过高级纠错和更长课程提升水平。"
+        },
+        "ultra": {
+          "name": "超级方案",
+          "priceValue": "$40",
+          "priceSuffix": "/ 月",
+          "description": "解锁一切：专业反馈、速度和即将推出的高级工具。"
+        }
+      }
+    },
+    "errors": {
+      "register": "注册失败",
+      "generic": "发生意外错误。",
+      "userInfo": "用户信息缺失。请重试。",
+      "paymentLoading": "付款系统加载中，请稍候。",
+      "paymentFailed": "无法打开付款页面。请重试。",
+      "paymentStart": "无法启动付款。请重试。",
+      "devActivate": "无法激活方案。",
+      "devGeneric": "发生错误。"
+    }
+  },
+  "chat": {
+    "newChat": "新聊天",
+    "noConversations": "暂无对话",
+    "startHint": "发送消息开始",
+    "startChat": "开始聊天",
+    "welcomeMsg": "写些内容来学习{lang}",
+    "inputPlaceholder": "用{lang}写些内容...",
+    "learningLabel": "学习",
+    "deleteConfirm": "确定要删除这个对话吗？",
+    "deleted": "对话已删除",
+    "deleteError": "无法删除",
+    "genericError": "发生错误",
+    "sendError": "发送消息失败。请重试。",
+    "loadError": "加载对话失败",
+    "hideHistory": "隐藏历史",
+    "showHistory": "显示历史",
+    "correctionLabel": "语法提示"
+  },
+  "profile": {
+    "backToChat": "返回聊天",
+    "title": "个人资料设置",
+    "personalInfo": "个人信息",
+    "fullName": "全名",
+    "namePlaceholder": "您的姓名",
+    "save": "保存",
+    "email": "电子邮件地址",
+    "emailNote": "电子邮件地址无法更改",
+    "languageSettings": "语言设置",
+    "nativeLanguage": "您的母语",
+    "learningLanguage": "您正在学习的语言",
+    "cefrLevel": "熟练程度（CEFR）",
+    "sameLangWarning": "母语和目标语言不能相同",
+    "saveLangs": "保存语言设置",
+    "saving": "保存中...",
+    "planStatus": "方案状态",
+    "activePlan": "活跃方案",
+    "freeTier": "免费版",
+    "fullAccess": "您可以访问所有功能",
+    "limitedAccess": "访问受限 — 升级以继续",
+    "upgrade": "升级",
+    "session": "会话",
+    "signOutDesc": "安全退出您的账号",
+    "signOut": "退出登录",
+    "errors": {
+      "nameEmpty": "姓名不能为空",
+      "nameUpdated": "姓名已更新",
+      "updateFailed": "更新失败",
+      "langSaved": "语言设置已更新",
+      "sameLang": "母语和目标语言不能相同"
+    }
+  },
+  "onboarding": {
+    "title": "设置您的个人资料",
+    "subtitle": "告诉我们您说什么语言以及想学什么语言。",
+    "nativeLang": "我说",
+    "targetLang": "我想学",
+    "cefrTitle": "您目前的水平是？",
+    "cefrSubtitle": "我们将根据您的水平定制词汇和语法讲解。",
+    "continue": "继续前往聊天",
+    "success": "偏好已保存！",
+    "errors": {
+      "sameLang": "母语和目标语言不能相同。",
+      "generic": "出了些问题"
+    },
+    "levels": {
+      "A1": { "label": "A1 — 入门", "description": "我知道一些词汇和基本短语" },
+      "A2": { "label": "A2 — 初级", "description": "我能处理简单的日常句子" },
+      "B1": { "label": "B1 — 中级", "description": "我能讨论熟悉的话题" },
+      "B2": { "label": "B2 — 中高级", "description": "我能进行流畅、详细的对话" },
+      "C1": { "label": "C1 — 高级", "description": "我能使用复杂、细腻的语言" },
+      "C2": { "label": "C2 — 精通", "description": "近乎母语的流利程度" }
+    }
+  },
+  "pricing": {
+    "title": "简单透明的定价",
+    "subtitle": "通过AI反馈解锁您目标语言的流畅对话。",
+    "monthly": "按月计费",
+    "annual": "按年计费",
+    "choosePlan": "选择您的方案",
+    "planSubtitle": "选择适合您学习旅程的方案",
+    "selected": "已选择",
+    "selectPlan": "选择方案",
+    "guarantee": "所有方案均包含14天退款保证。随时可取消。",
+    "recommended": "推荐",
+    "errors": {
+      "loginRequired": "请先登录以订阅",
+      "notConfigured": "计费系统尚未配置。"
+    },
+    "plans": {
+      "standardMonthly": {
+        "name": "标准月付",
+        "features": ["基础语言练习", "每日100条AI消息", "所有语言"]
+      },
+      "standardYearly": {
+        "name": "标准年付",
+        "features": ["基础语言练习", "每日100条AI消息", "所有语言", "节省10%"]
+      },
+      "proMonthly": {
+        "name": "专业月付",
+        "features": ["高级练习", "无限消息", "个性化导师", "优先支持"]
+      },
+      "proYearly": {
+        "name": "专业年付",
+        "features": ["高级练习", "无限消息", "个性化导师", "节省20%"]
+      }
+    }
+  },
+  "userMenu": {
+    "myProfile": "我的个人资料",
+    "chatHistory": "聊天记录",
+    "signOut": "退出登录",
+    "signOutError": "退出登录失败"
+  },
+  "languages": {
+    "ar": "阿拉伯语",
+    "en": "英语",
+    "es": "西班牙语",
+    "zh": "普通话",
+    "de": "德语",
+    "fr": "法语",
+    "ja": "日语"
+  },
+  "adminDashboard": {
+    "title": "管理员控制台",
+    "backToChat": "返回聊天",
+    "managePosts": "管理文章",
+    "metrics": {
+      "totalUsers":    "总用户数",
+      "recentSignups": "最近注册",
+      "totalChats":    "总聊天数",
+      "totalMessages": "总消息数",
+      "last7days":     "最近7天"
+    },
+    "table": {
+      "title":    "用户活动",
+      "showing":  "显示{count}位用户",
+      "user":     "用户",
+      "joined":   "加入时间",
+      "role":     "角色",
+      "plan":     "方案",
+      "chats":    "聊天",
+      "messages": "消息",
+      "noName":   "无姓名"
+    }
+  },
+  "admin": {
+    "backToChat": "返回聊天",
+    "backToPosts": "返回文章",
+    "postsTitle": "管理文章",
+    "newPost": "新文章",
+    "newPostTitle": "创建文章",
+    "editPostTitle": "编辑文章",
+    "postCreated": "文章已创建",
+    "postUpdated": "文章已更新",
+    "postDeleted": "文章已删除",
+    "published": "已发布",
+    "draft": "草稿",
+    "premium": "高级",
+    "edit": "编辑",
+    "empty": {
+      "title": "暂无文章",
+      "description": "创建您的第一篇博客、页面或文档。"
+    },
+    "categories": {
+      "blog": "博客",
+      "page": "页面",
+      "document": "文档"
+    },
+    "form": {
+      "title": "标题",
+      "titlePlaceholder": "文章标题",
+      "slug": "Slug",
+      "slugHint": "URL友好标识符 — 从标题自动生成",
+      "category": "分类",
+      "language": "语言",
+      "content": "内容",
+      "contentPlaceholder": "在此写入您的内容...",
+      "published": "已发布",
+      "premium": "高级内容",
+      "premiumHint": "需要活跃方案",
+      "create": "创建文章",
+      "saveChanges": "保存更改",
+      "cancel": "取消",
+      "delete": "删除",
+      "confirmDelete": "确认删除",
+      "deleting": "删除中..."
+    },
+    "errors": {
+      "required": "标题、slug和内容为必填项",
+      "slugConflict": "已存在相同slug的文章",
+      "saveFailed": "保存文章失败",
+      "deleteFailed": "删除文章失败"
+    }
+  },
+  "blogs": {
+    "title": "博客文章",
+    "backToChat": "返回聊天",
+    "backToBlogs": "返回博客",
+    "unknownAuthor": "未知",
+    "by": "作者",
+    "notFound": "文章未找到",
+    "notFoundDesc": "此文章可能已被删除或链接不正确。",
+    "empty": {
+      "title": "暂无文章",
+      "description": "请稍后查看语言学习文章。"
+    }
+  },
+  "pages": {
+    "title": "页面",
+    "backToChat": "返回聊天",
+    "backToPages": "返回页面",
+    "unknownAuthor": "未知",
+    "by": "作者",
+    "notFound": "页面未找到",
+    "notFoundDesc": "此页面可能已被删除或链接不正确。",
+    "empty": {
+      "title": "暂无页面",
+      "description": "静态内容页面将在此显示。"
+    }
+  },
+  "documents": {
+    "title": "文档",
+    "backToChat": "返回聊天",
+    "backToDocs": "返回文档",
+    "unknownAuthor": "未知",
+    "by": "作者",
+    "premium": "高级",
+    "premiumNote": "升级到活跃方案以访问此文档。",
+    "upgrade": "升级",
+    "sourceLang": "原始语言",
+    "viewingIn": "界面语言",
+    "translationNote": "此文档最初以{lang}写成。翻译版本尚不可用。",
+    "loginRequired": "登录以查看此文档",
+    "loginDesc": "此文档需要账号。请登录以继续。",
+    "signIn": "登录",
+    "notFound": "文档未找到",
+    "notFoundDesc": "此文档可能已被删除或链接不正确。",
+    "empty": {
+      "title": "暂无文档",
+      "description": "学习文档和资源将在此显示。"
+    }
+  },
+  "languageSwitcher": {
+    "label": "语言",
+    "ar": "AR",
+    "de": "DE",
+    "en": "EN",
+    "es": "ES",
+    "fr": "FR",
+    "ja": "JA",
+    "zh": "ZH"
+  }
+}

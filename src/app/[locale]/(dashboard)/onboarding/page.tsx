@@ -5,13 +5,12 @@ import { useRouter } from "@/i18n/navigation";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
-import { SUPPORTED_LANG_CODES, CEFR_LEVELS, type CefrLevel } from "@/constants/languages";
+import { LEARNING_LANGUAGES, CEFR_LEVELS, type CefrLevel } from "@/constants/languages";
 
 export default function OnboardingPage() {
   const router = useRouter();
   const { update } = useSession();
   const t = useTranslations("onboarding");
-  const tLangs = useTranslations("languages");
   const [loading, setLoading] = useState(false);
   const [nativeLang, setNativeLang] = useState("en");
   const [targetLang, setTargetLang] = useState("es");
@@ -70,8 +69,8 @@ export default function OnboardingPage() {
                   onChange={(e) => setNativeLang(e.target.value)}
                   className="w-full appearance-none px-4 py-3 bg-gray-950/50 border border-gray-800 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 text-white transition-all outline-none"
                 >
-                  {SUPPORTED_LANG_CODES.map((code) => (
-                    <option key={code} value={code}>{tLangs(code)}</option>
+                  {LEARNING_LANGUAGES.map((lang) => (
+                    <option key={lang.code} value={lang.code}>{lang.nameEn}</option>
                   ))}
                 </select>
                 <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-400">
@@ -92,8 +91,8 @@ export default function OnboardingPage() {
                   onChange={(e) => setTargetLang(e.target.value)}
                   className="w-full appearance-none px-4 py-3 bg-gray-950/50 border border-gray-800 rounded-xl focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 text-white transition-all outline-none"
                 >
-                  {SUPPORTED_LANG_CODES.map((code) => (
-                    <option key={code} value={code}>{tLangs(code)}</option>
+                  {LEARNING_LANGUAGES.map((lang) => (
+                    <option key={lang.code} value={lang.code}>{lang.nameEn}</option>
                   ))}
                 </select>
                 <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-400">

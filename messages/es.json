@@ -1,0 +1,335 @@
+{
+  "nav": {
+    "pricing": "Precios",
+    "login": "Iniciar sesión",
+    "register": "Comenzar",
+    "goToChat": "Ir al chat",
+    "light": "Claro",
+    "dark": "Oscuro"
+  },
+  "home": {
+    "badge": "Impulsado por gemini-2.5-flash",
+    "title": "Conversaciones fluidas,",
+    "titleAccent": "impulsadas por IA.",
+    "description": "Deja de memorizar vocabulario y empieza a hablar. Chatea de forma natural con nuestro tutor de IA bilingüe y obtén traducciones instantáneas y correcciones en tiempo real.",
+    "cta": "Empecemos"
+  },
+  "login": {
+    "title": "Bienvenido de vuelta",
+    "subtitle": "Inicia sesión en AiTut y continúa aprendiendo",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "submit": "Iniciar sesión",
+    "noAccount": "¿No tienes cuenta?",
+    "createAccount": "Crear cuenta",
+    "success": "¡Sesión iniciada correctamente!"
+  },
+  "register": {
+    "stepLabel": "Paso 2",
+    "title": "Crear cuenta",
+    "step1": "Paso 1: Tus datos",
+    "name": "Nombre completo",
+    "namePlaceholder": "Tu nombre",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "tu@ejemplo.com",
+    "password": "Contraseña",
+    "submit": "Continuar — Elegir plan",
+    "hasAccount": "¿Ya tienes una cuenta?",
+    "signIn": "Iniciar sesión",
+    "activating": "Verificando pago...",
+    "paymentPreparing": "Preparando página de pago...",
+    "paymentSuccess": "¡Plan activado! Bienvenido.",
+    "activationTimeout": "Pago confirmado pero activación retrasada. Por favor inicia sesión.",
+    "devSkip": "[DEV] Omitir pago — Activar plan",
+    "planStep": {
+      "title": "Elige tu plan",
+      "subtitle": "Selecciona el plan que se adapte a tus objetivos de aprendizaje.",
+      "note": "Irás directo a la experiencia de chat después de elegir un plan.",
+      "cta": "Ir al chat",
+      "selected": "Seleccionado",
+      "select": "Seleccionar",
+      "plans": {
+        "base": {
+          "name": "Plan Básico",
+          "priceValue": "$5",
+          "priceSuffix": "/ mes",
+          "description": "Inicia tu viaje con el tutor de IA con lo esencial."
+        },
+        "middle": {
+          "name": "Plan Intermedio",
+          "priceValue": "$15",
+          "priceSuffix": "/ mes",
+          "description": "Avanza con correcciones avanzadas y sesiones más largas."
+        },
+        "ultra": {
+          "name": "Plan Ultra",
+          "priceValue": "$40",
+          "priceSuffix": "/ mes",
+          "description": "Desbloquea todo: feedback profesional, velocidad y herramientas premium."
+        }
+      }
+    },
+    "errors": {
+      "register": "Error en el registro",
+      "generic": "Ocurrió un error inesperado.",
+      "userInfo": "Información de usuario faltante. Por favor intenta de nuevo.",
+      "paymentLoading": "Sistema de pago cargando, por favor espera.",
+      "paymentFailed": "No se pudo abrir la página de pago. Por favor intenta de nuevo.",
+      "paymentStart": "No se pudo iniciar el pago. Por favor intenta de nuevo.",
+      "devActivate": "No se pudo activar el plan.",
+      "devGeneric": "Ocurrió un error."
+    }
+  },
+  "chat": {
+    "newChat": "Nuevo chat",
+    "noConversations": "Sin conversaciones aún",
+    "startHint": "Comienza enviando un mensaje",
+    "startChat": "Empezar a chatear",
+    "welcomeMsg": "Escribe algo para aprender {lang}",
+    "inputPlaceholder": "Escribe algo en {lang}...",
+    "learningLabel": "Aprendiendo",
+    "deleteConfirm": "¿Seguro que quieres eliminar esta conversación?",
+    "deleted": "Conversación eliminada",
+    "deleteError": "No se pudo eliminar",
+    "genericError": "Ocurrió un error",
+    "sendError": "No se pudo enviar el mensaje. Inténtalo de nuevo.",
+    "loadError": "No se pudo cargar la conversación",
+    "hideHistory": "Ocultar historial",
+    "showHistory": "Mostrar historial",
+    "correctionLabel": "Nota gramatical"
+  },
+  "profile": {
+    "backToChat": "Volver al chat",
+    "title": "Configuración del perfil",
+    "personalInfo": "Información personal",
+    "fullName": "Nombre completo",
+    "namePlaceholder": "Tu nombre",
+    "save": "Guardar",
+    "email": "Dirección de correo electrónico",
+    "emailNote": "La dirección de correo electrónico no se puede cambiar",
+    "languageSettings": "Configuración de idioma",
+    "nativeLanguage": "Tu idioma nativo",
+    "learningLanguage": "Idioma que estás aprendiendo",
+    "cefrLevel": "Nivel de competencia (MCER)",
+    "sameLangWarning": "El idioma nativo y el objetivo no pueden ser iguales",
+    "saveLangs": "Guardar configuración de idioma",
+    "saving": "Guardando...",
+    "planStatus": "Estado del plan",
+    "activePlan": "Plan activo",
+    "freeTier": "Nivel gratuito",
+    "fullAccess": "Tienes acceso a todas las funciones",
+    "limitedAccess": "Acceso limitado — actualiza para continuar",
+    "upgrade": "Actualizar",
+    "session": "Sesión",
+    "signOutDesc": "Cerrar sesión de forma segura",
+    "signOut": "Cerrar sesión",
+    "errors": {
+      "nameEmpty": "El nombre no puede estar vacío",
+      "nameUpdated": "Nombre actualizado",
+      "updateFailed": "Error al actualizar",
+      "langSaved": "Configuración de idioma actualizada",
+      "sameLang": "El idioma nativo y el objetivo no pueden ser iguales"
+    }
+  },
+  "onboarding": {
+    "title": "Configura tu perfil",
+    "subtitle": "Dinos qué hablas y qué quieres aprender.",
+    "nativeLang": "Hablo",
+    "targetLang": "Quiero aprender",
+    "cefrTitle": "¿Cuál es tu nivel actual?",
+    "cefrSubtitle": "Adaptaremos las explicaciones de vocabulario y gramática a tu nivel.",
+    "continue": "Continuar al chat",
+    "success": "¡Preferencias guardadas!",
+    "errors": {
+      "sameLang": "Los idiomas nativo y objetivo no pueden ser iguales.",
+      "generic": "Algo salió mal"
+    },
+    "levels": {
+      "A1": { "label": "A1 — Principiante", "description": "Conozco algunas palabras y frases básicas" },
+      "A2": { "label": "A2 — Elemental", "description": "Puedo manejar oraciones cotidianas simples" },
+      "B1": { "label": "B1 — Intermedio", "description": "Puedo hablar sobre temas familiares" },
+      "B2": { "label": "B2 — Intermedio alto", "description": "Puedo tener conversaciones fluidas y detalladas" },
+      "C1": { "label": "C1 — Avanzado", "description": "Puedo usar lenguaje complejo y matizado" },
+      "C2": { "label": "C2 — Maestría", "description": "Fluidez casi nativa" }
+    }
+  },
+  "pricing": {
+    "title": "Precios simples y transparentes",
+    "subtitle": "Desbloquea conversaciones fluidas en tu idioma objetivo con retroalimentación impulsada por IA.",
+    "monthly": "Facturación mensual",
+    "annual": "Facturación anual",
+    "choosePlan": "Elige tu plan",
+    "planSubtitle": "Selecciona el plan que se adapte a tu viaje de aprendizaje",
+    "selected": "Seleccionado",
+    "selectPlan": "Seleccionar plan",
+    "guarantee": "Todos los planes incluyen garantía de devolución de dinero de 14 días. Cancela cuando quieras.",
+    "recommended": "Recomendado",
+    "errors": {
+      "loginRequired": "Por favor inicia sesión primero para suscribirte",
+      "notConfigured": "El sistema de facturación aún no está configurado."
+    },
+    "plans": {
+      "standardMonthly": {
+        "name": "Estándar Mensual",
+        "features": ["Práctica básica de idioma", "100 mensajes IA/día", "Todos los idiomas"]
+      },
+      "standardYearly": {
+        "name": "Estándar Anual",
+        "features": ["Práctica básica de idioma", "100 mensajes IA/día", "Todos los idiomas", "Ahorra 10%"]
+      },
+      "proMonthly": {
+        "name": "Pro Mensual",
+        "features": ["Práctica avanzada", "Mensajes ilimitados", "Tutores personalizados", "Soporte prioritario"]
+      },
+      "proYearly": {
+        "name": "Pro Anual",
+        "features": ["Práctica avanzada", "Mensajes ilimitados", "Tutores personalizados", "Ahorra 20%"]
+      }
+    }
+  },
+  "userMenu": {
+    "myProfile": "Mi perfil",
+    "chatHistory": "Historial de chats",
+    "signOut": "Cerrar sesión",
+    "signOutError": "Error al cerrar sesión"
+  },
+  "languages": {
+    "ar": "Árabe",
+    "en": "Inglés",
+    "es": "Español",
+    "zh": "Chino mandarín",
+    "de": "Alemán",
+    "fr": "Francés",
+    "ja": "Japonés"
+  },
+  "adminDashboard": {
+    "title": "Panel de administración",
+    "backToChat": "Volver al chat",
+    "managePosts": "Gestionar publicaciones",
+    "metrics": {
+      "totalUsers":    "Total de usuarios",
+      "recentSignups": "Registros recientes",
+      "totalChats":    "Total de chats",
+      "totalMessages": "Total de mensajes",
+      "last7days":     "últimos 7 días"
+    },
+    "table": {
+      "title":    "Actividad de usuarios",
+      "showing":  "Mostrando {count} usuarios",
+      "user":     "Usuario",
+      "joined":   "Se unió",
+      "role":     "Rol",
+      "plan":     "Plan",
+      "chats":    "Chats",
+      "messages": "Mensajes",
+      "noName":   "Sin nombre"
+    }
+  },
+  "admin": {
+    "backToChat": "Volver al chat",
+    "backToPosts": "Volver a publicaciones",
+    "postsTitle": "Gestionar publicaciones",
+    "newPost": "Nueva publicación",
+    "newPostTitle": "Crear publicación",
+    "editPostTitle": "Editar publicación",
+    "postCreated": "Publicación creada",
+    "postUpdated": "Publicación actualizada",
+    "postDeleted": "Publicación eliminada",
+    "published": "Publicado",
+    "draft": "Borrador",
+    "premium": "Premium",
+    "edit": "Editar",
+    "empty": {
+      "title": "Sin publicaciones aún",
+      "description": "Crea tu primer blog, página o documento."
+    },
+    "categories": {
+      "blog": "Blog",
+      "page": "Página",
+      "document": "Documento"
+    },
+    "form": {
+      "title": "Título",
+      "titlePlaceholder": "Título de la publicación",
+      "slug": "Slug",
+      "slugHint": "Identificador amigable para URL — generado automáticamente desde el título",
+      "category": "Categoría",
+      "language": "Idioma",
+      "content": "Contenido",
+      "contentPlaceholder": "Escribe tu contenido aquí...",
+      "published": "Publicado",
+      "premium": "Contenido premium",
+      "premiumHint": "requiere plan activo",
+      "create": "Crear publicación",
+      "saveChanges": "Guardar cambios",
+      "cancel": "Cancelar",
+      "delete": "Eliminar",
+      "confirmDelete": "Confirmar eliminación",
+      "deleting": "Eliminando..."
+    },
+    "errors": {
+      "required": "El título, slug y contenido son obligatorios",
+      "slugConflict": "Ya existe una publicación con este slug",
+      "saveFailed": "No se pudo guardar la publicación",
+      "deleteFailed": "No se pudo eliminar la publicación"
+    }
+  },
+  "blogs": {
+    "title": "Publicaciones del blog",
+    "backToChat": "Volver al chat",
+    "backToBlogs": "Volver al blog",
+    "unknownAuthor": "Desconocido",
+    "by": "Por",
+    "notFound": "Publicación no encontrada",
+    "notFoundDesc": "Esta publicación puede haber sido eliminada o el enlace es incorrecto.",
+    "empty": {
+      "title": "Sin publicaciones aún",
+      "description": "Vuelve pronto para artículos sobre aprendizaje de idiomas."
+    }
+  },
+  "pages": {
+    "title": "Páginas",
+    "backToChat": "Volver al chat",
+    "backToPages": "Volver a páginas",
+    "unknownAuthor": "Desconocido",
+    "by": "Por",
+    "notFound": "Página no encontrada",
+    "notFoundDesc": "Esta página puede haber sido eliminada o el enlace es incorrecto.",
+    "empty": {
+      "title": "Sin páginas aún",
+      "description": "Las páginas de contenido estático aparecerán aquí."
+    }
+  },
+  "documents": {
+    "title": "Documentos",
+    "backToChat": "Volver al chat",
+    "backToDocs": "Volver a documentos",
+    "unknownAuthor": "Desconocido",
+    "by": "Por",
+    "premium": "Premium",
+    "premiumNote": "Actualiza a un plan activo para acceder a este documento.",
+    "upgrade": "Actualizar",
+    "sourceLang": "Idioma fuente",
+    "viewingIn": "Interfaz en",
+    "translationNote": "Este documento fue escrito originalmente en {lang}. Las versiones traducidas aún no están disponibles.",
+    "loginRequired": "Inicia sesión para ver este documento",
+    "loginDesc": "Este documento requiere una cuenta. Por favor inicia sesión para continuar.",
+    "signIn": "Iniciar sesión",
+    "notFound": "Documento no encontrado",
+    "notFoundDesc": "Este documento puede haber sido eliminado o el enlace es incorrecto.",
+    "empty": {
+      "title": "Sin documentos aún",
+      "description": "Los documentos y recursos de aprendizaje aparecerán aquí."
+    }
+  },
+  "languageSwitcher": {
+    "label": "Idioma",
+    "ar": "AR",
+    "de": "DE",
+    "en": "EN",
+    "es": "ES",
+    "fr": "FR",
+    "ja": "JA",
+    "zh": "ZH"
+  }
+}

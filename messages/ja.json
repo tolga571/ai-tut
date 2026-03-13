@@ -1,0 +1,335 @@
+{
+  "nav": {
+    "pricing": "料金",
+    "login": "ログイン",
+    "register": "始める",
+    "goToChat": "チャットへ",
+    "light": "ライト",
+    "dark": "ダーク"
+  },
+  "home": {
+    "badge": "gemini-2.5-flash 搭載",
+    "title": "流暢な会話を、",
+    "titleAccent": "AIの力で。",
+    "description": "単語の暗記をやめて、話し始めましょう。バイリンガルAIチューターと自然に会話し、即時翻訳とリアルタイム修正を受け取りましょう。",
+    "cta": "始めましょう"
+  },
+  "login": {
+    "title": "おかえりなさい",
+    "subtitle": "AiTutにログインして学習を続けましょう",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "submit": "ログイン",
+    "noAccount": "アカウントをお持ちでないですか？",
+    "createAccount": "アカウントを作成",
+    "success": "ログインしました！"
+  },
+  "register": {
+    "stepLabel": "ステップ2",
+    "title": "アカウント作成",
+    "step1": "ステップ1：あなたの情報",
+    "name": "フルネーム",
+    "namePlaceholder": "あなたの名前",
+    "email": "メールアドレス",
+    "emailPlaceholder": "you@example.com",
+    "password": "パスワード",
+    "submit": "続ける — プランを選択",
+    "hasAccount": "すでにアカウントをお持ちですか？",
+    "signIn": "ログイン",
+    "activating": "支払いを確認中...",
+    "paymentPreparing": "支払いページを準備中...",
+    "paymentSuccess": "プランが有効化されました！ようこそ。",
+    "activationTimeout": "支払いは確認されましたが、有効化が遅れています。ログインしてください。",
+    "devSkip": "[開発] 支払いをスキップ — プランを有効化",
+    "planStep": {
+      "title": "プランを選択",
+      "subtitle": "学習目標に合ったプランを選んでください。",
+      "note": "プランを選択後、チャット体験に直接進みます。",
+      "cta": "チャットへ",
+      "selected": "選択済み",
+      "select": "選択",
+      "plans": {
+        "base": {
+          "name": "ベーシックプラン",
+          "priceValue": "$5",
+          "priceSuffix": "/ 月",
+          "description": "AIチューターの旅を基本から始めましょう。"
+        },
+        "middle": {
+          "name": "ミドルプラン",
+          "priceValue": "$15",
+          "priceSuffix": "/ 月",
+          "description": "高度な修正と長いセッションでレベルアップ。"
+        },
+        "ultra": {
+          "name": "ウルトラプラン",
+          "priceValue": "$40",
+          "priceSuffix": "/ 月",
+          "description": "すべてを解放：プロのフィードバック、スピード、プレミアムツール。"
+        }
+      }
+    },
+    "errors": {
+      "register": "登録に失敗しました",
+      "generic": "予期しないエラーが発生しました。",
+      "userInfo": "ユーザー情報が見つかりません。もう一度お試しください。",
+      "paymentLoading": "支払いシステムを読み込み中です。しばらくお待ちください。",
+      "paymentFailed": "支払いページを開けませんでした。もう一度お試しください。",
+      "paymentStart": "支払いを開始できませんでした。もう一度お試しください。",
+      "devActivate": "プランを有効化できませんでした。",
+      "devGeneric": "エラーが発生しました。"
+    }
+  },
+  "chat": {
+    "newChat": "新しいチャット",
+    "noConversations": "まだ会話がありません",
+    "startHint": "メッセージを送って始めましょう",
+    "startChat": "チャットを始める",
+    "welcomeMsg": "{lang}を学ぶために何か書いてください",
+    "inputPlaceholder": "{lang}で何か書いてください...",
+    "learningLabel": "学習中",
+    "deleteConfirm": "この会話を削除してもよいですか？",
+    "deleted": "会話を削除しました",
+    "deleteError": "削除できませんでした",
+    "genericError": "エラーが発生しました",
+    "sendError": "メッセージの送信に失敗しました。もう一度お試しください。",
+    "loadError": "会話の読み込みに失敗しました",
+    "hideHistory": "履歴を非表示",
+    "showHistory": "履歴を表示",
+    "correctionLabel": "文法メモ"
+  },
+  "profile": {
+    "backToChat": "チャットに戻る",
+    "title": "プロフィール設定",
+    "personalInfo": "個人情報",
+    "fullName": "フルネーム",
+    "namePlaceholder": "あなたの名前",
+    "save": "保存",
+    "email": "メールアドレス",
+    "emailNote": "メールアドレスは変更できません",
+    "languageSettings": "言語設定",
+    "nativeLanguage": "母国語",
+    "learningLanguage": "学習中の言語",
+    "cefrLevel": "習熟度レベル（CEFR）",
+    "sameLangWarning": "母国語と目標言語は同じにできません",
+    "saveLangs": "言語設定を保存",
+    "saving": "保存中...",
+    "planStatus": "プランの状態",
+    "activePlan": "有効なプラン",
+    "freeTier": "無料プラン",
+    "fullAccess": "すべての機能にアクセスできます",
+    "limitedAccess": "アクセス制限あり — 続けるにはアップグレードしてください",
+    "upgrade": "アップグレード",
+    "session": "セッション",
+    "signOutDesc": "アカウントから安全にログアウト",
+    "signOut": "ログアウト",
+    "errors": {
+      "nameEmpty": "名前は空にできません",
+      "nameUpdated": "名前を更新しました",
+      "updateFailed": "更新に失敗しました",
+      "langSaved": "言語設定を更新しました",
+      "sameLang": "母国語と目標言語は同じにできません"
+    }
+  },
+  "onboarding": {
+    "title": "プロフィールを設定する",
+    "subtitle": "話せる言語と学びたい言語を教えてください。",
+    "nativeLang": "私が話す言語",
+    "targetLang": "学びたい言語",
+    "cefrTitle": "現在のレベルは？",
+    "cefrSubtitle": "あなたのレベルに合わせて語彙と文法の説明を調整します。",
+    "continue": "チャットへ進む",
+    "success": "設定を保存しました！",
+    "errors": {
+      "sameLang": "母国語と目標言語は同じにできません。",
+      "generic": "問題が発生しました"
+    },
+    "levels": {
+      "A1": { "label": "A1 — 入門", "description": "いくつかの単語と基本的なフレーズを知っている" },
+      "A2": { "label": "A2 — 初級", "description": "簡単な日常の文を扱える" },
+      "B1": { "label": "B1 — 中級", "description": "身近なトピックについて話せる" },
+      "B2": { "label": "B2 — 中上級", "description": "流暢で詳細な会話ができる" },
+      "C1": { "label": "C1 — 上級", "description": "複雑で微妙な言語を使える" },
+      "C2": { "label": "C2 — 熟達", "description": "ほぼネイティブレベルの流暢さ" }
+    }
+  },
+  "pricing": {
+    "title": "シンプルで透明な料金",
+    "subtitle": "AIによるフィードバックで目標言語の流暢な会話を実現。",
+    "monthly": "月払い",
+    "annual": "年払い",
+    "choosePlan": "プランを選択",
+    "planSubtitle": "学習の旅に合ったプランを選んでください",
+    "selected": "選択済み",
+    "selectPlan": "プランを選択",
+    "guarantee": "全プランに14日間の返金保証付き。いつでもキャンセル可能。",
+    "recommended": "おすすめ",
+    "errors": {
+      "loginRequired": "サブスクリプションにはまずログインしてください",
+      "notConfigured": "課金システムはまだ設定されていません。"
+    },
+    "plans": {
+      "standardMonthly": {
+        "name": "スタンダード月払い",
+        "features": ["基本的な語学練習", "AIメッセージ100件/日", "全言語対応"]
+      },
+      "standardYearly": {
+        "name": "スタンダード年払い",
+        "features": ["基本的な語学練習", "AIメッセージ100件/日", "全言語対応", "10%お得"]
+      },
+      "proMonthly": {
+        "name": "プロ月払い",
+        "features": ["高度な練習", "無制限メッセージ", "個人チューター", "優先サポート"]
+      },
+      "proYearly": {
+        "name": "プロ年払い",
+        "features": ["高度な練習", "無制限メッセージ", "個人チューター", "20%お得"]
+      }
+    }
+  },
+  "userMenu": {
+    "myProfile": "マイプロフィール",
+    "chatHistory": "チャット履歴",
+    "signOut": "ログアウト",
+    "signOutError": "ログアウトに失敗しました"
+  },
+  "languages": {
+    "ar": "アラビア語",
+    "en": "英語",
+    "es": "スペイン語",
+    "zh": "中国語（北京語）",
+    "de": "ドイツ語",
+    "fr": "フランス語",
+    "ja": "日本語"
+  },
+  "adminDashboard": {
+    "title": "管理ダッシュボード",
+    "backToChat": "チャットに戻る",
+    "managePosts": "投稿を管理",
+    "metrics": {
+      "totalUsers":    "総ユーザー数",
+      "recentSignups": "最近の登録",
+      "totalChats":    "総チャット数",
+      "totalMessages": "総メッセージ数",
+      "last7days":     "過去7日間"
+    },
+    "table": {
+      "title":    "ユーザー活動",
+      "showing":  "{count}人のユーザーを表示",
+      "user":     "ユーザー",
+      "joined":   "登録日",
+      "role":     "役割",
+      "plan":     "プラン",
+      "chats":    "チャット",
+      "messages": "メッセージ",
+      "noName":   "名前なし"
+    }
+  },
+  "admin": {
+    "backToChat": "チャットに戻る",
+    "backToPosts": "投稿一覧に戻る",
+    "postsTitle": "投稿を管理",
+    "newPost": "新しい投稿",
+    "newPostTitle": "投稿を作成",
+    "editPostTitle": "投稿を編集",
+    "postCreated": "投稿を作成しました",
+    "postUpdated": "投稿を更新しました",
+    "postDeleted": "投稿を削除しました",
+    "published": "公開済み",
+    "draft": "下書き",
+    "premium": "プレミアム",
+    "edit": "編集",
+    "empty": {
+      "title": "まだ投稿がありません",
+      "description": "最初のブログ、ページ、またはドキュメントを作成してください。"
+    },
+    "categories": {
+      "blog": "ブログ",
+      "page": "ページ",
+      "document": "ドキュメント"
+    },
+    "form": {
+      "title": "タイトル",
+      "titlePlaceholder": "投稿タイトル",
+      "slug": "スラッグ",
+      "slugHint": "URL識別子 — タイトルから自動生成",
+      "category": "カテゴリ",
+      "language": "言語",
+      "content": "コンテンツ",
+      "contentPlaceholder": "ここにコンテンツを書いてください...",
+      "published": "公開済み",
+      "premium": "プレミアムコンテンツ",
+      "premiumHint": "有効なプランが必要",
+      "create": "投稿を作成",
+      "saveChanges": "変更を保存",
+      "cancel": "キャンセル",
+      "delete": "削除",
+      "confirmDelete": "削除を確認",
+      "deleting": "削除中..."
+    },
+    "errors": {
+      "required": "タイトル、スラッグ、コンテンツは必須です",
+      "slugConflict": "このスラッグを持つ投稿がすでに存在します",
+      "saveFailed": "投稿の保存に失敗しました",
+      "deleteFailed": "投稿の削除に失敗しました"
+    }
+  },
+  "blogs": {
+    "title": "ブログ投稿",
+    "backToChat": "チャットに戻る",
+    "backToBlogs": "ブログ一覧に戻る",
+    "unknownAuthor": "不明",
+    "by": "著者",
+    "notFound": "投稿が見つかりません",
+    "notFoundDesc": "この投稿は削除されたか、リンクが正しくない可能性があります。",
+    "empty": {
+      "title": "まだ投稿がありません",
+      "description": "語学学習の記事をお楽しみに。"
+    }
+  },
+  "pages": {
+    "title": "ページ",
+    "backToChat": "チャットに戻る",
+    "backToPages": "ページ一覧に戻る",
+    "unknownAuthor": "不明",
+    "by": "著者",
+    "notFound": "ページが見つかりません",
+    "notFoundDesc": "このページは削除されたか、リンクが正しくない可能性があります。",
+    "empty": {
+      "title": "まだページがありません",
+      "description": "静的コンテンツページがここに表示されます。"
+    }
+  },
+  "documents": {
+    "title": "ドキュメント",
+    "backToChat": "チャットに戻る",
+    "backToDocs": "ドキュメント一覧に戻る",
+    "unknownAuthor": "不明",
+    "by": "著者",
+    "premium": "プレミアム",
+    "premiumNote": "このドキュメントにアクセスするには有効なプランにアップグレードしてください。",
+    "upgrade": "アップグレード",
+    "sourceLang": "元の言語",
+    "viewingIn": "UI言語",
+    "translationNote": "このドキュメントはもともと{lang}で書かれています。翻訳版はまだ利用できません。",
+    "loginRequired": "このドキュメントを見るにはログインが必要です",
+    "loginDesc": "このドキュメントにはアカウントが必要です。続けるにはログインしてください。",
+    "signIn": "ログイン",
+    "notFound": "ドキュメントが見つかりません",
+    "notFoundDesc": "このドキュメントは削除されたか、リンクが正しくない可能性があります。",
+    "empty": {
+      "title": "まだドキュメントがありません",
+      "description": "学習ドキュメントとリソースがここに表示されます。"
+    }
+  },
+  "languageSwitcher": {
+    "label": "言語",
+    "ar": "AR",
+    "de": "DE",
+    "en": "EN",
+    "es": "ES",
+    "fr": "FR",
+    "ja": "JA",
+    "zh": "ZH"
+  }
+}

@@ -5,12 +5,11 @@ import { useState } from "react";
 import { Link } from "@/i18n/navigation";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
-import { SUPPORTED_LANG_CODES, CEFR_LEVELS, type CefrLevel } from "@/constants/languages";
+import { LEARNING_LANGUAGES, CEFR_LEVELS, type CefrLevel } from "@/constants/languages";
 
 export default function ProfilePage() {
   const { data: session, update: updateSession } = useSession();
   const t = useTranslations("profile");
-  const tLangs = useTranslations("languages");
   const tOnboarding = useTranslations("onboarding");
   const user = session?.user as {
     id?: string;
@@ -121,8 +120,8 @@ export default function ProfilePage() {
               <label className="block text-sm font-medium text-gray-400">{t("nativeLanguage")}</label>
               <select value={nativeLang} onChange={(e) => setNativeLang(e.target.value)}
                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none cursor-pointer">
-                {SUPPORTED_LANG_CODES.map((code) => (
-                  <option key={code} value={code} className="bg-gray-800 text-white">{tLangs(code)}</option>
+                {LEARNING_LANGUAGES.map((lang) => (
+                  <option key={lang.code} value={lang.code} className="bg-gray-800 text-white">{lang.nameEn}</option>
                 ))}
               </select>
             </div>
@@ -130,8 +129,8 @@ export default function ProfilePage() {
               <label className="block text-sm font-medium text-gray-400">{t("learningLanguage")}</label>
               <select value={targetLang} onChange={(e) => setTargetLang(e.target.value)}
                 className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none cursor-pointer">
-                {SUPPORTED_LANG_CODES.map((code) => (
-                  <option key={code} value={code} className="bg-gray-800 text-white">{tLangs(code)}</option>
+                {LEARNING_LANGUAGES.map((lang) => (
+                  <option key={lang.code} value={lang.code} className="bg-gray-800 text-white">{lang.nameEn}</option>
                 ))}
               </select>
             </div>
