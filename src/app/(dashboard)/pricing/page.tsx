@@ -1,54 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { initializePaddle, Paddle } from "@paddle/paddle-js";
-import { useSession } from "next-auth/react";
-import toast from "react-hot-toast";
+import Link from "next/link";
 
 export default function PricingPage() {
-  const { data: session } = useSession();
-  const [paddle, setPaddle] = useState<Paddle>();
-  const [isAnnual, setIsAnnual] = useState(false);
-
-  useEffect(() => {
-    // Initialize Paddle using required client token
-    if (process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN) {
-      initializePaddle({
-        environment: "sandbox", 
-        token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN,
-      }).then((paddleInstance: Paddle | undefined) => {
-        if (paddleInstance) {
-          setPaddle(paddleInstance);
-        }
-      });
-    }
-  }, []);
-
-  const openCheckout = (priceId: string) => {
-    if (!session?.user) {
-      toast.error("Please log in first to subscribe");
-      return;
-    }
-    
-    if (!paddle) {
-      toast.error("Billing system is not configured yet. (Missing Paddle Token)");
-      return;
-    }
-
-    paddle.Checkout.open({
-      items: [{ priceId, quantity: 1 }],
-      customer: {
-        email: session.user.email!,
-      },
-      customData: {
-        userId: (session.user as any).id
-      }
-    });
-  };
-
-  const monthlyPriceId = process.env.NEXT_PUBLIC_PADDLE_PRICE_MONTHLY || "pri_mock_monthly";
-  const annualPriceId = process.env.NEXT_PUBLIC_PADDLE_PRICE_ANNUAL || "pri_mock_annual";
-
   return (
     <div className="min-h-screen bg-gray-950 py-24 px-4 sm:px-6 lg:px-8 text-white">
       <div className="max-w-7xl mx-auto">
@@ -61,23 +15,6 @@ export default function PricingPage() {
           </p>
         </div>
 
-        <div className="mt-12 flex justify-center">
-          <div className="relative flex items-center p-1 bg-gray-900 border border-gray-800 rounded-full">
-            <button
-              onClick={() => setIsAnnual(false)}
-              className={`relative w-1/2 rounded-full py-2.5 px-8 text-sm font-semibold whitespace-nowrap focus:outline-none transition-all ${!isAnnual ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-400 hover:text-white'}`}
-            >
-              Monthly billing
-            </button>
-            <button
-              onClick={() => setIsAnnual(true)}
-              className={`relative w-1/2 rounded-full py-2.5 px-8 text-sm font-semibold whitespace-nowrap focus:outline-none transition-all ${isAnnual ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-400 hover:text-white'}`}
-            >
-              Annual billing
-            </button>
-          </div>
-        </div>
-
         <div className="mt-16 mx-auto max-w-lg lg:max-w-none lg:flex justify-center flex-wrap gap-8">
           {/* Plan Card */}
           <div className="bg-gray-900/80 border border-gray-800 rounded-3xl shadow-2xl overflow-hidden glass-panel max-w-sm w-full transition-transform hover:-translate-y-2 hover:shadow-blue-900/20">
@@ -88,10 +25,8 @@ export default function PricingPage() {
                 </h3>
               </div>
               <div className="mt-6 flex items-baseline justify-center text-6xl font-extrabold">
-                ${isAnnual ? '99' : '15'}
-                <span className="ml-1 text-2xl font-medium text-gray-500">
-                  {isAnnual ? '/yr' : '/mo'}
-                </span>
+                $15
+                <span className="ml-1 text-2xl font-medium text-gray-500">/mo</span>
               </div>
               <p className="mt-5 text-lg text-gray-400">
                 Everything you need to master a new language.
@@ -116,13 +51,16 @@ export default function PricingPage() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-10">
-                <button
-                  onClick={() => openCheckout(isAnnual ? annualPriceId : monthlyPriceId)}
+              <div className="mt-10 space-y-3">
+                <Link
+                  href="/register"
                   className="w-full flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-lg font-medium hover:from-blue-500 hover:to-indigo-500 transition-all shadow-lg active:scale-[0.98]"
                 >
-                  Subscribe Now
-                </button>
+                  Get Started
+                </Link>
+                <p className="text-xs text-gray-500 text-center">
+                  Pricing plans are coming soon. Choose a plan after registration to jump into chat.
+                </p>
               </div>
             </div>
           </div>

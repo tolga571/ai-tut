@@ -12,7 +12,7 @@
     "title": "Fluent conversations,",
     "titleAccent": "powered by AI.",
     "description": "Stop memorizing vocabulary and start speaking. Chat naturally with our bilingual AI tutor and get instant translations and real-time corrections.",
-    "cta": "Start Learning for Free"
+    "cta": "Let's Get Started"
   },
   "login": {
     "title": "Welcome back",
@@ -25,6 +25,7 @@
     "success": "Successfully logged in!"
   },
   "register": {
+    "stepLabel": "Step 2",
     "title": "Create Account",
     "step1": "Step 1: Your Details",
     "name": "Full Name",
@@ -40,6 +41,34 @@
     "paymentSuccess": "Plan activated! Welcome.",
     "activationTimeout": "Payment confirmed but activation delayed. Please sign in.",
     "devSkip": "[DEV] Skip Payment — Activate Plan",
+    "planStep": {
+      "title": "Choose Your Plan",
+      "subtitle": "Select the plan that matches your learning goals. We'll enable payments soon.",
+      "note": "You'll head straight to the chat experience after choosing a plan.",
+      "cta": "Go to Chat",
+      "selected": "Selected",
+      "select": "Select",
+      "plans": {
+        "base": {
+          "name": "Base Plan",
+          "priceValue": "$5",
+          "priceSuffix": "/ month",
+          "description": "Kickstart your AI tutor journey with the essentials."
+        },
+        "middle": {
+          "name": "Middle Plan",
+          "priceValue": "$15",
+          "priceSuffix": "/ month",
+          "description": "Level up with advanced corrections and longer sessions."
+        },
+        "ultra": {
+          "name": "Ultra Plan",
+          "priceValue": "$40",
+          "priceSuffix": "/ month",
+          "description": "Unlock everything: pro feedback, speed, and upcoming premium tools."
+        }
+      }
+    },
     "errors": {
       "register": "Registration failed",
       "generic": "An unexpected error occurred.",

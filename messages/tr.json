@@ -12,7 +12,7 @@
     "title": "Akıcı konuşmalar,",
     "titleAccent": "AI ile güçlendirilmiş.",
     "description": "Kelime ezberlemeyi bırakın, konuşmaya başlayın. İki dilli AI öğretmenimizle doğal sohbet edin, anlık çeviriler ve gerçek zamanlı düzeltmeler alın.",
-    "cta": "Ücretsiz Öğrenmeye Başla"
+    "cta": "Hadi Başlayalım"
   },
   "login": {
     "title": "Tekrar hoş geldiniz",
@@ -25,6 +25,7 @@
     "success": "Başarıyla giriş yapıldı!"
   },
   "register": {
+    "stepLabel": "Adım 2",
     "title": "Hesap Oluştur",
     "step1": "Adım 1: Hesap Bilgilerin",
     "name": "Ad Soyad",
@@ -40,6 +41,34 @@
     "paymentSuccess": "Plan aktif edildi! Hoş geldiniz.",
     "activationTimeout": "Ödeme doğrulandı ancak aktivasyon gecikti. Lütfen giriş yapın.",
     "devSkip": "[DEV] Ödemeyi Atla — Planı Aktif Et",
+    "planStep": {
+      "title": "Planını Seç",
+      "subtitle": "Öğrenme hedefine en uygun planı seç. Ödemeyi yakında ekleyeceğiz.",
+      "note": "Plan seçtikten sonra direkt sohbet deneyimine geçeceksin.",
+      "cta": "Chat'e Git",
+      "selected": "Seçildi",
+      "select": "Seç",
+      "plans": {
+        "base": {
+          "name": "Base Plan",
+          "priceValue": "5$",
+          "priceSuffix": "/ ay",
+          "description": "AI öğretmen yolculuğuna temel özelliklerle başla."
+        },
+        "middle": {
+          "name": "Middle Plan",
+          "priceValue": "15$",
+          "priceSuffix": "/ ay",
+          "description": "Gelişmiş düzeltmeler ve daha uzun seanslarla seviyeni artır."
+        },
+        "ultra": {
+          "name": "Ultra Plan",
+          "priceValue": "40$",
+          "priceSuffix": "/ ay",
+          "description": "Her şeyi aç: profesyonel geri bildirim, hız ve yakında gelecek premium araçlar."
+        }
+      }
+    },
     "errors": {
       "register": "Kayıt başarısız",
       "generic": "Beklenmedik bir hata oluştu.",

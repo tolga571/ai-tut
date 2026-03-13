@@ -1,93 +1,38 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { Link } from "@/i18n/navigation";
 import { signIn, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
-import Pricing from "@/components/Pricing";
-import { initializePaddle, Paddle } from "@paddle/paddle-js";
 import { useTranslations } from "next-intl";
+
+const PLAN_OPTIONS = [
+  { id: "base", translationKey: "base" },
+  { id: "middle", translationKey: "middle" },
+  { id: "ultra", translationKey: "ultra" },
+];
 
 export default function RegisterPage() {
   const router = useRouter();
   const t = useTranslations("register");
-  const { data: session, update: updateSession } = useSession();
+  const { data: session } = useSession();
   const [data, setData] = useState({ name: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
-  const [userId, setUserId] = useState<string | null>(null);
-  const userIdRef = useRef<string | null>(null);
-  const [paddle, setPaddle] = useState<Paddle | undefined>();
-  const [awaitingActivation, setAwaitingActivation] = useState(false);
-  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
 
   useEffect(() => {
-    if (awaitingActivation) return;
     if (session?.user) {
       const user = session.user as { id?: string; planStatus?: string; name?: string; email?: string };
       if (user.planStatus === "inactive") {
-        setUserId(user.id ?? null);
-        userIdRef.current = user.id ?? null;
         setData((prev) => ({ ...prev, name: user.name || "", email: user.email || "" }));
         setStep(2);
       } else if (user.planStatus === "active") {
         router.push("/chat");
       }
     }
-  }, [session, router, awaitingActivation]);
-
-  useEffect(() => {
-    const token = process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN;
-    if (!token) return;
-
-    const env = token.startsWith("test_") ? "sandbox" : "production";
-
-    initializePaddle({
-      environment: env as "sandbox" | "production",
-      token,
-      eventCallback: (event: { name?: string }) => {
-        if (event.name === "checkout.completed") {
-          if (userIdRef.current) startActivationPolling(userIdRef.current);
-        }
-      },
-    })
-      .then((instance) => { if (instance) setPaddle(instance); })
-      .catch((err) => console.error("[PADDLE_INIT]", err));
-  }, []);
-
-  useEffect(() => {
-    return () => { if (pollRef.current) clearInterval(pollRef.current); };
-  }, []);
-
-  const startActivationPolling = (currentUserId: string) => {
-    setAwaitingActivation(true);
-    let attempts = 0;
-    const maxAttempts = 30;
-
-    pollRef.current = setInterval(async () => {
-      attempts++;
-      try {
-        const res = await fetch(`/api/user/plan-status?userId=${currentUserId}`);
-        const json = await res.json();
-
-        if (json.planStatus === "active") {
-          clearInterval(pollRef.current!);
-          toast.success(t("paymentSuccess"));
-          window.location.href = "/chat";
-          return;
-        }
-      } catch {
-        // continue silently
-      }
-
-      if (attempts >= maxAttempts) {
-        clearInterval(pollRef.current!);
-        toast.error(t("activationTimeout"));
-        window.location.href = "/login";
-      }
-    }, 2000);
-  };
+  }, [session, router]);
 
   const handleDetailsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -107,9 +52,6 @@ export default function RegisterPage() {
         return;
       }
 
-      setUserId(json.userId);
-      userIdRef.current = json.userId;
-
       const signInResult = await signIn("credentials", {
         email: data.email,
         password: data.password,
@@ -128,92 +70,71 @@ export default function RegisterPage() {
     }
   };
 
-  const handleSelectPlan = async (priceId: string) => {
-    if (!userId || !data.email) {
-      toast.error(t("errors.userInfo"));
-      return;
-    }
-
-    if (!paddle) {
-      toast.error(t("errors.paymentLoading"));
-      return;
-    }
-
-    setLoading(true);
-    const toastId = toast.loading(t("paymentPreparing"));
-
-    try {
-      const res = await fetch("/api/paddle/create-transaction", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ priceId, userId, email: data.email }),
-      });
-
-      const json = await res.json();
-      toast.dismiss(toastId);
-
-      if (!res.ok || !json.transactionId) {
-        toast.error(json.error || t("errors.paymentFailed"));
-        setLoading(false);
-        return;
-      }
-
-      paddle.Checkout.open({
-        transactionId: json.transactionId,
-        settings: { displayMode: "overlay", theme: "dark" },
-      });
-    } catch {
-      toast.dismiss(toastId);
-      toast.error(t("errors.paymentStart"));
-    } finally {
-      setLoading(false);
-    }
+  const handlePlanContinue = () => {
+    if (!selectedPlan) return;
+    toast.success(t("planStep.note"));
+    router.push("/chat");
   };
-
-  const handleDevSkipPayment = async () => {
-    if (!userId) return;
-    setLoading(true);
-    try {
-      const res = await fetch("/api/dev/activate-plan", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId }),
-      });
-      if (res.ok) {
-        await updateSession();
-        router.push("/chat");
-      } else {
-        toast.error(t("errors.devActivate"));
-      }
-    } catch {
-      toast.error(t("errors.devGeneric"));
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (awaitingActivation) {
-    return (
-      <div className="min-h-screen bg-gray-950 flex flex-col items-center justify-center gap-4">
-        <span className="w-10 h-10 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
-        <p className="text-gray-400 text-sm">{t("activating")}</p>
-      </div>
-    );
-  }
 
   if (step === 2) {
     return (
       <div className="min-h-screen bg-gray-950 flex flex-col items-center justify-center p-4">
-        <Pricing onSelectPlan={handleSelectPlan} loading={loading} />
-        {process.env.NODE_ENV !== "production" && (
+        <div className="w-full max-w-4xl bg-gray-900 border border-gray-800 rounded-3xl shadow-2xl p-8">
+          <div className="text-center mb-10">
+            <p className="text-sm uppercase tracking-[0.3em] text-blue-400">{t("stepLabel")}</p>
+            <h2 className="text-3xl font-bold text-white mt-2">{t("planStep.title")}</h2>
+            <p className="text-gray-400 mt-3">{t("planStep.subtitle")}</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {PLAN_OPTIONS.map((plan) => {
+              const planData = t.raw(`planStep.plans.${plan.translationKey}`) as {
+                name: string;
+                priceValue: string;
+                priceSuffix: string;
+                description: string;
+              };
+              return (
+                <button
+                  key={plan.id}
+                  type="button"
+                  onClick={() => setSelectedPlan(plan.id)}
+                  className={`text-left relative rounded-2xl border-2 p-6 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/70 ${
+                    selectedPlan === plan.id
+                      ? "border-blue-500 bg-blue-500/10 shadow-[0_10px_40px_rgba(59,130,246,0.35)]"
+                      : "border-gray-800 bg-gray-900/40 hover:border-gray-700"
+                  }`}
+                >
+                  <div className="text-sm font-semibold text-blue-300 tracking-wide uppercase">
+                    {planData.name}
+                  </div>
+                  <div className="flex items-baseline gap-1 mt-4">
+                    <span className="text-4xl font-bold text-white">{planData.priceValue}</span>
+                    <span className="text-gray-400 font-medium">{planData.priceSuffix}</span>
+                  </div>
+                  <p className="text-sm text-gray-400 mt-4 leading-relaxed">{planData.description}</p>
+                  <span
+                    className={`inline-flex items-center justify-center mt-6 text-sm font-medium rounded-full px-4 py-2 ${
+                      selectedPlan === plan.id ? "bg-blue-600 text-white" : "bg-gray-800 text-gray-300"
+                    }`}
+                  >
+                    {selectedPlan === plan.id ? t("planStep.selected") : t("planStep.select")}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          <p className="text-center text-sm text-gray-500 mt-8">{t("planStep.note")}</p>
+
           <button
-            onClick={handleDevSkipPayment}
-            disabled={loading}
-            className="mt-4 px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg text-sm font-medium disabled:opacity-50 transition-colors"
+            onClick={handlePlanContinue}
+            disabled={!selectedPlan}
+            className="w-full mt-6 py-4 px-6 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg shadow-lg shadow-blue-600/20 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            {t("devSkip")}
+            {t("planStep.cta")}
           </button>
-        )}
+        </div>
       </div>
     );
   }
