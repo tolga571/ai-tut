@@ -1,0 +1,174 @@
+{
+  "nav": {
+    "pricing": "Pricing",
+    "login": "Sign In",
+    "register": "Get Started",
+    "goToChat": "Go to Chat",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "home": {
+    "badge": "Powered by gemini-1.5-flash",
+    "title": "Fluent conversations,",
+    "titleAccent": "powered by AI.",
+    "description": "Stop memorizing vocabulary and start speaking. Chat naturally with our bilingual AI tutor and get instant translations and real-time corrections.",
+    "cta": "Start Learning for Free"
+  },
+  "login": {
+    "title": "Welcome back",
+    "subtitle": "Log in to AiTut and continue learning",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign In",
+    "noAccount": "Don't have an account?",
+    "createAccount": "Create account",
+    "success": "Successfully logged in!"
+  },
+  "register": {
+    "title": "Create Account",
+    "step1": "Step 1: Your Details",
+    "name": "Full Name",
+    "namePlaceholder": "Your Name",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "password": "Password",
+    "submit": "Continue — Choose Plan",
+    "hasAccount": "Already have an account?",
+    "signIn": "Sign In",
+    "activating": "Verifying payment...",
+    "paymentPreparing": "Preparing payment page...",
+    "paymentSuccess": "Plan activated! Welcome.",
+    "activationTimeout": "Payment confirmed but activation delayed. Please sign in.",
+    "devSkip": "[DEV] Skip Payment — Activate Plan",
+    "errors": {
+      "register": "Registration failed",
+      "generic": "An unexpected error occurred.",
+      "userInfo": "User info missing. Please try again.",
+      "paymentLoading": "Payment system loading, please wait.",
+      "paymentFailed": "Payment page failed to open. Please try again.",
+      "paymentStart": "Failed to start payment. Please try again.",
+      "devActivate": "Failed to activate plan.",
+      "devGeneric": "An error occurred."
+    }
+  },
+  "chat": {
+    "newChat": "New Chat",
+    "noConversations": "No conversations yet",
+    "startHint": "Start by sending a message",
+    "startChat": "Start chatting",
+    "welcomeMsg": "Write something to learn {lang}",
+    "inputPlaceholder": "Write something in {lang}...",
+    "learningLabel": "Learning",
+    "deleteConfirm": "Are you sure you want to delete this conversation?",
+    "deleted": "Conversation deleted",
+    "deleteError": "Could not delete",
+    "genericError": "An error occurred",
+    "sendError": "Failed to send message. Try again.",
+    "loadError": "Failed to load conversation",
+    "hideHistory": "Hide history",
+    "showHistory": "Show history"
+  },
+  "profile": {
+    "backToChat": "Back to Chat",
+    "title": "Profile Settings",
+    "personalInfo": "Personal Info",
+    "fullName": "Full Name",
+    "namePlaceholder": "Your name",
+    "save": "Save",
+    "email": "Email Address",
+    "emailNote": "Email address cannot be changed",
+    "languageSettings": "Language Settings",
+    "nativeLanguage": "Your Native Language",
+    "learningLanguage": "Language You're Learning",
+    "sameLangWarning": "Native and target language cannot be the same",
+    "saveLangs": "Save Language Settings",
+    "saving": "Saving...",
+    "planStatus": "Plan Status",
+    "activePlan": "Active Plan",
+    "freeTier": "Free Tier",
+    "fullAccess": "You have access to all features",
+    "limitedAccess": "Limited access — upgrade to continue",
+    "upgrade": "Upgrade",
+    "session": "Session",
+    "signOutDesc": "Securely sign out of your account",
+    "signOut": "Sign Out",
+    "errors": {
+      "nameEmpty": "Name cannot be empty",
+      "nameUpdated": "Name updated",
+      "updateFailed": "Update failed",
+      "langSaved": "Language settings updated",
+      "sameLang": "Native and target language cannot be the same"
+    }
+  },
+  "onboarding": {
+    "title": "Set Up Your Profile",
+    "subtitle": "Choose the language you speak and the one you want to learn.",
+    "nativeLang": "Native Language",
+    "targetLang": "Target Language (I want to learn)",
+    "continue": "Continue to Chat",
+    "success": "Preferences saved!",
+    "errors": {
+      "sameLang": "Native and Target languages cannot be the same.",
+      "generic": "Something went wrong"
+    }
+  },
+  "pricing": {
+    "title": "Simple, transparent pricing",
+    "subtitle": "Unlock fluent conversations in your target language with AI-powered feedback.",
+    "monthly": "Monthly billing",
+    "annual": "Annual billing",
+    "choosePlan": "Choose Your Plan",
+    "planSubtitle": "Select the plan that fits your learning journey",
+    "selected": "Selected",
+    "selectPlan": "Select Plan",
+    "guarantee": "All plans include 14-day money back guarantee. Cancel anytime.",
+    "recommended": "Recommended",
+    "errors": {
+      "loginRequired": "Please log in first to subscribe",
+      "notConfigured": "Billing system is not configured yet. (Missing Paddle Token)"
+    },
+    "plans": {
+      "standardMonthly": {
+        "name": "Standard Monthly",
+        "features": ["Basic Language Practice", "100 AI Messages/day", "All Languages"]
+      },
+      "standardYearly": {
+        "name": "Standard Yearly",
+        "features": ["Basic Language Practice", "100 AI Messages/day", "All Languages", "Save 10%"]
+      },
+      "proMonthly": {
+        "name": "Pro Monthly",
+        "features": ["Advanced Practice", "Unlimited Messages", "Personalized Tutors", "Priority Support"]
+      },
+      "proYearly": {
+        "name": "Pro Yearly",
+        "features": ["Advanced Practice", "Unlimited Messages", "Personalized Tutors", "Save 20%"]
+      }
+    }
+  },
+  "userMenu": {
+    "myProfile": "My Profile",
+    "chatHistory": "Chat History",
+    "signOut": "Sign Out",
+    "signOutError": "Failed to sign out"
+  },
+  "languages": {
+    "tr": "Turkish",
+    "en": "English",
+    "de": "German",
+    "fr": "French",
+    "es": "Spanish",
+    "it": "Italian",
+    "pt": "Portuguese",
+    "ru": "Russian",
+    "zh": "Chinese",
+    "ja": "Japanese",
+    "ko": "Korean",
+    "ar": "Arabic"
+  },
+  "languageSwitcher": {
+    "label": "Language",
+    "en": "EN",
+    "tr": "TR"
+  }
+}

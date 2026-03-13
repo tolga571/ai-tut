@@ -1,0 +1,174 @@
+{
+  "nav": {
+    "pricing": "Fiyatlar",
+    "login": "Giriş Yap",
+    "register": "Başla",
+    "goToChat": "Chate Git",
+    "light": "Açık",
+    "dark": "Koyu"
+  },
+  "home": {
+    "badge": "Powered by gemini-1.5-flash",
+    "title": "Akıcı konuşmalar,",
+    "titleAccent": "AI ile güçlendirilmiş.",
+    "description": "Kelime ezberlemeyi bırakın, konuşmaya başlayın. İki dilli AI öğretmenimizle doğal sohbet edin, anlık çeviriler ve gerçek zamanlı düzeltmeler alın.",
+    "cta": "Ücretsiz Öğrenmeye Başla"
+  },
+  "login": {
+    "title": "Tekrar hoş geldiniz",
+    "subtitle": "AiTut'a giriş yapın ve öğrenmeye devam edin",
+    "email": "E-posta",
+    "password": "Şifre",
+    "submit": "Giriş Yap",
+    "noAccount": "Hesabınız yok mu?",
+    "createAccount": "Hesap oluştur",
+    "success": "Başarıyla giriş yapıldı!"
+  },
+  "register": {
+    "title": "Hesap Oluştur",
+    "step1": "Adım 1: Hesap Bilgilerin",
+    "name": "Ad Soyad",
+    "namePlaceholder": "Adın Soyadın",
+    "email": "E-posta",
+    "emailPlaceholder": "sen@ornek.com",
+    "password": "Şifre",
+    "submit": "Devam Et — Plan Seç",
+    "hasAccount": "Zaten hesabın var mı?",
+    "signIn": "Giriş Yap",
+    "activating": "Ödeme doğrulanıyor…",
+    "paymentPreparing": "Ödeme sayfası hazırlanıyor…",
+    "paymentSuccess": "Plan aktif edildi! Hoş geldiniz.",
+    "activationTimeout": "Ödeme doğrulandı ancak aktivasyon gecikti. Lütfen giriş yapın.",
+    "devSkip": "[DEV] Ödemeyi Atla — Planı Aktif Et",
+    "errors": {
+      "register": "Kayıt başarısız",
+      "generic": "Beklenmedik bir hata oluştu.",
+      "userInfo": "Kullanıcı bilgisi eksik. Lütfen tekrar deneyin.",
+      "paymentLoading": "Ödeme sistemi yükleniyor, lütfen bekleyin.",
+      "paymentFailed": "Ödeme sayfası açılamadı. Lütfen tekrar deneyin.",
+      "paymentStart": "Ödeme başlatılamadı. Lütfen tekrar deneyin.",
+      "devActivate": "Plan aktif edilemedi.",
+      "devGeneric": "Bir hata oluştu."
+    }
+  },
+  "chat": {
+    "newChat": "Yeni Chat",
+    "noConversations": "Henüz konuşma yok",
+    "startHint": "Bir mesaj göndererek başlayın",
+    "startChat": "Konuşmaya başla",
+    "welcomeMsg": "{lang} öğrenmek için bir şeyler yaz",
+    "inputPlaceholder": "{lang} dilinde bir şeyler yaz...",
+    "learningLabel": "Öğrenilen dil",
+    "deleteConfirm": "Bu konuşmayı silmek istediğinize emin misiniz?",
+    "deleted": "Konuşma silindi",
+    "deleteError": "Silinemedi",
+    "genericError": "Bir hata oluştu",
+    "sendError": "Mesaj gönderilemedi. Tekrar deneyin.",
+    "loadError": "Konuşma yüklenemedi",
+    "hideHistory": "Geçmişi gizle",
+    "showHistory": "Geçmişi göster"
+  },
+  "profile": {
+    "backToChat": "Chat'e Dön",
+    "title": "Profil Ayarları",
+    "personalInfo": "Kişisel Bilgiler",
+    "fullName": "Ad Soyad",
+    "namePlaceholder": "Adınız",
+    "save": "Kaydet",
+    "email": "E-posta Adresi",
+    "emailNote": "E-posta adresi değiştirilemez",
+    "languageSettings": "Dil Ayarları",
+    "nativeLanguage": "Ana Diliniz",
+    "learningLanguage": "Öğrendiğiniz Dil",
+    "sameLangWarning": "Ana dil ve hedef dil aynı olamaz",
+    "saveLangs": "Dil Ayarlarını Kaydet",
+    "saving": "Kaydediliyor…",
+    "planStatus": "Plan Durumu",
+    "activePlan": "Aktif Plan",
+    "freeTier": "Ücretsiz Tier",
+    "fullAccess": "Tüm özelliklere erişiminiz var",
+    "limitedAccess": "Sınırlı erişim — plan seçerek devam edin",
+    "upgrade": "Yükselt",
+    "session": "Oturum",
+    "signOutDesc": "Hesabınızdan güvenli çıkış yapın",
+    "signOut": "Çıkış Yap",
+    "errors": {
+      "nameEmpty": "İsim boş olamaz",
+      "nameUpdated": "İsim güncellendi",
+      "updateFailed": "Güncelleme başarısız",
+      "langSaved": "Dil ayarları güncellendi",
+      "sameLang": "Ana dil ve hedef dil aynı olamaz"
+    }
+  },
+  "onboarding": {
+    "title": "Profilinizi Ayarlayın",
+    "subtitle": "Konuştuğunuz dili ve öğrenmek istediğinizi seçin.",
+    "nativeLang": "Ana Diliniz",
+    "targetLang": "Öğreneceğiniz Dil",
+    "continue": "Sohbete Geç",
+    "success": "Tercihler kaydedildi!",
+    "errors": {
+      "sameLang": "Ana dil ve hedef dil aynı olamaz.",
+      "generic": "Bir şeyler yanlış gitti"
+    }
+  },
+  "pricing": {
+    "title": "Basit, şeffaf fiyatlandırma",
+    "subtitle": "AI destekli geri bildirimlerle hedef dilinizde akıcı konuşmalar yapın.",
+    "monthly": "Aylık fatura",
+    "annual": "Yıllık fatura",
+    "choosePlan": "Planınızı Seçin",
+    "planSubtitle": "Öğrenme yolculuğunuza uygun planı seçin",
+    "selected": "Seçildi",
+    "selectPlan": "Planı Seç",
+    "guarantee": "Tüm planlar 14 günlük para iade garantisi içerir. İstediğinizde iptal edin.",
+    "recommended": "Önerilen",
+    "errors": {
+      "loginRequired": "Abone olmak için önce giriş yapın",
+      "notConfigured": "Ödeme sistemi henüz yapılandırılmamış. (Paddle Token eksik)"
+    },
+    "plans": {
+      "standardMonthly": {
+        "name": "Standart Aylık",
+        "features": ["Temel Dil Pratiği", "Günde 100 AI Mesajı", "Tüm Diller"]
+      },
+      "standardYearly": {
+        "name": "Standart Yıllık",
+        "features": ["Temel Dil Pratiği", "Günde 100 AI Mesajı", "Tüm Diller", "%10 Tasarruf"]
+      },
+      "proMonthly": {
+        "name": "Pro Aylık",
+        "features": ["Gelişmiş Pratik", "Sınırsız Mesaj", "Kişiselleştirilmiş Öğretmenler", "Öncelikli Destek"]
+      },
+      "proYearly": {
+        "name": "Pro Yıllık",
+        "features": ["Gelişmiş Pratik", "Sınırsız Mesaj", "Kişiselleştirilmiş Öğretmenler", "%20 Tasarruf"]
+      }
+    }
+  },
+  "userMenu": {
+    "myProfile": "Profilim",
+    "chatHistory": "Sohbet Geçmişi",
+    "signOut": "Çıkış Yap",
+    "signOutError": "Çıkış yapılamadı"
+  },
+  "languages": {
+    "tr": "Türkçe",
+    "en": "İngilizce",
+    "de": "Almanca",
+    "fr": "Fransızca",
+    "es": "İspanyolca",
+    "it": "İtalyanca",
+    "pt": "Portekizce",
+    "ru": "Rusça",
+    "zh": "Çince",
+    "ja": "Japonca",
+    "ko": "Korece",
+    "ar": "Arapça"
+  },
+  "languageSwitcher": {
+    "label": "Dil",
+    "en": "EN",
+    "tr": "TR"
+  }
+}

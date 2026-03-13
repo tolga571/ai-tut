@@ -1,23 +1,44 @@
-import { withAuth } from "next-auth/middleware";
-import { NextResponse } from "next/server";
+import createMiddleware from "next-intl/middleware";
+import { NextRequest, NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
+import { routing } from "./i18n/routing";
 
-export default withAuth(
-  function middleware() {
-    return NextResponse.next();
-  },
-  {
-    callbacks: {
-      // Allow /register without token, but require token for other protected routes
-      authorized: ({ token, req }) => {
-        if (req.nextUrl.pathname.startsWith("/register")) {
-          return true; // Allow unauthenticated access to /register for plan selection
-        }
-        return !!token; // Require token for other routes
-      },
-    },
+const PROTECTED_PATHS = ["/chat", "/profile", "/onboarding"];
+
+const intlMiddleware = createMiddleware(routing);
+
+export default async function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
+
+  // Detect if the URL already has a locale prefix
+  const locales = routing.locales as readonly string[];
+  const segments = pathname.split("/");
+  const hasLocale = locales.includes(segments[1]);
+
+  // Get the path without locale prefix to check protection rules
+  const pathWithoutLocale = hasLocale
+    ? "/" + segments.slice(2).join("/")
+    : pathname;
+
+  const isProtected = PROTECTED_PATHS.some(
+    (p) => pathWithoutLocale === p || pathWithoutLocale.startsWith(p + "/")
+  );
+
+  if (isProtected) {
+    const token = await getToken({
+      req,
+      secret: process.env.NEXTAUTH_SECRET,
+    });
+
+    if (!token) {
+      const locale = hasLocale ? segments[1] : routing.defaultLocale;
+      return NextResponse.redirect(new URL(`/${locale}/login`, req.url));
+    }
   }
-);
+
+  return intlMiddleware(req);
+}
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/chat/:path*", "/profile/:path*", "/register/:path*", "/register"],
+  matcher: ["/((?!api|_next|.*\..*).*)"],
 };

@@ -1,20 +1,28 @@
 "use client";
 
-import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
+import { usePathname, Link, useRouter } from "@/i18n/navigation";
 import { useTheme } from "next-themes";
+import { useLocale, useTranslations } from "next-intl";
 import { UserMenu } from "./UserMenu";
 
 export function Navbar() {
   const { data: session, status } = useSession();
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
+  const locale = useLocale();
+  const router = useRouter();
+  const t = useTranslations("nav");
 
   // Dashboard pages have their own header — hide global navbar
   if (pathname?.startsWith("/chat") || pathname?.startsWith("/profile")) {
     return null;
   }
+
+  const switchLocale = () => {
+    const newLocale = locale === "en" ? "tr" : "en";
+    router.replace(pathname, { locale: newLocale });
+  };
 
   return (
     <nav className="fixed top-0 w-full z-50 transition-all border-b border-white/5 bg-gray-950/80 backdrop-blur-xl">
@@ -30,16 +38,26 @@ export function Navbar() {
             </span>
           </Link>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            {/* Language switcher */}
+            <button
+              type="button"
+              onClick={switchLocale}
+              className="w-9 h-9 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-xs font-semibold text-gray-200 hover:bg-white/10 transition-colors"
+              aria-label="Switch language"
+            >
+              {locale === "en" ? "TR" : "EN"}
+            </button>
+
             {/* Theme toggle */}
             <button
               type="button"
-              aria-label="Temayı değiştir"
+              aria-label="Toggle theme"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               className="w-9 h-9 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-xs text-gray-200 hover:bg-white/10 transition-colors"
             >
               <span className="hidden md:inline">
-                {theme === "dark" ? "Light" : "Dark"}
+                {theme === "dark" ? t("light") : t("dark")}
               </span>
               <span className="md:hidden">
                 {theme === "dark" ? "☀" : "☾"}
@@ -49,38 +67,36 @@ export function Navbar() {
             {status === "loading" ? (
               <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />
             ) : session ? (
-              /* Logged-in: shortcut to app + user menu */
               <>
                 <Link
                   href="/chat"
                   className="px-4 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-500 text-white rounded-full transition-all active:scale-95"
                 >
-                  Chate Git
+                  {t("goToChat")}
                 </Link>
-                <UserMenu user={session.user} />
+                <UserMenu user={session.user ?? {}} />
               </>
             ) : (
-              /* Logged-out: marketing links */
               <>
                 <div className="hidden md:flex items-center gap-6 mr-2">
                   <Link
                     href="/pricing"
                     className="text-sm font-medium text-gray-400 hover:text-white transition-colors"
                   >
-                    Fiyatlar
+                    {t("pricing")}
                   </Link>
                 </div>
                 <Link
                   href="/login"
                   className="text-sm font-medium text-gray-400 hover:text-white transition-colors"
                 >
-                  Giriş Yap
+                  {t("login")}
                 </Link>
                 <Link
                   href="/register"
                   className="px-4 py-2 text-sm font-medium bg-white text-gray-950 rounded-full hover:bg-gray-100 transition-all active:scale-95 shadow-lg shadow-white/10"
                 >
-                  Başla
+                  {t("register")}
                 </Link>
               </>
             )}

@@ -8,8 +8,8 @@ const store = new Map<string, number[]>();
 // Periodically clean up stale keys to prevent memory leaks
 setInterval(() => {
   const cutoff = Date.now() - 60_000;
-  for (const [key, timestamps] of store) {
-    const fresh = timestamps.filter((t) => t > cutoff);
+  for (const [key, timestamps] of Array.from(store)) {
+    const fresh = timestamps.filter((ts) => ts > cutoff);
     if (fresh.length === 0) {
       store.delete(key);
     } else {
