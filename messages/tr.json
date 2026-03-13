@@ -273,6 +273,9 @@
     "title": "Belgeler",
     "backToChat": "Sohbete Dön",
     "unknownAuthor": "Bilinmiyor",
+    "premium": "Premium",
+    "premiumNote": "Bu belgeye erişmek için aktif bir plana geçin.",
+    "upgrade": "Yükselt",
     "empty": {
       "title": "Henüz belge yok",
       "description": "Öğrenme belgeleri ve kaynaklar burada görünecek."

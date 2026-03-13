@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { routing } from "./i18n/routing";
 
-const PROTECTED_PATHS = ["/chat", "/profile", "/onboarding"];
+const PROTECTED_PATHS = ["/chat", "/profile", "/onboarding", "/documents"];
 const ADMIN_PATHS = ["/admin"];
 
 const intlMiddleware = createMiddleware(routing);

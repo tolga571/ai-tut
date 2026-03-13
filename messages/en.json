@@ -273,6 +273,9 @@
     "title": "Documents",
     "backToChat": "Back to Chat",
     "unknownAuthor": "Unknown",
+    "premium": "Premium",
+    "premiumNote": "Upgrade to an active plan to access this document.",
+    "upgrade": "Upgrade",
     "empty": {
       "title": "No documents yet",
       "description": "Learning documents and resources will appear here."
