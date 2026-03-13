@@ -14,8 +14,8 @@ export function Navbar() {
   const router = useRouter();
   const t = useTranslations("nav");
 
-  // Dashboard pages have their own header — hide global navbar
-  if (pathname?.startsWith("/chat") || pathname?.startsWith("/profile")) {
+  // Chat pages have their own layout — hide global navbar only there
+  if (pathname?.includes("/chat")) {
     return null;
   }
 

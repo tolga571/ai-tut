@@ -4,7 +4,6 @@ import { usePathname } from "@/i18n/navigation";
 
 export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isDashboard =
-    pathname?.startsWith("/chat") || pathname?.startsWith("/profile");
-  return <div className={isDashboard ? "" : "pt-16"}>{children}</div>;
+  const isChatPage = pathname?.includes("/chat");
+  return <div className={isChatPage ? "" : "pt-16"}>{children}</div>;
 }
