@@ -93,6 +93,13 @@ export default function VocabularyPage() {
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
           <ThemeToggle />
+          <Link
+            href="/vocabulary/quiz"
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 border border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5 rounded-xl text-sm font-medium transition-all"
+          >
+            <span className="hidden sm:inline">Start Quiz</span>
+            <span className="sm:hidden">Quiz</span>
+          </Link>
           <button
             onClick={() => setShowForm((v) => !v)}
             className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-medium transition-all"

@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import { Navbar } from "@/components/Navbar";
 import { LayoutWrapper } from "@/components/LayoutWrapper";
 import { routing } from "@/i18n/routing";
+import AnimatedFavicon from "@/components/AnimatedFavicon";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -25,6 +26,7 @@ export default async function LocaleLayout({
     <div dir={locale === "ar" ? "rtl" : "ltr"} className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white transition-colors">
       <NextIntlClientProvider messages={messages}>
         <AuthProvider>
+            <AnimatedFavicon />
             <Navbar />
             <LayoutWrapper>{children}</LayoutWrapper>
             <Toaster position="bottom-right" />
