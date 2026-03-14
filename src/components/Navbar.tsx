@@ -10,6 +10,16 @@ import { UserMenu } from "./UserMenu";
 // Only show global Navbar on public marketing pages
 const PUBLIC_PATHS = ["/", "/login", "/register", "/pricing"];
 
+const LANGUAGE_CONFIG = {
+  ar: { name: "العربية", flag: "🇸🇦" },
+  de: { name: "Deutsch", flag: "🇩🇪" },
+  en: { name: "English", flag: "🇺🇸" },
+  es: { name: "Español", flag: "🇪🇸" },
+  fr: { name: "Français", flag: "🇫🇷" },
+  ja: { name: "日本語", flag: "🇯🇵" },
+  zh: { name: "中文", flag: "🇨🇳" },
+} as const;
+
 export function Navbar() {
   const { data: session, status } = useSession();
   const pathname = usePathname();
@@ -59,11 +69,17 @@ export function Navbar() {
               value={locale}
               onChange={handleLocaleChange}
               aria-label="Switch UI language"
-              className="h-9 px-2 rounded-full border border-gray-300 dark:border-white/10 bg-gray-100 dark:bg-gray-900 text-xs font-semibold text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors cursor-pointer focus:outline-none"
+              className="h-9 px-3 pr-8 rounded-full border border-gray-300 dark:border-white/10 bg-gray-100 dark:bg-gray-900 text-xs font-semibold text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors cursor-pointer focus:outline-none appearance-none"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 0.75rem center',
+                backgroundSize: '1rem'
+              }}
             >
-              {UI_LOCALES.map((l) => (
-                <option key={l} value={l} className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
-                  {l.toUpperCase()}
+              {Object.entries(LANGUAGE_CONFIG).map(([code, { name, flag }]) => (
+                <option key={code} value={code} className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+                  {flag} {name}
                 </option>
               ))}
             </select>
@@ -168,10 +184,18 @@ export function Navbar() {
           <select
             value={locale}
             onChange={handleLocaleChange}
-            className="w-full h-10 px-3 rounded-xl border border-gray-300 dark:border-white/10 bg-gray-100 dark:bg-gray-900 text-sm text-gray-800 dark:text-gray-200 focus:outline-none"
+            className="w-full h-10 px-3 pr-10 rounded-xl border border-gray-300 dark:border-white/10 bg-gray-100 dark:bg-gray-900 text-sm text-gray-800 dark:text-gray-200 focus:outline-none appearance-none"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'right 1rem center',
+              backgroundSize: '1.25rem'
+            }}
           >
-            {UI_LOCALES.map((l) => (
-              <option key={l} value={l} className="bg-white dark:bg-gray-900">{l.toUpperCase()}</option>
+            {Object.entries(LANGUAGE_CONFIG).map(([code, { name, flag }]) => (
+              <option key={code} value={code} className="bg-white dark:bg-gray-900">
+                {flag} {name}
+              </option>
             ))}
           </select>
 
