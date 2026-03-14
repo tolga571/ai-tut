@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AiTut
 
-## Getting Started
+AI destekli dil öğrenme platformu. Hedef dilde sohbet edin, anlık çeviri ve gramer düzeltmeleri alın.
 
-First, run the development server:
+**Stack:** Next.js 14, Prisma, PostgreSQL, NextAuth, Gemini AI, next-intl
+
+---
+
+## Geliştirme Ortamı Kurulumu
+
+### 1. Bağımlılıkları yükleyin
+
+```bash
+npm install
+```
+
+### 2. Ortam değişkenlerini ayarlayın
+
+```bash
+cp .env.example .env
+```
+
+`.env` dosyasını düzenleyip gerekli değerleri girin. Zorunlu değişkenler:
+
+- `DATABASE_URL` – PostgreSQL bağlantı URL'i
+- `DIRECT_URL` – Prisma için direct connection URL
+- `NEXTAUTH_SECRET` – Rastgele güvenli string (`openssl rand -base64 32`)
+- `NEXTAUTH_URL` – Geliştirme için `http://localhost:3000`
+- `GEMINI_API_KEY` – [Google AI Studio](https://aistudio.google.com/) API anahtarı
+
+### 3. Veritabanını hazırlayın
+
+```bash
+npx prisma generate
+npx prisma db push
+```
+
+### 4. Geliştirme sunucusunu başlatın
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Tarayıcıda [http://localhost:3000](http://localhost:3000) adresini açın. `next-intl` varsayılan olarak `/en` ile yönlendirir.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Railway ile Deploy
 
-## Learn More
+### 1. Railway projesi oluşturun
 
-To learn more about Next.js, take a look at the following resources:
+- [Railway](https://railway.app/) hesabı açın
+- Yeni proje oluşturun
+- GitHub repo'nuzu bağlayın
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 2. PostgreSQL ekleyin
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Railway dashboard'da **Add Service** → **Database** → **PostgreSQL**
+- Oluşan `DATABASE_URL` ve `DIRECT_URL` değerlerini kopyalayın
 
-## Deploy on Vercel
+### 3. Ortam değişkenlerini ayarlayın
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Railway'de servisinize tıklayın → **Variables** sekmesi → aşağıdaki değişkenleri ekleyin:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Değişken | Zorunlu | Açıklama |
+|----------|---------|----------|
+| `DATABASE_URL` | ✅ | Railway PostgreSQL connection URL |
+| `DIRECT_URL` | ✅ | Railway PostgreSQL direct URL |
+| `NEXTAUTH_SECRET` | ✅ | `openssl rand -base64 32` ile üretin |
+| `NEXTAUTH_URL` | ✅ | Railway uygulama URL'i (örn. `https://aitut-xxx.railway.app`) |
+| `GEMINI_API_KEY` | ✅ | Google AI Studio API anahtarı |
+
+**Önemli:** `NEXTAUTH_URL` deploy sonrası Railway'in verdiği public URL olmalı (örn. `https://your-app-name.up.railway.app`).
+
+### 4. Deploy
+
+- GitHub'a push yaptığınızda Railway otomatik build ve deploy yapar
+- İlk deploy'dan sonra **Deploy** → **Settings** → **Generate Domain** ile public URL alın
+- Bu URL'i `NEXTAUTH_URL` olarak güncelleyin ve tekrar deploy tetikleyin
+
+### 5. Veritabanı schema'sını uygulayın
+
+İlk deploy'dan sonra Railway CLI ile veya **One-off command** ile:
+
+```bash
+npx prisma db push
+```
+
+Bu komutu proje root'unda bir kez çalıştırmanız yeterli. Schema değişikliği yaptığınızda tekrar çalıştırın.
+
+---
+
+## Proje Yapısı
+
+- `src/app/[locale]/` – Locale'li sayfalar (ar, de, en, es, fr, ja, zh)
+- `src/app/api/` – API route'ları
+- `src/components/` – Paylaşılan bileşenler
+- `messages/` – next-intl çeviri dosyaları
+
+---
+
+## Lisans
+
+Private
