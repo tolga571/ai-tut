@@ -44,6 +44,7 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -176,6 +177,14 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
     }
   };
 
+  const MAX_CHARS = 500;
+
+  const copyMessage = async (id: string, text: string) => {
+    await navigator.clipboard.writeText(text);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
   const getConvTitle = (conv: Conversation): string => {
     const first = conv.messages[0];
     if (!first) return new Date(conv.createdAt).toLocaleDateString(locale === "tr" ? "tr-TR" : "en-US");
@@ -302,6 +311,12 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
               </svg>
               Vocabulary
             </Link>
+            <Link href="/progress" className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-white/5 transition-all">
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+              My Progress
+            </Link>
             <Link href="/blogs" className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-white/5 transition-all">
               <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
@@ -415,7 +430,7 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
                       </div>
                     ) : (
                       <div className="space-y-2 w-full">
-                        <div className="bg-gray-100 dark:bg-gray-800/90 backdrop-blur border border-gray-200 dark:border-gray-700/50 px-5 py-3.5 rounded-2xl rounded-tl-sm shadow-lg overflow-hidden group transition-all">
+                        <div className="bg-gray-100 dark:bg-gray-800/90 backdrop-blur border border-gray-200 dark:border-gray-700/50 px-5 py-3.5 rounded-2xl rounded-tl-sm shadow-lg overflow-hidden group transition-all relative">
                           <p className="text-[16px] leading-relaxed text-gray-800 dark:text-blue-50">{msg.content}</p>
                           {msg.translation && (
                             <div className="mt-3 pt-3 border-t border-gray-200 dark:border-white/5">
@@ -424,6 +439,21 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
                               </p>
                             </div>
                           )}
+                          <button
+                            onClick={() => copyMessage(msg.id, msg.content)}
+                            className="absolute top-2 right-2 p-1.5 rounded-lg opacity-0 group-hover:opacity-100 bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 text-gray-500 dark:text-gray-400 transition-all"
+                            title="Copy"
+                          >
+                            {copiedId === msg.id ? (
+                              <svg className="w-3.5 h-3.5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                              </svg>
+                            ) : (
+                              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                              </svg>
+                            )}
+                          </button>
                         </div>
                         {msg.correction && (
                           <div className="flex items-start gap-2 px-3 py-2.5 bg-amber-500/10 border border-amber-500/20 rounded-xl">
@@ -460,12 +490,17 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
                     ref={inputRef}
                     type="text"
                     value={input}
-                    onChange={(e) => setInput(e.target.value)}
+                    onChange={(e) => setInput(e.target.value.slice(0, MAX_CHARS))}
                     placeholder={t("inputPlaceholder", { lang: targetLangName })}
                     className="flex-1 bg-transparent border-none text-gray-900 dark:text-white focus:ring-0 placeholder-gray-500 px-4 text-base h-12 outline-none"
                     autoComplete="off"
                     disabled={loading}
                   />
+                  {input.length > 0 && (
+                    <span className={`text-xs px-2 flex-shrink-0 ${input.length >= MAX_CHARS ? "text-red-400" : input.length > MAX_CHARS * 0.8 ? "text-amber-400" : "text-gray-400 dark:text-gray-500"}`}>
+                      {input.length}/{MAX_CHARS}
+                    </span>
+                  )}
                   <button
                     type="submit"
                     disabled={!input.trim() || loading}

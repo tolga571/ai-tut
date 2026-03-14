@@ -17,6 +17,16 @@ type DashboardData = {
   xpInLevel: number;
 };
 
+type WordOfDay = {
+  word: string;
+  translation: string;
+  pronunciation: string;
+  partOfSpeech: string;
+  example: string;
+  exampleTranslation: string;
+  tip: string;
+};
+
 const DAILY_TIPS = [
   "Try speaking for 10 minutes without switching to your native language.",
   "Describe what you see around you in your target language.",
@@ -43,6 +53,8 @@ export default function DashboardPage() {
   const tLangs = useTranslations("languages");
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [wordOfDay, setWordOfDay] = useState<WordOfDay | null>(null);
+  const [wordLoading, setWordLoading] = useState(true);
 
   const user = session?.user as {
     name?: string | null;
@@ -65,6 +77,12 @@ export default function DashboardPage() {
       .then(setData)
       .catch(() => setData(null))
       .finally(() => setLoading(false));
+
+    fetch("/api/word-of-day")
+      .then((res) => (res.ok ? res.json() : null))
+      .then(setWordOfDay)
+      .catch(() => setWordOfDay(null))
+      .finally(() => setWordLoading(false));
   }, []);
 
   const getRelativeTime = (dateStr: string) => {
@@ -135,6 +153,45 @@ export default function DashboardPage() {
           <p className="text-xs text-gray-500 dark:text-gray-500 mt-1.5">
             {loading ? "" : `${data?.xp ?? 0} total XP · +10 XP per message · +5 XP per saved word`}
           </p>
+        </div>
+
+        {/* Word of the Day */}
+        <div className="mb-6 rounded-2xl border border-amber-500/20 bg-gradient-to-br from-amber-500/5 to-orange-500/5 overflow-hidden">
+          <div className="px-5 py-3 border-b border-amber-500/10 flex items-center gap-2">
+            <span className="text-base">✨</span>
+            <h2 className="text-sm font-semibold text-gray-900 dark:text-white">Word of the Day</h2>
+          </div>
+          {wordLoading ? (
+            <div className="px-5 py-5 space-y-2">
+              <div className="h-6 w-32 bg-gray-200 dark:bg-white/10 rounded animate-pulse" />
+              <div className="h-4 w-48 bg-gray-200 dark:bg-white/5 rounded animate-pulse" />
+              <div className="h-4 w-56 bg-gray-200 dark:bg-white/5 rounded animate-pulse" />
+            </div>
+          ) : wordOfDay ? (
+            <div className="px-5 py-4 space-y-3">
+              <div className="flex items-start gap-4 flex-wrap">
+                <div>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{wordOfDay.word}</p>
+                  <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{wordOfDay.pronunciation} · <span className="italic">{wordOfDay.partOfSpeech}</span></p>
+                </div>
+                <div className="ml-auto text-right">
+                  <p className="text-base font-semibold text-amber-600 dark:text-amber-300">{wordOfDay.translation}</p>
+                </div>
+              </div>
+              <div className="text-sm text-gray-600 dark:text-gray-300 bg-white/50 dark:bg-white/5 rounded-xl px-4 py-2.5 italic border border-gray-100 dark:border-white/5">
+                <p>{wordOfDay.example}</p>
+                <p className="text-gray-400 dark:text-gray-500 mt-1 not-italic text-xs">{wordOfDay.exampleTranslation}</p>
+              </div>
+              {wordOfDay.tip && (
+                <p className="text-xs text-amber-600 dark:text-amber-400 flex gap-1.5">
+                  <span className="flex-shrink-0">💡</span>
+                  <span>{wordOfDay.tip}</span>
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className="px-5 py-5 text-sm text-gray-500">Could not load word of the day.</div>
+          )}
         </div>
 
         {/* Stats Grid */}
@@ -270,6 +327,21 @@ export default function DashboardPage() {
           {/* Quick Links */}
           <div className="space-y-4">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white px-1">{t("explore")}</h2>
+            <Link
+              href="/progress"
+              className="flex items-center gap-4 p-4 rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-900/50 hover:border-blue-500/30 hover:bg-gray-100 dark:hover:bg-white/5 transition-all group"
+            >
+              <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                📊
+              </div>
+              <div>
+                <p className="font-medium text-gray-900 dark:text-white">My Progress</p>
+                <p className="text-sm text-gray-600 dark:text-gray-500">Charts & analytics</p>
+              </div>
+              <svg className="w-5 h-5 text-gray-500 group-hover:text-blue-400 ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
             <Link
               href="/vocabulary"
               className="flex items-center gap-4 p-4 rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-900/50 hover:border-green-500/30 hover:bg-gray-100 dark:hover:bg-white/5 transition-all group"
