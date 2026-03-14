@@ -6,8 +6,8 @@ import { Link } from "@/i18n/navigation";
 import toast from "react-hot-toast";
 import { UserMenu } from "@/components/UserMenu";
 import { useTranslations, useLocale } from "next-intl";
-import { LANG_FLAG } from "@/constants/languages";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { FlagIcon } from "@/components/FlagIcon";
 
 type Message = {
   id: string;
@@ -33,7 +33,6 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
 
   const targetLang = (user as { targetLang?: string }).targetLang?.toLowerCase() ?? "en";
   const targetLangName = tLangs(targetLang as Parameters<typeof tLangs>[0], { defaultValue: targetLang.toUpperCase() });
-  const targetLangFlag = LANG_FLAG[targetLang] ?? "";
 
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeConvId, setActiveConvId] = useState<string | null>(null);
@@ -41,7 +40,8 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingHistory, setLoadingHistory] = useState(true);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -54,6 +54,17 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
+
+  useEffect(() => {
+    const check = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      setSidebarOpen(!mobile);
+    };
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   const fetchConversations = useCallback(async (): Promise<Conversation[]> => {
     try {
@@ -99,13 +110,13 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
     setActiveConvId(null);
     setMessages([]);
     inputRef.current?.focus();
-    if (window.innerWidth < 768) setSidebarOpen(false);
+    if (isMobile) setSidebarOpen(false);
   };
 
   const handleSelectConversation = async (convId: string) => {
     if (convId === activeConvId) return;
     await loadConversation(convId);
-    if (window.innerWidth < 768) setSidebarOpen(false);
+    if (isMobile) setSidebarOpen(false);
   };
 
   const handleDeleteConversation = async (e: React.MouseEvent, convId: string) => {
@@ -208,24 +219,57 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <header className="px-6 py-4 glass-nav border-b border-gray-200 dark:border-white/5 flex items-center justify-between z-10 flex-shrink-0">
-        <div className="font-bold text-xl bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 bg-clip-text text-transparent">
-          AiTut Chat
+      <header className="px-4 sm:px-6 py-3 sm:py-4 glass-nav border-b border-gray-200 dark:border-white/5 flex items-center justify-between z-10 flex-shrink-0">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setSidebarOpen((v) => !v)}
+            className="p-2 rounded-xl bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 transition-all text-gray-600 dark:text-gray-400"
+            title={sidebarOpen ? t("hideHistory") : t("showHistory")}
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <div className="font-bold text-lg sm:text-xl bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 bg-clip-text text-transparent">
+            AiTut Chat
+          </div>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <ThemeToggle />
-          <div className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="hidden sm:block text-sm text-gray-600 dark:text-gray-400">
             {t("learningLabel")}:{" "}
-            <span className="text-gray-900 dark:text-white font-medium">{targetLangFlag} {targetLangName}</span>
+            <span className="text-gray-900 dark:text-white font-medium inline-flex items-center gap-2">
+              <FlagIcon code={targetLang} className="w-5 h-4" />
+              <span>{targetLangName}</span>
+            </span>
+          </div>
+          <div className="sm:hidden text-sm font-medium text-gray-600 dark:text-gray-300">
+            <FlagIcon code={targetLang} className="w-5 h-4" />
           </div>
           <UserMenu user={user} role={user.role} />
         </div>
       </header>
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden relative">
+        {/* Mobile backdrop */}
+        {isMobile && sidebarOpen && (
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(false)}
+            className="absolute inset-0 bg-black/40 z-20"
+            aria-label={t("hideHistory")}
+          />
+        )}
+
         {/* Sidebar */}
         <div
-          className={`${sidebarOpen ? "w-64" : "w-0"} flex-shrink-0 overflow-hidden transition-all duration-300 bg-gray-100 dark:bg-gray-900/80 border-r border-gray-200 dark:border-white/5 flex flex-col`}
+          className={`
+            ${isMobile
+              ? `absolute inset-y-0 left-0 z-30 w-72 max-w-[85vw] transform transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`
+              : `${sidebarOpen ? "w-64" : "w-0"} flex-shrink-0 transition-all duration-300`
+            }
+            overflow-hidden bg-gray-100 dark:bg-gray-900/80 border-r border-gray-200 dark:border-white/5 flex flex-col
+          `}
         >
           <div className="p-3 border-b border-gray-200 dark:border-white/5 flex-shrink-0 space-y-2">
             <button
@@ -369,23 +413,13 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
 
         {/* Main chat area */}
         <div className="flex-1 flex flex-col min-w-0 relative">
-          <button
-            onClick={() => setSidebarOpen((v) => !v)}
-            className="absolute top-4 left-4 z-10 p-2 rounded-xl bg-white/90 dark:bg-gray-900/80 backdrop-blur border border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-            title={sidebarOpen ? t("hideHistory") : t("showHistory")}
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-
-          <div className="flex-1 overflow-y-auto custom-scrollbar pt-16 pb-28 px-4 md:px-8">
+          <div className="flex-1 overflow-y-auto custom-scrollbar pt-4 pb-28 px-4 md:px-8">
             <div className="max-w-2xl mx-auto">
               {messages.length === 0 && !loading && (
                 <div className="flex flex-col items-center justify-center h-full min-h-[400px] space-y-6 px-2">
                   <div className="text-center space-y-2">
                     <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto">
-                      <span className="text-3xl">{targetLangFlag || "💬"}</span>
+                      <FlagIcon code={targetLang} className="w-8 h-6" />
                     </div>
                     <p className="text-lg font-semibold text-gray-800 dark:text-gray-200">{t("startChat")}</p>
                     <p className="text-sm text-gray-500 dark:text-gray-500">

@@ -143,7 +143,7 @@ export default function ProfilePage() {
 
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-600 dark:text-gray-400">{t("cefrLevel")}</label>
-            <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-6 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
               {CEFR_LEVELS.map((level) => (
                 <button key={level} type="button" onClick={() => setCefrLevel(level)}
                   className={`py-2 px-3 rounded-xl text-sm font-semibold border-2 transition-all focus:outline-none ${cefrLevel === level ? "border-blue-500 bg-blue-500/10 text-blue-600 dark:text-blue-300" : "border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800/50 text-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-600"}`}>
