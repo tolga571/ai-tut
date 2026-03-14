@@ -128,11 +128,13 @@
     "session": "Sesión",
     "signOutDesc": "Cerrar sesión de forma segura",
     "signOut": "Cerrar sesión",
+    "success": {
+      "nameUpdated": "Nombre actualizado",
+      "langSaved": "Configuración de idioma actualizada"
+    },
     "errors": {
       "nameEmpty": "El nombre no puede estar vacío",
-      "nameUpdated": "Nombre actualizado",
       "updateFailed": "Error al actualizar",
-      "langSaved": "Configuración de idioma actualizada",
       "sameLang": "El idioma nativo y el objetivo no pueden ser iguales"
     }
   },

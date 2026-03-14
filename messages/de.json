@@ -128,11 +128,13 @@
     "session": "Sitzung",
     "signOutDesc": "Sicher aus deinem Konto abmelden",
     "signOut": "Abmelden",
+    "success": {
+      "nameUpdated": "Name aktualisiert",
+      "langSaved": "Spracheinstellungen aktualisiert"
+    },
     "errors": {
       "nameEmpty": "Name darf nicht leer sein",
-      "nameUpdated": "Name aktualisiert",
       "updateFailed": "Aktualisierung fehlgeschlagen",
-      "langSaved": "Spracheinstellungen aktualisiert",
       "sameLang": "Muttersprache und Zielsprache können nicht gleich sein"
     }
   },

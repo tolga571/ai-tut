@@ -128,11 +128,13 @@
     "session": "Session",
     "signOutDesc": "Se déconnecter de votre compte en toute sécurité",
     "signOut": "Se déconnecter",
+    "success": {
+      "nameUpdated": "Nom mis à jour",
+      "langSaved": "Paramètres de langue mis à jour"
+    },
     "errors": {
       "nameEmpty": "Le nom ne peut pas être vide",
-      "nameUpdated": "Nom mis à jour",
       "updateFailed": "Échec de la mise à jour",
-      "langSaved": "Paramètres de langue mis à jour",
       "sameLang": "La langue maternelle et la langue cible ne peuvent pas être identiques"
     }
   },

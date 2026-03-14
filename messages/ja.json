@@ -128,11 +128,13 @@
     "session": "セッション",
     "signOutDesc": "アカウントから安全にログアウト",
     "signOut": "ログアウト",
+    "success": {
+      "nameUpdated": "名前を更新しました",
+      "langSaved": "言語設定を更新しました"
+    },
     "errors": {
       "nameEmpty": "名前は空にできません",
-      "nameUpdated": "名前を更新しました",
       "updateFailed": "更新に失敗しました",
-      "langSaved": "言語設定を更新しました",
       "sameLang": "母国語と目標言語は同じにできません"
     }
   },

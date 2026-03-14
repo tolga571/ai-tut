@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { signOut } from "next-auth/react";
 import { Link } from "@/i18n/navigation";
 import toast from "react-hot-toast";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 interface UserMenuProps {
   user: { name?: string | null; email?: string | null };
@@ -14,6 +14,7 @@ interface UserMenuProps {
 export function UserMenu({ user, role }: UserMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const locale = useLocale();
   const t = useTranslations("userMenu");
   const tNav = useTranslations("nav");
 
@@ -29,7 +30,7 @@ export function UserMenu({ user, role }: UserMenuProps) {
 
   const handleSignOut = async () => {
     try {
-      await signOut({ callbackUrl: `${window.location.origin}/login` });
+      await signOut({ callbackUrl: `${window.location.origin}/${locale}/login` });
     } catch {
       toast.error(t("signOutError"));
     }

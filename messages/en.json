@@ -128,11 +128,13 @@
     "session": "Session",
     "signOutDesc": "Securely sign out of your account",
     "signOut": "Sign Out",
+    "success": {
+      "nameUpdated": "Name updated",
+      "langSaved": "Language settings updated"
+    },
     "errors": {
       "nameEmpty": "Name cannot be empty",
-      "nameUpdated": "Name updated",
       "updateFailed": "Update failed",
-      "langSaved": "Language settings updated",
       "sameLang": "Native and target language cannot be the same"
     }
   },

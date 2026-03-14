@@ -123,11 +123,13 @@
     "session": "Oturum",
     "signOutDesc": "Hesabınızdan güvenli çıkış yapın",
     "signOut": "Çıkış Yap",
+    "success": {
+      "nameUpdated": "İsim güncellendi",
+      "langSaved": "Dil ayarları güncellendi"
+    },
     "errors": {
       "nameEmpty": "İsim boş olamaz",
-      "nameUpdated": "İsim güncellendi",
       "updateFailed": "Güncelleme başarısız",
-      "langSaved": "Dil ayarları güncellendi",
       "sameLang": "Anadil ve hedef dil aynı olamaz"
     }
   },

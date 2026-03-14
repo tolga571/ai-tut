@@ -1,14 +1,15 @@
 "use client";
 
 import { useSession, signOut } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "@/i18n/navigation";
 import toast from "react-hot-toast";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { LEARNING_LANGUAGES, CEFR_LEVELS, type CefrLevel } from "@/constants/languages";
 
 export default function ProfilePage() {
   const { data: session, update: updateSession } = useSession();
+  const locale = useLocale();
   const t = useTranslations("profile");
   const tOnboarding = useTranslations("onboarding");
   const user = session?.user as {
@@ -28,10 +29,13 @@ export default function ProfilePage() {
   const [savingName, setSavingName] = useState(false);
   const [savingLangs, setSavingLangs] = useState(false);
 
-  if (user?.name && name === "" && user.name !== name) setName(user.name);
-  if (user?.nativeLang && nativeLang !== user.nativeLang && nativeLang === "en") setNativeLang(user.nativeLang);
-  if (user?.targetLang && targetLang !== user.targetLang && targetLang === "es") setTargetLang(user.targetLang);
-  if (user?.cefrLevel && cefrLevel !== user.cefrLevel && cefrLevel === "A1") setCefrLevel(user.cefrLevel as CefrLevel);
+  useEffect(() => {
+    if (!user) return;
+    if (user.name && name === "") setName(user.name);
+    if (user.nativeLang) setNativeLang(user.nativeLang);
+    if (user.targetLang) setTargetLang(user.targetLang);
+    if (user.cefrLevel) setCefrLevel(user.cefrLevel as CefrLevel);
+  }, [user]);
 
   const handleSaveName = async () => {
     if (!name.trim()) return toast.error(t("errors.nameEmpty"));
@@ -44,7 +48,7 @@ export default function ProfilePage() {
       });
       if (!res.ok) throw new Error();
       await updateSession();
-      toast.success(t("errors.nameUpdated"));
+      toast.success(t("success.nameUpdated"));
     } catch {
       toast.error(t("errors.updateFailed"));
     } finally {
@@ -63,7 +67,7 @@ export default function ProfilePage() {
       });
       if (!res.ok) throw new Error();
       await updateSession();
-      toast.success(t("errors.langSaved"));
+      toast.success(t("success.langSaved"));
     } catch {
       toast.error(t("errors.updateFailed"));
     } finally {
@@ -188,7 +192,7 @@ export default function ProfilePage() {
         <div className="bg-gray-900 border border-red-500/20 rounded-2xl p-6 shadow-xl">
           <h2 className="text-lg font-semibold text-white mb-1">{t("session")}</h2>
           <p className="text-sm text-gray-400 mb-4">{t("signOutDesc")}</p>
-          <button onClick={() => signOut({ callbackUrl: window.location.origin + "/login" })}
+          <button onClick={() => signOut({ callbackUrl: `${window.location.origin}/${locale}/login` })}
             className="px-5 py-2.5 bg-red-600/20 hover:bg-red-600/30 border border-red-500/30 rounded-xl text-sm font-medium text-red-400 hover:text-red-300 transition-all">
             {t("signOut")}
           </button>

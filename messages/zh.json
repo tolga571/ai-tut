@@ -128,11 +128,13 @@
     "session": "会话",
     "signOutDesc": "安全退出您的账号",
     "signOut": "退出登录",
+    "success": {
+      "nameUpdated": "姓名已更新",
+      "langSaved": "语言设置已更新"
+    },
     "errors": {
       "nameEmpty": "姓名不能为空",
-      "nameUpdated": "姓名已更新",
       "updateFailed": "更新失败",
-      "langSaved": "语言设置已更新",
       "sameLang": "母语和目标语言不能相同"
     }
   },
