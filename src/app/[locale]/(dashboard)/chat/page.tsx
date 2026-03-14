@@ -21,7 +21,7 @@ export default async function ChatPage({
   }
 
   return (
-    <div className="h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white flex flex-col transition-colors">
+    <div className="min-h-[100dvh] bg-white dark:bg-gray-950 text-gray-900 dark:text-white flex flex-col transition-colors">
       <main className="flex-1 overflow-hidden relative">
         <ChatInterface user={session!.user as { name?: string | null; email?: string | null; targetLang?: string; nativeLang?: string; role?: string }} />
       </main>

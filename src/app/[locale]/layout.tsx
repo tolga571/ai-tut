@@ -1,10 +1,10 @@
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { AuthProvider } from "@/components/providers/AuthProvider";
-import { Toaster } from "react-hot-toast";
 import { Navbar } from "@/components/Navbar";
 import { LayoutWrapper } from "@/components/LayoutWrapper";
 import { routing } from "@/i18n/routing";
+import { ResponsiveToaster } from "@/components/providers/ResponsiveToaster";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -27,7 +27,7 @@ export default async function LocaleLayout({
         <AuthProvider>
             <Navbar />
             <LayoutWrapper>{children}</LayoutWrapper>
-            <Toaster position="bottom-right" />
+            <ResponsiveToaster />
           </AuthProvider>
       </NextIntlClientProvider>
     </div>

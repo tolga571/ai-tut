@@ -41,7 +41,10 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingHistory, setLoadingHistory] = useState(true);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth >= 768 : true
+  );
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -54,6 +57,20 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setSidebarOpen(true);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const fetchConversations = useCallback(async (): Promise<Conversation[]> => {
     try {
@@ -208,24 +225,54 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <header className="px-6 py-4 glass-nav border-b border-gray-200 dark:border-white/5 flex items-center justify-between z-10 flex-shrink-0">
-        <div className="font-bold text-xl bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 bg-clip-text text-transparent">
-          AiTut Chat
+      <header className="px-4 sm:px-6 py-3 sm:py-4 glass-nav border-b border-gray-200 dark:border-white/5 flex items-center justify-between z-10 flex-shrink-0">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <button
+            onClick={() => setSidebarOpen((v) => !v)}
+            className="p-2 rounded-xl bg-white/90 dark:bg-gray-900/80 backdrop-blur border border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+            title={sidebarOpen ? t("hideHistory") : t("showHistory")}
+            aria-label={sidebarOpen ? t("hideHistory") : t("showHistory")}
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <div className="font-bold text-lg sm:text-xl bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 bg-clip-text text-transparent truncate">
+            AiTut Chat
+          </div>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <ThemeToggle />
-          <div className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="hidden sm:block text-sm text-gray-600 dark:text-gray-400">
             {t("learningLabel")}:{" "}
             <span className="text-gray-900 dark:text-white font-medium">{targetLangFlag} {targetLangName}</span>
+          </div>
+          <div className="sm:hidden text-sm text-gray-600 dark:text-gray-400 font-medium">
+            {targetLangFlag || targetLang.toUpperCase()}
           </div>
           <UserMenu user={user} role={user.role} />
         </div>
       </header>
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden relative">
+        {isMobile && sidebarOpen && (
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(false)}
+            className="absolute inset-0 bg-black/40 z-20"
+            aria-label={t("hideHistory")}
+          />
+        )}
+
         {/* Sidebar */}
         <div
-          className={`${sidebarOpen ? "w-64" : "w-0"} flex-shrink-0 overflow-hidden transition-all duration-300 bg-gray-100 dark:bg-gray-900/80 border-r border-gray-200 dark:border-white/5 flex flex-col`}
+          className={`${
+            isMobile
+              ? `absolute inset-y-0 left-0 z-30 w-72 max-w-[85vw] transform transition-transform duration-300 ${
+                  sidebarOpen ? "translate-x-0" : "-translate-x-full"
+                }`
+              : `${sidebarOpen ? "w-64" : "w-0"} flex-shrink-0 transition-all duration-300`
+          } overflow-hidden bg-gray-100 dark:bg-gray-900/80 border-r border-gray-200 dark:border-white/5 flex flex-col`}
         >
           <div className="p-3 border-b border-gray-200 dark:border-white/5 flex-shrink-0 space-y-2">
             <button
@@ -369,17 +416,7 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
 
         {/* Main chat area */}
         <div className="flex-1 flex flex-col min-w-0 relative">
-          <button
-            onClick={() => setSidebarOpen((v) => !v)}
-            className="absolute top-4 left-4 z-10 p-2 rounded-xl bg-white/90 dark:bg-gray-900/80 backdrop-blur border border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-            title={sidebarOpen ? t("hideHistory") : t("showHistory")}
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-
-          <div className="flex-1 overflow-y-auto custom-scrollbar pt-16 pb-28 px-4 md:px-8">
+          <div className="flex-1 overflow-y-auto custom-scrollbar pt-4 pb-28 px-4 md:px-8">
             <div className="max-w-2xl mx-auto">
               {messages.length === 0 && !loading && (
                 <div className="flex flex-col items-center justify-center h-full min-h-[400px] space-y-6 px-2">
@@ -482,7 +519,7 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
           </div>
 
           {/* Input */}
-          <div className="absolute bottom-0 left-0 right-0 px-4 pb-5 pt-3 bg-gradient-to-t from-white via-white/95 to-transparent dark:from-gray-950 dark:via-gray-950/90 dark:to-transparent">
+          <div className="absolute bottom-0 left-0 right-0 px-4 pt-3 pb-[max(1.25rem,env(safe-area-inset-bottom))] bg-gradient-to-t from-white via-white/95 to-transparent dark:from-gray-950 dark:via-gray-950/90 dark:to-transparent">
             <div className="max-w-2xl mx-auto">
               <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700/50 rounded-2xl shadow-2xl backdrop-blur-2xl transition-all focus-within:border-blue-500/50 focus-within:ring-1 focus-within:ring-blue-500/20">
                 <form onSubmit={sendMessage} className="flex items-center px-2 py-2">

@@ -1,14 +1,14 @@
-# 🧠 CLAUDE — Master Configuration File (v3)
+# 🧠 Codex — Master Configuration File (v3)
 
-This file defines how Claude behaves, which rules to apply, and which workflows to follow across all projects. Copy this `.claude/` folder to the root of every new project.
+This file defines how Codex behaves, which rules to apply, and which workflows to follow across all projects. Copy this `.Codex/` folder to the root of every new project.
 
 ---
 
 ## 📁 Structure
 
 ```
-.claude/
-├── CLAUDE.md
+.Codex/
+├── AGENTS.md
 ├── rules/
 │   ├── 01-core-principles.md       ← SOLID, DRY, KISS, OOP
 │   ├── 02-clean-code.md            ← Naming, constants, logging
@@ -116,7 +116,7 @@ This file defines how Claude behaves, which rules to apply, and which workflows 
 **GitHub**
 - Never push directly to `main` branch
 - Never commit `.env` files
-- Never leave `.claude/` in `.gitignore`
+- Never leave `.Codex/` in `.gitignore`
 - Never write uninformative commit messages (`fix`, `update`, `wip`)
 - Never forget to update `PROJECT.md` when a module is completed
 
