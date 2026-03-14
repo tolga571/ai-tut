@@ -50,7 +50,11 @@
     "submit": "Se connecter",
     "noAccount": "Pas encore de compte ?",
     "createAccount": "Créer un compte",
-    "success": "Connexion réussie !"
+    "success": "Connexion réussie !",
+    "testMode": "Mode test",
+    "testCredentialsHint": "Utilisez ces identifiants pour tester rapidement :",
+    "fillTestCredentials": "Remplir les identifiants test",
+    "testCredentialsFilled": "Identifiants test remplis"
   },
   "register": {
     "stepLabel": "Étape 2",
@@ -124,7 +128,13 @@
     "loadError": "Échec du chargement de la conversation",
     "hideHistory": "Masquer l'historique",
     "showHistory": "Afficher l'historique",
-    "correctionLabel": "Note de grammaire"
+    "correctionLabel": "Note de grammaire",
+    "searchPlaceholder": "Search conversations...",
+    "suggestionsLabel": "Try asking",
+    "suggestion1": "How do I introduce myself?",
+    "suggestion2": "Help me order food at a restaurant",
+    "suggestion3": "Correct my grammar as I practice",
+    "suggestion4": "Lets have a casual conversation"
   },
   "profile": {
     "backToChat": "Retour au chat",
@@ -175,12 +185,30 @@
       "generic": "Quelque chose s'est mal passé"
     },
     "levels": {
-      "A1": { "label": "A1 — Débutant", "description": "Je connais quelques mots et phrases de base" },
-      "A2": { "label": "A2 — Élémentaire", "description": "Je peux gérer des phrases quotidiennes simples" },
-      "B1": { "label": "B1 — Intermédiaire", "description": "Je peux discuter de sujets familiers" },
-      "B2": { "label": "B2 — Intermédiaire avancé", "description": "Je peux avoir des conversations fluides et détaillées" },
-      "C1": { "label": "C1 — Avancé", "description": "Je peux utiliser un langage complexe et nuancé" },
-      "C2": { "label": "C2 — Maîtrise", "description": "Fluidité quasi native" }
+      "A1": {
+        "label": "A1 — Débutant",
+        "description": "Je connais quelques mots et phrases de base"
+      },
+      "A2": {
+        "label": "A2 — Élémentaire",
+        "description": "Je peux gérer des phrases quotidiennes simples"
+      },
+      "B1": {
+        "label": "B1 — Intermédiaire",
+        "description": "Je peux discuter de sujets familiers"
+      },
+      "B2": {
+        "label": "B2 — Intermédiaire avancé",
+        "description": "Je peux avoir des conversations fluides et détaillées"
+      },
+      "C1": {
+        "label": "C1 — Avancé",
+        "description": "Je peux utiliser un langage complexe et nuancé"
+      },
+      "C2": {
+        "label": "C2 — Maîtrise",
+        "description": "Fluidité quasi native"
+      }
     }
   },
   "pricing": {
@@ -201,19 +229,38 @@
     "plans": {
       "standardMonthly": {
         "name": "Standard Mensuel",
-        "features": ["Pratique linguistique de base", "100 messages IA/jour", "Toutes les langues"]
+        "features": [
+          "Pratique linguistique de base",
+          "100 messages IA/jour",
+          "Toutes les langues"
+        ]
       },
       "standardYearly": {
         "name": "Standard Annuel",
-        "features": ["Pratique linguistique de base", "100 messages IA/jour", "Toutes les langues", "Économisez 10%"]
+        "features": [
+          "Pratique linguistique de base",
+          "100 messages IA/jour",
+          "Toutes les langues",
+          "Économisez 10%"
+        ]
       },
       "proMonthly": {
         "name": "Pro Mensuel",
-        "features": ["Pratique avancée", "Messages illimités", "Tuteurs personnalisés", "Support prioritaire"]
+        "features": [
+          "Pratique avancée",
+          "Messages illimités",
+          "Tuteurs personnalisés",
+          "Support prioritaire"
+        ]
       },
       "proYearly": {
         "name": "Pro Annuel",
-        "features": ["Pratique avancée", "Messages illimités", "Tuteurs personnalisés", "Économisez 20%"]
+        "features": [
+          "Pratique avancée",
+          "Messages illimités",
+          "Tuteurs personnalisés",
+          "Économisez 20%"
+        ]
       }
     }
   },
@@ -237,22 +284,22 @@
     "backToChat": "Retour au chat",
     "managePosts": "Gérer les publications",
     "metrics": {
-      "totalUsers":    "Total utilisateurs",
+      "totalUsers": "Total utilisateurs",
       "recentSignups": "Inscriptions récentes",
-      "totalChats":    "Total chats",
+      "totalChats": "Total chats",
       "totalMessages": "Total messages",
-      "last7days":     "7 derniers jours"
+      "last7days": "7 derniers jours"
     },
     "table": {
-      "title":    "Activité des utilisateurs",
-      "showing":  "Affichage de {count} utilisateurs",
-      "user":     "Utilisateur",
-      "joined":   "Inscrit le",
-      "role":     "Rôle",
-      "plan":     "Plan",
-      "chats":    "Chats",
+      "title": "Activité des utilisateurs",
+      "showing": "Affichage de {count} utilisateurs",
+      "user": "Utilisateur",
+      "joined": "Inscrit le",
+      "role": "Rôle",
+      "plan": "Plan",
+      "chats": "Chats",
       "messages": "Messages",
-      "noName":   "Sans nom"
+      "noName": "Sans nom"
     }
   },
   "admin": {

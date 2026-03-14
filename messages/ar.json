@@ -50,7 +50,11 @@
     "submit": "تسجيل الدخول",
     "noAccount": "ليس لديك حساب؟",
     "createAccount": "إنشاء حساب",
-    "success": "تم تسجيل الدخول بنجاح!"
+    "success": "تم تسجيل الدخول بنجاح!",
+    "testMode": "وضع الاختبار",
+    "testCredentialsHint": "استخدم هذه البيانات للاختبار السريع:",
+    "fillTestCredentials": "ملء بيانات الاختبار",
+    "testCredentialsFilled": "تم ملء بيانات الاختبار"
   },
   "register": {
     "stepLabel": "الخطوة 2",
@@ -124,7 +128,13 @@
     "loadError": "فشل تحميل المحادثة",
     "hideHistory": "إخفاء السجل",
     "showHistory": "عرض السجل",
-    "correctionLabel": "ملاحظة نحوية"
+    "correctionLabel": "ملاحظة نحوية",
+    "searchPlaceholder": "Search conversations...",
+    "suggestionsLabel": "Try asking",
+    "suggestion1": "How do I introduce myself?",
+    "suggestion2": "Help me order food at a restaurant",
+    "suggestion3": "Correct my grammar as I practice",
+    "suggestion4": "Lets have a casual conversation"
   },
   "profile": {
     "backToChat": "العودة إلى المحادثة",
@@ -175,12 +185,30 @@
       "generic": "حدث خطأ ما"
     },
     "levels": {
-      "A1": { "label": "A1 — مبتدئ", "description": "أعرف بعض الكلمات والعبارات الأساسية" },
-      "A2": { "label": "A2 — أولي", "description": "أستطيع التعامل مع جمل يومية بسيطة" },
-      "B1": { "label": "B1 — متوسط", "description": "أستطيع مناقشة المواضيع المألوفة" },
-      "B2": { "label": "B2 — فوق المتوسط", "description": "أستطيع إجراء محادثات مفصلة وسلسة" },
-      "C1": { "label": "C1 — متقدم", "description": "أستطيع استخدام لغة معقدة ودقيقة" },
-      "C2": { "label": "C2 — إتقان", "description": "طلاقة شبه أصيلة" }
+      "A1": {
+        "label": "A1 — مبتدئ",
+        "description": "أعرف بعض الكلمات والعبارات الأساسية"
+      },
+      "A2": {
+        "label": "A2 — أولي",
+        "description": "أستطيع التعامل مع جمل يومية بسيطة"
+      },
+      "B1": {
+        "label": "B1 — متوسط",
+        "description": "أستطيع مناقشة المواضيع المألوفة"
+      },
+      "B2": {
+        "label": "B2 — فوق المتوسط",
+        "description": "أستطيع إجراء محادثات مفصلة وسلسة"
+      },
+      "C1": {
+        "label": "C1 — متقدم",
+        "description": "أستطيع استخدام لغة معقدة ودقيقة"
+      },
+      "C2": {
+        "label": "C2 — إتقان",
+        "description": "طلاقة شبه أصيلة"
+      }
     }
   },
   "pricing": {
@@ -201,19 +229,38 @@
     "plans": {
       "standardMonthly": {
         "name": "القياسية الشهرية",
-        "features": ["ممارسة لغوية أساسية", "100 رسالة ذكاء اصطناعي/يوم", "جميع اللغات"]
+        "features": [
+          "ممارسة لغوية أساسية",
+          "100 رسالة ذكاء اصطناعي/يوم",
+          "جميع اللغات"
+        ]
       },
       "standardYearly": {
         "name": "القياسية السنوية",
-        "features": ["ممارسة لغوية أساسية", "100 رسالة ذكاء اصطناعي/يوم", "جميع اللغات", "وفر 10%"]
+        "features": [
+          "ممارسة لغوية أساسية",
+          "100 رسالة ذكاء اصطناعي/يوم",
+          "جميع اللغات",
+          "وفر 10%"
+        ]
       },
       "proMonthly": {
         "name": "الاحترافية الشهرية",
-        "features": ["ممارسة متقدمة", "رسائل غير محدودة", "مدرسون شخصيون", "دعم أولوية"]
+        "features": [
+          "ممارسة متقدمة",
+          "رسائل غير محدودة",
+          "مدرسون شخصيون",
+          "دعم أولوية"
+        ]
       },
       "proYearly": {
         "name": "الاحترافية السنوية",
-        "features": ["ممارسة متقدمة", "رسائل غير محدودة", "مدرسون شخصيون", "وفر 20%"]
+        "features": [
+          "ممارسة متقدمة",
+          "رسائل غير محدودة",
+          "مدرسون شخصيون",
+          "وفر 20%"
+        ]
       }
     }
   },
@@ -237,22 +284,22 @@
     "backToChat": "العودة إلى المحادثة",
     "managePosts": "إدارة المنشورات",
     "metrics": {
-      "totalUsers":    "إجمالي المستخدمين",
+      "totalUsers": "إجمالي المستخدمين",
       "recentSignups": "التسجيلات الأخيرة",
-      "totalChats":    "إجمالي المحادثات",
+      "totalChats": "إجمالي المحادثات",
       "totalMessages": "إجمالي الرسائل",
-      "last7days":     "آخر 7 أيام"
+      "last7days": "آخر 7 أيام"
     },
     "table": {
-      "title":    "نشاط المستخدمين",
-      "showing":  "عرض {count} مستخدمين",
-      "user":     "المستخدم",
-      "joined":   "تاريخ الانضمام",
-      "role":     "الدور",
-      "plan":     "الخطة",
-      "chats":    "المحادثات",
+      "title": "نشاط المستخدمين",
+      "showing": "عرض {count} مستخدمين",
+      "user": "المستخدم",
+      "joined": "تاريخ الانضمام",
+      "role": "الدور",
+      "plan": "الخطة",
+      "chats": "المحادثات",
       "messages": "الرسائل",
-      "noName":   "بلا اسم"
+      "noName": "بلا اسم"
     }
   },
   "admin": {

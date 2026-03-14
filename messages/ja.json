@@ -50,7 +50,11 @@
     "submit": "ログイン",
     "noAccount": "アカウントをお持ちでないですか？",
     "createAccount": "アカウントを作成",
-    "success": "ログインしました！"
+    "success": "ログインしました！",
+    "testMode": "テストモード",
+    "testCredentialsHint": "クイックテスト用の認証情報：",
+    "fillTestCredentials": "テスト認証情報を入力",
+    "testCredentialsFilled": "テスト認証情報を入力しました"
   },
   "register": {
     "stepLabel": "ステップ2",
@@ -124,7 +128,13 @@
     "loadError": "会話の読み込みに失敗しました",
     "hideHistory": "履歴を非表示",
     "showHistory": "履歴を表示",
-    "correctionLabel": "文法メモ"
+    "correctionLabel": "文法メモ",
+    "searchPlaceholder": "Search conversations...",
+    "suggestionsLabel": "Try asking",
+    "suggestion1": "How do I introduce myself?",
+    "suggestion2": "Help me order food at a restaurant",
+    "suggestion3": "Correct my grammar as I practice",
+    "suggestion4": "Lets have a casual conversation"
   },
   "profile": {
     "backToChat": "チャットに戻る",
@@ -175,12 +185,30 @@
       "generic": "問題が発生しました"
     },
     "levels": {
-      "A1": { "label": "A1 — 入門", "description": "いくつかの単語と基本的なフレーズを知っている" },
-      "A2": { "label": "A2 — 初級", "description": "簡単な日常の文を扱える" },
-      "B1": { "label": "B1 — 中級", "description": "身近なトピックについて話せる" },
-      "B2": { "label": "B2 — 中上級", "description": "流暢で詳細な会話ができる" },
-      "C1": { "label": "C1 — 上級", "description": "複雑で微妙な言語を使える" },
-      "C2": { "label": "C2 — 熟達", "description": "ほぼネイティブレベルの流暢さ" }
+      "A1": {
+        "label": "A1 — 入門",
+        "description": "いくつかの単語と基本的なフレーズを知っている"
+      },
+      "A2": {
+        "label": "A2 — 初級",
+        "description": "簡単な日常の文を扱える"
+      },
+      "B1": {
+        "label": "B1 — 中級",
+        "description": "身近なトピックについて話せる"
+      },
+      "B2": {
+        "label": "B2 — 中上級",
+        "description": "流暢で詳細な会話ができる"
+      },
+      "C1": {
+        "label": "C1 — 上級",
+        "description": "複雑で微妙な言語を使える"
+      },
+      "C2": {
+        "label": "C2 — 熟達",
+        "description": "ほぼネイティブレベルの流暢さ"
+      }
     }
   },
   "pricing": {
@@ -201,19 +229,38 @@
     "plans": {
       "standardMonthly": {
         "name": "スタンダード月払い",
-        "features": ["基本的な語学練習", "AIメッセージ100件/日", "全言語対応"]
+        "features": [
+          "基本的な語学練習",
+          "AIメッセージ100件/日",
+          "全言語対応"
+        ]
       },
       "standardYearly": {
         "name": "スタンダード年払い",
-        "features": ["基本的な語学練習", "AIメッセージ100件/日", "全言語対応", "10%お得"]
+        "features": [
+          "基本的な語学練習",
+          "AIメッセージ100件/日",
+          "全言語対応",
+          "10%お得"
+        ]
       },
       "proMonthly": {
         "name": "プロ月払い",
-        "features": ["高度な練習", "無制限メッセージ", "個人チューター", "優先サポート"]
+        "features": [
+          "高度な練習",
+          "無制限メッセージ",
+          "個人チューター",
+          "優先サポート"
+        ]
       },
       "proYearly": {
         "name": "プロ年払い",
-        "features": ["高度な練習", "無制限メッセージ", "個人チューター", "20%お得"]
+        "features": [
+          "高度な練習",
+          "無制限メッセージ",
+          "個人チューター",
+          "20%お得"
+        ]
       }
     }
   },
@@ -237,22 +284,22 @@
     "backToChat": "チャットに戻る",
     "managePosts": "投稿を管理",
     "metrics": {
-      "totalUsers":    "総ユーザー数",
+      "totalUsers": "総ユーザー数",
       "recentSignups": "最近の登録",
-      "totalChats":    "総チャット数",
+      "totalChats": "総チャット数",
       "totalMessages": "総メッセージ数",
-      "last7days":     "過去7日間"
+      "last7days": "過去7日間"
     },
     "table": {
-      "title":    "ユーザー活動",
-      "showing":  "{count}人のユーザーを表示",
-      "user":     "ユーザー",
-      "joined":   "登録日",
-      "role":     "役割",
-      "plan":     "プラン",
-      "chats":    "チャット",
+      "title": "ユーザー活動",
+      "showing": "{count}人のユーザーを表示",
+      "user": "ユーザー",
+      "joined": "登録日",
+      "role": "役割",
+      "plan": "プラン",
+      "chats": "チャット",
       "messages": "メッセージ",
-      "noName":   "名前なし"
+      "noName": "名前なし"
     }
   },
   "admin": {

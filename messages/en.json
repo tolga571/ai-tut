@@ -50,7 +50,11 @@
     "submit": "Sign In",
     "noAccount": "Don't have an account?",
     "createAccount": "Create account",
-    "success": "Successfully logged in!"
+    "success": "Successfully logged in!",
+    "testMode": "Test Mode",
+    "testCredentialsHint": "Use these credentials for quick testing:",
+    "fillTestCredentials": "Fill test credentials",
+    "testCredentialsFilled": "Test credentials filled"
   },
   "register": {
     "stepLabel": "Step 2",
@@ -124,7 +128,13 @@
     "loadError": "Failed to load conversation",
     "hideHistory": "Hide history",
     "showHistory": "Show history",
-    "correctionLabel": "Grammar note"
+    "correctionLabel": "Grammar note",
+    "searchPlaceholder": "Search conversations...",
+    "suggestionsLabel": "Try asking",
+    "suggestion1": "How do I introduce myself?",
+    "suggestion2": "Help me order food at a restaurant",
+    "suggestion3": "Correct my grammar as I practice",
+    "suggestion4": "Let's have a casual conversation"
   },
   "profile": {
     "backToChat": "Back to Chat",

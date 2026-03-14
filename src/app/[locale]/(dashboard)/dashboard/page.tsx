@@ -13,6 +13,25 @@ type DashboardData = {
   recentConversations: { id: string; updatedAt: string; title: string }[];
 };
 
+const DAILY_TIPS = [
+  "Try speaking for 10 minutes without switching to your native language.",
+  "Describe what you see around you in your target language.",
+  "Ask the AI to explain a grammar rule you find confusing.",
+  "Practice ordering food at a restaurant in your target language.",
+  "Try to think in your target language for just 5 minutes today.",
+  "Ask the AI to give you 5 new vocabulary words to practice.",
+  "Write a short diary entry in your target language.",
+];
+
+const CEFR_COLORS: Record<string, string> = {
+  A1: "bg-gray-500/20 text-gray-600 dark:text-gray-300 border-gray-400/30",
+  A2: "bg-green-500/20 text-green-700 dark:text-green-300 border-green-400/30",
+  B1: "bg-blue-500/20 text-blue-700 dark:text-blue-300 border-blue-400/30",
+  B2: "bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border-indigo-400/30",
+  C1: "bg-purple-500/20 text-purple-700 dark:text-purple-300 border-purple-400/30",
+  C2: "bg-amber-500/20 text-amber-700 dark:text-amber-300 border-amber-400/30",
+};
+
 export default function DashboardPage() {
   const { data: session } = useSession();
   const t = useTranslations("dashboard");
@@ -25,12 +44,16 @@ export default function DashboardPage() {
     name?: string | null;
     targetLang?: string;
     nativeLang?: string;
+    cefrLevel?: string;
   } | undefined;
   const targetLang = user?.targetLang?.toLowerCase() ?? "en";
   const targetLangName = tLangs(targetLang as Parameters<typeof tLangs>[0], {
     defaultValue: targetLang.toUpperCase(),
   });
   const targetLangFlag = LANG_FLAG[targetLang] ?? "🌐";
+  const cefrLevel = user?.cefrLevel ?? "A1";
+  const cefrColor = CEFR_COLORS[cefrLevel] ?? CEFR_COLORS.A1;
+  const dailyTip = DAILY_TIPS[new Date().getDay() % DAILY_TIPS.length];
 
   useEffect(() => {
     fetch("/api/user/dashboard")
@@ -63,12 +86,24 @@ export default function DashboardPage() {
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
         <header className="mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-500 dark:from-white dark:via-gray-200 dark:to-gray-400 bg-clip-text text-transparent">
-            {t("welcome", { name: user?.name?.split(" ")[0] || "there" })}
-          </h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-400 text-lg">
-            {t("subtitle", { lang: `${targetLangFlag} ${targetLangName}` })}
-          </p>
+          <div className="flex items-start justify-between gap-4 flex-wrap">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-500 dark:from-white dark:via-gray-200 dark:to-gray-400 bg-clip-text text-transparent">
+                {t("welcome", { name: user?.name?.split(" ")[0] || "there" })}
+              </h1>
+              <p className="mt-2 text-gray-600 dark:text-gray-400 text-lg">
+                {t("subtitle", { lang: `${targetLangFlag} ${targetLangName}` })}
+              </p>
+            </div>
+            <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold border ${cefrColor} flex-shrink-0`}>
+              {cefrLevel}
+            </span>
+          </div>
+          {/* Daily tip */}
+          <div className="mt-5 flex items-start gap-3 px-4 py-3 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20">
+            <span className="text-lg flex-shrink-0">💡</span>
+            <p className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">{dailyTip}</p>
+          </div>
         </header>
 
         {/* Stats Grid */}

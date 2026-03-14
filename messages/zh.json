@@ -50,7 +50,11 @@
     "submit": "登录",
     "noAccount": "还没有账号？",
     "createAccount": "创建账号",
-    "success": "登录成功！"
+    "success": "登录成功！",
+    "testMode": "测试模式",
+    "testCredentialsHint": "使用以下凭据进行快速测试：",
+    "fillTestCredentials": "填充测试凭据",
+    "testCredentialsFilled": "已填充测试凭据"
   },
   "register": {
     "stepLabel": "第2步",
@@ -124,7 +128,13 @@
     "loadError": "加载对话失败",
     "hideHistory": "隐藏历史",
     "showHistory": "显示历史",
-    "correctionLabel": "语法提示"
+    "correctionLabel": "语法提示",
+    "searchPlaceholder": "Search conversations...",
+    "suggestionsLabel": "Try asking",
+    "suggestion1": "How do I introduce myself?",
+    "suggestion2": "Help me order food at a restaurant",
+    "suggestion3": "Correct my grammar as I practice",
+    "suggestion4": "Lets have a casual conversation"
   },
   "profile": {
     "backToChat": "返回聊天",
@@ -175,12 +185,30 @@
       "generic": "出了些问题"
     },
     "levels": {
-      "A1": { "label": "A1 — 入门", "description": "我知道一些词汇和基本短语" },
-      "A2": { "label": "A2 — 初级", "description": "我能处理简单的日常句子" },
-      "B1": { "label": "B1 — 中级", "description": "我能讨论熟悉的话题" },
-      "B2": { "label": "B2 — 中高级", "description": "我能进行流畅、详细的对话" },
-      "C1": { "label": "C1 — 高级", "description": "我能使用复杂、细腻的语言" },
-      "C2": { "label": "C2 — 精通", "description": "近乎母语的流利程度" }
+      "A1": {
+        "label": "A1 — 入门",
+        "description": "我知道一些词汇和基本短语"
+      },
+      "A2": {
+        "label": "A2 — 初级",
+        "description": "我能处理简单的日常句子"
+      },
+      "B1": {
+        "label": "B1 — 中级",
+        "description": "我能讨论熟悉的话题"
+      },
+      "B2": {
+        "label": "B2 — 中高级",
+        "description": "我能进行流畅、详细的对话"
+      },
+      "C1": {
+        "label": "C1 — 高级",
+        "description": "我能使用复杂、细腻的语言"
+      },
+      "C2": {
+        "label": "C2 — 精通",
+        "description": "近乎母语的流利程度"
+      }
     }
   },
   "pricing": {
@@ -201,19 +229,38 @@
     "plans": {
       "standardMonthly": {
         "name": "标准月付",
-        "features": ["基础语言练习", "每日100条AI消息", "所有语言"]
+        "features": [
+          "基础语言练习",
+          "每日100条AI消息",
+          "所有语言"
+        ]
       },
       "standardYearly": {
         "name": "标准年付",
-        "features": ["基础语言练习", "每日100条AI消息", "所有语言", "节省10%"]
+        "features": [
+          "基础语言练习",
+          "每日100条AI消息",
+          "所有语言",
+          "节省10%"
+        ]
       },
       "proMonthly": {
         "name": "专业月付",
-        "features": ["高级练习", "无限消息", "个性化导师", "优先支持"]
+        "features": [
+          "高级练习",
+          "无限消息",
+          "个性化导师",
+          "优先支持"
+        ]
       },
       "proYearly": {
         "name": "专业年付",
-        "features": ["高级练习", "无限消息", "个性化导师", "节省20%"]
+        "features": [
+          "高级练习",
+          "无限消息",
+          "个性化导师",
+          "节省20%"
+        ]
       }
     }
   },
@@ -237,22 +284,22 @@
     "backToChat": "返回聊天",
     "managePosts": "管理文章",
     "metrics": {
-      "totalUsers":    "总用户数",
+      "totalUsers": "总用户数",
       "recentSignups": "最近注册",
-      "totalChats":    "总聊天数",
+      "totalChats": "总聊天数",
       "totalMessages": "总消息数",
-      "last7days":     "最近7天"
+      "last7days": "最近7天"
     },
     "table": {
-      "title":    "用户活动",
-      "showing":  "显示{count}位用户",
-      "user":     "用户",
-      "joined":   "加入时间",
-      "role":     "角色",
-      "plan":     "方案",
-      "chats":    "聊天",
+      "title": "用户活动",
+      "showing": "显示{count}位用户",
+      "user": "用户",
+      "joined": "加入时间",
+      "role": "角色",
+      "plan": "方案",
+      "chats": "聊天",
       "messages": "消息",
-      "noName":   "无姓名"
+      "noName": "无姓名"
     }
   },
   "admin": {

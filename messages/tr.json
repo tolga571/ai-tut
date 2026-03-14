@@ -45,7 +45,11 @@
     "submit": "Giriş Yap",
     "noAccount": "Hesabınız yok mu?",
     "createAccount": "Hesap oluştur",
-    "success": "Başarıyla giriş yapıldı!"
+    "success": "Başarıyla giriş yapıldı!",
+    "testMode": "Test Modu",
+    "testCredentialsHint": "Hızlı test için bu bilgileri kullanın:",
+    "fillTestCredentials": "Test bilgilerini doldur",
+    "testCredentialsFilled": "Test bilgileri dolduruldu"
   },
   "register": {
     "stepLabel": "Adım 2",
@@ -119,7 +123,13 @@
     "loadError": "Sohbet yüklenemedi",
     "hideHistory": "Geçmişi gizle",
     "showHistory": "Geçmişi göster",
-    "correctionLabel": "Dilbilgisi notu"
+    "correctionLabel": "Dilbilgisi notu",
+    "searchPlaceholder": "Search conversations...",
+    "suggestionsLabel": "Try asking",
+    "suggestion1": "How do I introduce myself?",
+    "suggestion2": "Help me order food at a restaurant",
+    "suggestion3": "Correct my grammar as I practice",
+    "suggestion4": "Lets have a casual conversation"
   },
   "profile": {
     "backToChat": "Sohbete Dön",
@@ -170,12 +180,30 @@
       "generic": "Bir şeyler ters gitti"
     },
     "levels": {
-      "A1": { "label": "A1 — Başlangıç", "description": "Birkaç kelime ve temel ifade biliyorum" },
-      "A2": { "label": "A2 — Temel", "description": "Basit günlük cümleler kurabilirim" },
-      "B1": { "label": "B1 — Orta", "description": "Tanıdık konuları tartışabilirim" },
-      "B2": { "label": "B2 — Orta-Üstü", "description": "Akıcı, ayrıntılı sohbetler yapabilirim" },
-      "C1": { "label": "C1 — İleri", "description": "Karmaşık, nüanslı dil kullanabilirim" },
-      "C2": { "label": "C2 — Ustalık", "description": "Anadil konuşanına yakın akıcılık" }
+      "A1": {
+        "label": "A1 — Başlangıç",
+        "description": "Birkaç kelime ve temel ifade biliyorum"
+      },
+      "A2": {
+        "label": "A2 — Temel",
+        "description": "Basit günlük cümleler kurabilirim"
+      },
+      "B1": {
+        "label": "B1 — Orta",
+        "description": "Tanıdık konuları tartışabilirim"
+      },
+      "B2": {
+        "label": "B2 — Orta-Üstü",
+        "description": "Akıcı, ayrıntılı sohbetler yapabilirim"
+      },
+      "C1": {
+        "label": "C1 — İleri",
+        "description": "Karmaşık, nüanslı dil kullanabilirim"
+      },
+      "C2": {
+        "label": "C2 — Ustalık",
+        "description": "Anadil konuşanına yakın akıcılık"
+      }
     }
   },
   "pricing": {
@@ -196,19 +224,38 @@
     "plans": {
       "standardMonthly": {
         "name": "Standart Aylık",
-        "features": ["Temel Dil Pratiği", "Günde 100 AI Mesajı", "Tüm Diller"]
+        "features": [
+          "Temel Dil Pratiği",
+          "Günde 100 AI Mesajı",
+          "Tüm Diller"
+        ]
       },
       "standardYearly": {
         "name": "Standart Yıllık",
-        "features": ["Temel Dil Pratiği", "Günde 100 AI Mesajı", "Tüm Diller", "%10 Tasarruf"]
+        "features": [
+          "Temel Dil Pratiği",
+          "Günde 100 AI Mesajı",
+          "Tüm Diller",
+          "%10 Tasarruf"
+        ]
       },
       "proMonthly": {
         "name": "Pro Aylık",
-        "features": ["Gelişmiş Pratik", "Sınırsız Mesaj", "Kişiselleştirilmiş Öğretmenler", "Öncelikli Destek"]
+        "features": [
+          "Gelişmiş Pratik",
+          "Sınırsız Mesaj",
+          "Kişiselleştirilmiş Öğretmenler",
+          "Öncelikli Destek"
+        ]
       },
       "proYearly": {
         "name": "Pro Yıllık",
-        "features": ["Gelişmiş Pratik", "Sınırsız Mesaj", "Kişiselleştirilmiş Öğretmenler", "%20 Tasarruf"]
+        "features": [
+          "Gelişmiş Pratik",
+          "Sınırsız Mesaj",
+          "Kişiselleştirilmiş Öğretmenler",
+          "%20 Tasarruf"
+        ]
       }
     }
   },
@@ -232,22 +279,22 @@
     "backToChat": "Sohbete Dön",
     "managePosts": "Yazıları Yönet",
     "metrics": {
-      "totalUsers":    "Toplam Kullanıcı",
+      "totalUsers": "Toplam Kullanıcı",
       "recentSignups": "Son Kayıtlar",
-      "totalChats":    "Toplam Sohbet",
+      "totalChats": "Toplam Sohbet",
       "totalMessages": "Toplam Mesaj",
-      "last7days":     "son 7 gün"
+      "last7days": "son 7 gün"
     },
     "table": {
-      "title":    "Kullanıcı Aktivitesi",
-      "showing":  "{count} kullanıcı gösteriliyor",
-      "user":     "Kullanıcı",
-      "joined":   "Katılım",
-      "role":     "Rol",
-      "plan":     "Plan",
-      "chats":    "Sohbet",
+      "title": "Kullanıcı Aktivitesi",
+      "showing": "{count} kullanıcı gösteriliyor",
+      "user": "Kullanıcı",
+      "joined": "Katılım",
+      "role": "Rol",
+      "plan": "Plan",
+      "chats": "Sohbet",
       "messages": "Mesaj",
-      "noName":   "İsim yok"
+      "noName": "İsim yok"
     }
   },
   "admin": {

@@ -50,7 +50,11 @@
     "submit": "Anmelden",
     "noAccount": "Noch kein Konto?",
     "createAccount": "Konto erstellen",
-    "success": "Erfolgreich angemeldet!"
+    "success": "Erfolgreich angemeldet!",
+    "testMode": "Testmodus",
+    "testCredentialsHint": "Diese Zugangsdaten für schnelle Tests verwenden:",
+    "fillTestCredentials": "Testdaten einfügen",
+    "testCredentialsFilled": "Testdaten eingefügt"
   },
   "register": {
     "stepLabel": "Schritt 2",
@@ -124,7 +128,13 @@
     "loadError": "Gespräch konnte nicht geladen werden",
     "hideHistory": "Verlauf ausblenden",
     "showHistory": "Verlauf anzeigen",
-    "correctionLabel": "Grammatikhinweis"
+    "correctionLabel": "Grammatikhinweis",
+    "searchPlaceholder": "Search conversations...",
+    "suggestionsLabel": "Try asking",
+    "suggestion1": "How do I introduce myself?",
+    "suggestion2": "Help me order food at a restaurant",
+    "suggestion3": "Correct my grammar as I practice",
+    "suggestion4": "Lets have a casual conversation"
   },
   "profile": {
     "backToChat": "Zurück zum Chat",
@@ -175,12 +185,30 @@
       "generic": "Etwas ist schiefgelaufen"
     },
     "levels": {
-      "A1": { "label": "A1 — Anfänger", "description": "Ich kenne ein paar Wörter und Grundphrasen" },
-      "A2": { "label": "A2 — Grundlegende Kenntnisse", "description": "Ich kann einfache Alltagssätze verstehen" },
-      "B1": { "label": "B1 — Mittelstufe", "description": "Ich kann über vertraute Themen sprechen" },
-      "B2": { "label": "B2 — Gute Mittelstufe", "description": "Ich kann fließend und detailliert kommunizieren" },
-      "C1": { "label": "C1 — Fortgeschritten", "description": "Ich kann komplexe, nuancierte Sprache verwenden" },
-      "C2": { "label": "C2 — Beherrschung", "description": "Nahezu muttersprachliche Kompetenz" }
+      "A1": {
+        "label": "A1 — Anfänger",
+        "description": "Ich kenne ein paar Wörter und Grundphrasen"
+      },
+      "A2": {
+        "label": "A2 — Grundlegende Kenntnisse",
+        "description": "Ich kann einfache Alltagssätze verstehen"
+      },
+      "B1": {
+        "label": "B1 — Mittelstufe",
+        "description": "Ich kann über vertraute Themen sprechen"
+      },
+      "B2": {
+        "label": "B2 — Gute Mittelstufe",
+        "description": "Ich kann fließend und detailliert kommunizieren"
+      },
+      "C1": {
+        "label": "C1 — Fortgeschritten",
+        "description": "Ich kann komplexe, nuancierte Sprache verwenden"
+      },
+      "C2": {
+        "label": "C2 — Beherrschung",
+        "description": "Nahezu muttersprachliche Kompetenz"
+      }
     }
   },
   "pricing": {
@@ -201,19 +229,38 @@
     "plans": {
       "standardMonthly": {
         "name": "Standard Monatlich",
-        "features": ["Grundlegendes Sprachtraining", "100 KI-Nachrichten/Tag", "Alle Sprachen"]
+        "features": [
+          "Grundlegendes Sprachtraining",
+          "100 KI-Nachrichten/Tag",
+          "Alle Sprachen"
+        ]
       },
       "standardYearly": {
         "name": "Standard Jährlich",
-        "features": ["Grundlegendes Sprachtraining", "100 KI-Nachrichten/Tag", "Alle Sprachen", "10 % sparen"]
+        "features": [
+          "Grundlegendes Sprachtraining",
+          "100 KI-Nachrichten/Tag",
+          "Alle Sprachen",
+          "10 % sparen"
+        ]
       },
       "proMonthly": {
         "name": "Pro Monatlich",
-        "features": ["Fortgeschrittenes Training", "Unbegrenzte Nachrichten", "Persönliche Tutoren", "Prioritätssupport"]
+        "features": [
+          "Fortgeschrittenes Training",
+          "Unbegrenzte Nachrichten",
+          "Persönliche Tutoren",
+          "Prioritätssupport"
+        ]
       },
       "proYearly": {
         "name": "Pro Jährlich",
-        "features": ["Fortgeschrittenes Training", "Unbegrenzte Nachrichten", "Persönliche Tutoren", "20 % sparen"]
+        "features": [
+          "Fortgeschrittenes Training",
+          "Unbegrenzte Nachrichten",
+          "Persönliche Tutoren",
+          "20 % sparen"
+        ]
       }
     }
   },
@@ -237,22 +284,22 @@
     "backToChat": "Zurück zum Chat",
     "managePosts": "Beiträge verwalten",
     "metrics": {
-      "totalUsers":    "Gesamtbenutzer",
+      "totalUsers": "Gesamtbenutzer",
       "recentSignups": "Neue Anmeldungen",
-      "totalChats":    "Gesamte Chats",
+      "totalChats": "Gesamte Chats",
       "totalMessages": "Gesamte Nachrichten",
-      "last7days":     "letzte 7 Tage"
+      "last7days": "letzte 7 Tage"
     },
     "table": {
-      "title":    "Benutzeraktivität",
-      "showing":  "{count} Benutzer werden angezeigt",
-      "user":     "Benutzer",
-      "joined":   "Beigetreten",
-      "role":     "Rolle",
-      "plan":     "Plan",
-      "chats":    "Chats",
+      "title": "Benutzeraktivität",
+      "showing": "{count} Benutzer werden angezeigt",
+      "user": "Benutzer",
+      "joined": "Beigetreten",
+      "role": "Rolle",
+      "plan": "Plan",
+      "chats": "Chats",
       "messages": "Nachrichten",
-      "noName":   "Kein Name"
+      "noName": "Kein Name"
     }
   },
   "admin": {
