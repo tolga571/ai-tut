@@ -57,7 +57,7 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
 
   useEffect(() => {
     const check = () => {
-      const mobile = window.innerWidth < 768;
+      const mobile = window.innerWidth < 1024;
       setIsMobile(mobile);
       setSidebarOpen(!mobile);
     };
@@ -152,6 +152,7 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
       role: "user",
       content: input.trim(),
     };
+
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setLoading(true);
@@ -200,7 +201,7 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
     const first = conv.messages[0];
     if (!first) return new Date(conv.createdAt).toLocaleDateString(locale === "tr" ? "tr-TR" : "en-US");
     const text = first.content;
-    return text.length > 28 ? text.slice(0, 28) + "…" : text;
+    return text.length > 28 ? `${text.slice(0, 28)}...` : text;
   };
 
   const getRelativeTime = (dateStr: string): string => {
@@ -216,266 +217,213 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
     return new Date(dateStr).toLocaleDateString(locale === "tr" ? "tr-TR" : "en-US");
   };
 
-  return (
-    <div className="flex flex-col h-full">
-      {/* Header */}
-      <header className="px-4 sm:px-6 py-3 sm:py-4 glass-nav border-b border-gray-200 dark:border-white/5 flex items-center justify-between z-10 flex-shrink-0">
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setSidebarOpen((v) => !v)}
-            className="p-2 rounded-xl bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 transition-all text-gray-600 dark:text-gray-400"
-            title={sidebarOpen ? t("hideHistory") : t("showHistory")}
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-          <div className="font-bold text-lg sm:text-xl bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 bg-clip-text text-transparent">
-            AiTut Chat
-          </div>
-        </div>
-        <div className="flex items-center gap-2 sm:gap-4">
-          <ThemeToggle />
-          <div className="hidden sm:block text-sm text-gray-600 dark:text-gray-400">
-            {t("learningLabel")}:{" "}
-            <span className="text-gray-900 dark:text-white font-medium inline-flex items-center gap-2">
-              <FlagIcon code={targetLang} className="w-5 h-4" />
-              <span>{targetLangName}</span>
-            </span>
-          </div>
-          <div className="sm:hidden text-sm font-medium text-gray-600 dark:text-gray-300">
-            <FlagIcon code={targetLang} className="w-5 h-4" />
-          </div>
-          <UserMenu user={user} role={user.role} />
-        </div>
-      </header>
+  const promptSuggestions = [t("suggestion1"), t("suggestion2"), t("suggestion3"), t("suggestion4")];
+  const progressPct = Math.max(20, Math.min(92, 38 + conversations.length * 7 + messages.length * 2));
+  const filteredConversations = conversations.filter((conv) =>
+    searchQuery.trim() === "" || getConvTitle(conv).toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-      <div className="flex flex-1 overflow-hidden relative">
-        {/* Mobile backdrop */}
+  return (
+    <div className="h-full min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white transition-colors">
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute inset-0 opacity-[0.35] dark:opacity-[0.2] [background-image:radial-gradient(circle_at_1px_1px,rgba(100,116,139,.25)_1px,transparent_0)] [background-size:18px_18px]" />
+      </div>
+
+      <div className="relative h-full p-3 sm:p-4 lg:p-5">
         {isMobile && sidebarOpen && (
           <button
             type="button"
             onClick={() => setSidebarOpen(false)}
-            className="absolute inset-0 bg-black/40 z-20"
+            className="absolute inset-0 bg-black/40 z-30 lg:hidden"
             aria-label={t("hideHistory")}
           />
         )}
 
-        {/* Sidebar */}
-        <div
-          className={`
-            ${isMobile
-              ? `absolute inset-y-0 left-0 z-30 w-72 max-w-[85vw] transform transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`
-              : `${sidebarOpen ? "w-64" : "w-0"} flex-shrink-0 transition-all duration-300`
-            }
-            overflow-hidden bg-gray-100 dark:bg-gray-900/80 border-r border-gray-200 dark:border-white/5 flex flex-col
-          `}
-        >
-          <div className="p-3 border-b border-gray-200 dark:border-white/5 flex-shrink-0 space-y-2">
-            <button
-              onClick={handleNewChat}
-              className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-500 active:scale-[0.98] text-white rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-              {t("newChat")}
-            </button>
-            {/* Search */}
-            <div className="relative">
-              <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={t("searchPlaceholder")}
-                className="w-full pl-8 pr-3 py-2 bg-gray-200 dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg text-xs text-gray-700 dark:text-gray-300 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all"
-              />
-            </div>
-          </div>
+        <div className="h-[calc(100vh-1.5rem)] sm:h-[calc(100vh-2rem)] grid grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)_290px] gap-3">
+          <aside
+            className={`${
+              isMobile
+                ? `absolute inset-y-3 left-3 z-40 w-[84vw] max-w-[320px] transform transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-[110%]"}`
+                : "relative"
+            } flex flex-col rounded-3xl border border-gray-200 dark:border-white/10 bg-white/90 dark:bg-gray-900/80 backdrop-blur-xl shadow-xl overflow-hidden`}
+          >
+            <div className="p-4 border-b border-gray-200 dark:border-white/10">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white font-semibold">
+                    {(user?.name?.charAt(0) || "U").toUpperCase()}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white">{user?.name || "User"}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[160px]">{user?.email}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setSidebarOpen(false)}
+                  className="lg:hidden p-2 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                  aria-label={t("hideHistory")}
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
 
-          <div className="flex-1 overflow-y-auto py-2 custom-scrollbar">
-            {loadingHistory ? (
-              <div className="space-y-2 px-3 mt-1">
-                {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="h-12 bg-gray-200 dark:bg-white/5 rounded-xl animate-pulse" />
-                ))}
-              </div>
-            ) : conversations.length === 0 ? (
-              <div className="px-4 py-10 text-center">
-                <p className="text-gray-500 dark:text-gray-500 text-sm">{t("noConversations")}</p>
-                <p className="text-gray-600 dark:text-gray-600 text-xs mt-1">{t("startHint")}</p>
-              </div>
-            ) : (
-              <div className="px-2 space-y-0.5">
-                {conversations.filter((conv) =>
-                  searchQuery.trim() === "" ||
-                  getConvTitle(conv).toLowerCase().includes(searchQuery.toLowerCase())
-                ).map((conv) => (
+              <div className="rounded-2xl bg-gray-100/80 dark:bg-white/5 p-4">
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Your Progress</p>
+                <div className="flex items-center justify-center">
                   <div
-                    key={conv.id}
-                    onClick={() => handleSelectConversation(conv.id)}
-                    className={`group relative flex items-center gap-2 px-3 py-2.5 rounded-xl cursor-pointer transition-all ${
-                      activeConvId === conv.id
-                        ? "bg-blue-500/20 dark:bg-blue-600/20 border border-blue-500/30 text-gray-900 dark:text-white"
-                        : "hover:bg-gray-200 dark:hover:bg-white/5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 border border-transparent"
-                    }`}
+                    className="w-28 h-28 rounded-full grid place-items-center"
+                    style={{
+                      background: `conic-gradient(rgb(37 99 235) ${progressPct}%, rgb(209 213 219) 0%)`,
+                    }}
                   >
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate leading-tight">{getConvTitle(conv)}</p>
-                      <p className="text-xs text-gray-500 mt-0.5 dark:text-gray-500">{getRelativeTime(conv.updatedAt)}</p>
-                    </div>
-
-                    <button
-                      onClick={(e) => handleDeleteConversation(e, conv.id)}
-                      disabled={deletingId === conv.id}
-                      className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg hover:bg-red-500/20 text-gray-500 hover:text-red-400 transition-all flex-shrink-0 disabled:opacity-40"
-                    >
-                      {deletingId === conv.id ? (
-                        <div className="w-3.5 h-3.5 border-2 border-red-400/30 border-t-red-400 rounded-full animate-spin" />
-                      ) : (
-                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      )}
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Content nav */}
-          <div className="p-3 border-t border-gray-200 dark:border-white/5 flex-shrink-0 space-y-0.5">
-            <Link href="/vocabulary" className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-white/5 transition-all">
-              <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-              </svg>
-              Vocabulary
-            </Link>
-            <Link href="/progress" className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-white/5 transition-all">
-              <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
-              My Progress
-            </Link>
-            <Link href="/blogs" className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-white/5 transition-all">
-              <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-              </svg>
-              {tNav("blogs")}
-            </Link>
-            <Link href="/pages" className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-white/5 transition-all">
-              <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              {tNav("pages")}
-            </Link>
-            <Link href="/documents" className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-white/5 transition-all">
-              <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-              </svg>
-              {tNav("documents")}
-            </Link>
-            {user.role === "admin" && (
-              <Link href="/admin" className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 transition-all">
-                <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                {tNav("adminPanel")}
-              </Link>
-            )}
-          </div>
-
-          {/* User footer */}
-          <div className="p-3 border-t border-gray-200 dark:border-white/5 flex-shrink-0">
-            <Link
-              href="/profile"
-              className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-gray-200 dark:hover:bg-white/5 transition-all group"
-            >
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-xs text-white font-bold">
-                  {user?.name?.charAt(0)?.toUpperCase() || "U"}
-                </span>
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm text-gray-800 dark:text-gray-200 truncate font-medium leading-tight">{user?.name || "User"}</p>
-                <p className="text-xs text-gray-500 truncate">{user?.email}</p>
-              </div>
-              <svg className="w-3.5 h-3.5 text-gray-500 dark:text-gray-600 group-hover:text-gray-700 dark:group-hover:text-gray-400 flex-shrink-0 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
-          </div>
-        </div>
-
-        {/* Main chat area */}
-        <div className="flex-1 flex flex-col min-w-0 relative">
-          <div className="flex-1 overflow-y-auto custom-scrollbar pt-4 pb-28 px-4 md:px-8">
-            <div className="max-w-2xl mx-auto">
-              {messages.length === 0 && !loading && (
-                <div className="flex flex-col items-center justify-center h-full min-h-[400px] space-y-6 px-2">
-                  <div className="text-center space-y-2">
-                    <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto">
-                      <FlagIcon code={targetLang} className="w-8 h-6" />
-                    </div>
-                    <p className="text-lg font-semibold text-gray-800 dark:text-gray-200">{t("startChat")}</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-500">
-                      {t("welcomeMsg", { lang: targetLangName })}
-                    </p>
-                  </div>
-                  {/* Prompt suggestions */}
-                  <div className="w-full max-w-lg space-y-2">
-                    <p className="text-xs text-gray-400 dark:text-gray-600 text-center uppercase tracking-wider font-medium">
-                      {t("suggestionsLabel")}
-                    </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {[
-                        { icon: "👋", text: t("suggestion1") },
-                        { icon: "🛒", text: t("suggestion2") },
-                        { icon: "✏️", text: t("suggestion3") },
-                        { icon: "🗣️", text: t("suggestion4") },
-                      ].map((s) => (
-                        <button
-                          key={s.text}
-                          onClick={() => { setInput(s.text); inputRef.current?.focus(); }}
-                          className="flex items-center gap-2.5 px-4 py-3 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 hover:border-blue-400/50 dark:hover:border-blue-500/40 hover:bg-blue-50 dark:hover:bg-blue-500/10 text-left text-sm text-gray-700 dark:text-gray-300 transition-all group"
-                        >
-                          <span className="text-base flex-shrink-0">{s.icon}</span>
-                          <span className="group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors leading-snug">{s.text}</span>
-                        </button>
-                      ))}
+                    <div className="w-20 h-20 rounded-full bg-white dark:bg-gray-900 grid place-items-center text-xl font-bold">
+                      {progressPct}%
                     </div>
                   </div>
                 </div>
-              )}
+              </div>
+            </div>
 
-              <div className="space-y-6">
-                {messages.map((msg) => (
-                  <div
-                    key={msg.id}
-                    className={`flex flex-col max-w-[85%] ${msg.role === "user" ? "self-end items-end ml-auto" : "self-start items-start mr-auto"}`}
-                  >
-                    {msg.role === "user" ? (
-                      <div className="bg-blue-600/90 hover:bg-blue-600 px-5 py-3.5 rounded-2xl rounded-tr-sm shadow-md transition-all text-[15px] leading-relaxed break-words border border-blue-500/30">
-                        {msg.content}
+            <div className="p-3 border-b border-gray-200 dark:border-white/10">
+              <button
+                onClick={handleNewChat}
+                className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-500 active:scale-[0.98] text-white rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                {t("newChat")}
+              </button>
+              <div className="relative mt-2">
+                <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={t("searchPlaceholder")}
+                  className="w-full pl-8 pr-3 py-2 bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-xs text-gray-700 dark:text-gray-300 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all"
+                />
+              </div>
+            </div>
+
+            <div className="flex-1 overflow-y-auto custom-scrollbar p-2">
+              {loadingHistory ? (
+                <div className="space-y-2 px-2 mt-1">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className="h-12 bg-gray-200 dark:bg-white/5 rounded-xl animate-pulse" />
+                  ))}
+                </div>
+              ) : filteredConversations.length === 0 ? (
+                <div className="px-3 py-10 text-center">
+                  <p className="text-gray-500 dark:text-gray-500 text-sm">{t("noConversations")}</p>
+                </div>
+              ) : (
+                <div className="space-y-1">
+                  {filteredConversations.map((conv) => (
+                    <div
+                      key={conv.id}
+                      onClick={() => handleSelectConversation(conv.id)}
+                      className={`group relative flex items-center gap-2 px-3 py-2.5 rounded-xl cursor-pointer transition-all ${
+                        activeConvId === conv.id
+                          ? "bg-blue-500/20 dark:bg-blue-600/20 border border-blue-500/30 text-gray-900 dark:text-white"
+                          : "hover:bg-gray-100 dark:hover:bg-white/5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 border border-transparent"
+                      }`}
+                    >
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium truncate leading-tight">{getConvTitle(conv)}</p>
+                        <p className="text-xs text-gray-500 mt-0.5 dark:text-gray-500">{getRelativeTime(conv.updatedAt)}</p>
                       </div>
-                    ) : (
-                      <div className="space-y-2 w-full">
-                        <div className="bg-gray-100 dark:bg-gray-800/90 backdrop-blur border border-gray-200 dark:border-gray-700/50 px-5 py-3.5 rounded-2xl rounded-tl-sm shadow-lg overflow-hidden group transition-all relative">
-                          <p className="text-[16px] leading-relaxed text-gray-800 dark:text-blue-50">{msg.content}</p>
-                          {msg.translation && (
-                            <div className="mt-3 pt-3 border-t border-gray-200 dark:border-white/5">
-                              <p className="text-[14px] leading-relaxed text-gray-600 dark:text-gray-400 font-light group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors">
-                                {msg.translation}
-                              </p>
-                            </div>
-                          )}
+                      <button
+                        onClick={(e) => handleDeleteConversation(e, conv.id)}
+                        disabled={deletingId === conv.id}
+                        className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg hover:bg-red-500/20 text-gray-500 hover:text-red-400 transition-all flex-shrink-0 disabled:opacity-40"
+                      >
+                        {deletingId === conv.id ? (
+                          <div className="w-3.5 h-3.5 border-2 border-red-400/30 border-t-red-400 rounded-full animate-spin" />
+                        ) : (
+                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        )}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="p-3 border-t border-gray-200 dark:border-white/10">
+              <button className="w-full rounded-full bg-blue-600 text-white text-sm font-medium py-3 hover:bg-blue-500 transition-colors inline-flex items-center justify-center gap-2">
+                <FlagIcon code={targetLang} className="w-5 h-4" />
+                <span>{targetLangName}</span>
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </aside>
+
+          <section className="min-w-0 rounded-3xl border border-gray-200 dark:border-white/10 bg-white/90 dark:bg-gray-900/70 backdrop-blur-xl shadow-xl overflow-hidden flex flex-col">
+            <header className="px-4 py-3 border-b border-gray-200 dark:border-white/10 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setSidebarOpen((v) => !v)}
+                  className="p-2 rounded-xl bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 transition-all text-gray-600 dark:text-gray-400 lg:hidden"
+                  title={sidebarOpen ? t("hideHistory") : t("showHistory")}
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                </button>
+                <h1 className="font-semibold text-lg">AiTut Chat</h1>
+              </div>
+              <div className="flex items-center gap-2 sm:gap-3">
+                <ThemeToggle />
+                <span className="hidden sm:inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                  <FlagIcon code={targetLang} className="w-5 h-4" />
+                  {targetLangName}
+                </span>
+                <UserMenu user={user} role={user.role} />
+              </div>
+            </header>
+
+            <div className="flex-1 overflow-y-auto custom-scrollbar px-4 md:px-6 py-5">
+              {messages.length === 0 && !loading ? (
+                <div className="h-full min-h-[360px] flex flex-col items-center justify-center text-center px-2">
+                  <div className="w-14 h-14 rounded-full bg-blue-500/10 grid place-items-center mb-3">
+                    <FlagIcon code={targetLang} className="w-8 h-6" />
+                  </div>
+                  <p className="text-lg font-semibold text-gray-800 dark:text-gray-200">{t("startChat")}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t("welcomeMsg", { lang: targetLangName })}</p>
+                </div>
+              ) : (
+                <div className="space-y-5 max-w-4xl mx-auto">
+                  {messages.map((msg) => (
+                    <div key={msg.id} className={`flex items-end gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                      {msg.role === "ai" && (
+                        <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-white/10 grid place-items-center text-xs font-semibold flex-shrink-0">
+                          AI
+                        </div>
+                      )}
+                      <div className={`group max-w-[80%] md:max-w-[68%] rounded-2xl px-4 py-3 border shadow-sm relative ${
+                        msg.role === "user"
+                          ? "bg-blue-600 text-white border-blue-500/40"
+                          : "bg-white dark:bg-gray-800/80 text-gray-800 dark:text-gray-100 border-gray-200 dark:border-gray-700/50"
+                      }`}>
+                        <p className="text-[15px] leading-relaxed whitespace-pre-wrap break-words">{msg.content}</p>
+                        {msg.translation && msg.role === "ai" && (
+                          <p className="text-sm mt-2 pt-2 border-t border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-300">
+                            {msg.translation}
+                          </p>
+                        )}
+                        {msg.role === "ai" && (
                           <button
                             onClick={() => copyMessage(msg.id, msg.content)}
-                            className="absolute top-2 right-2 p-1.5 rounded-lg opacity-0 group-hover:opacity-100 bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 text-gray-500 dark:text-gray-400 transition-all"
+                            className="absolute -top-2 -right-2 p-1.5 rounded-lg opacity-0 group-hover:opacity-100 bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 text-gray-600 dark:text-gray-300 transition-all"
                             title="Copy"
                           >
                             {copiedId === msg.id ? (
@@ -488,66 +436,117 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
                               </svg>
                             )}
                           </button>
-                        </div>
+                        )}
                         {msg.correction && (
-                          <div className="flex items-start gap-2 px-3 py-2.5 bg-amber-500/10 border border-amber-500/20 rounded-xl">
-                            <span className="text-amber-400 text-sm flex-shrink-0 mt-0.5">✏️</span>
-                            <p className="text-xs text-amber-300/90 leading-relaxed">{msg.correction}</p>
+                          <div className="mt-2 text-xs rounded-lg px-2 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-300">
+                            {msg.correction}
                           </div>
                         )}
                       </div>
-                    )}
-                  </div>
-                ))}
-
-                {loading && (
-                  <div className="flex self-start mr-auto">
-                    <div className="bg-gray-100 dark:bg-gray-800/80 px-5 py-4 rounded-2xl rounded-tl-sm flex items-center gap-2 shadow-sm border border-gray-200 dark:border-gray-700/50">
-                      <div className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: "0ms" }} />
-                      <div className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: "150ms" }} />
-                      <div className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: "300ms" }} />
+                      {msg.role === "user" && (
+                        <div className="w-8 h-8 rounded-full bg-blue-500/20 text-blue-700 dark:text-blue-300 grid place-items-center text-xs font-semibold flex-shrink-0">
+                          ME
+                        </div>
+                      )}
                     </div>
-                  </div>
-                )}
+                  ))}
 
-                <div ref={endRef} />
-              </div>
-            </div>
-          </div>
-
-          {/* Input */}
-          <div className="absolute bottom-0 left-0 right-0 px-4 pb-5 pt-3 bg-gradient-to-t from-white via-white/95 to-transparent dark:from-gray-950 dark:via-gray-950/90 dark:to-transparent">
-            <div className="max-w-2xl mx-auto">
-              <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700/50 rounded-2xl shadow-2xl backdrop-blur-2xl transition-all focus-within:border-blue-500/50 focus-within:ring-1 focus-within:ring-blue-500/20">
-                <form onSubmit={sendMessage} className="flex items-center px-2 py-2">
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value.slice(0, MAX_CHARS))}
-                    placeholder={t("inputPlaceholder", { lang: targetLangName })}
-                    className="flex-1 bg-transparent border-none text-gray-900 dark:text-white focus:ring-0 placeholder-gray-500 px-4 text-base h-12 outline-none"
-                    autoComplete="off"
-                    disabled={loading}
-                  />
-                  {input.length > 0 && (
-                    <span className={`text-xs px-2 flex-shrink-0 ${input.length >= MAX_CHARS ? "text-red-400" : input.length > MAX_CHARS * 0.8 ? "text-amber-400" : "text-gray-400 dark:text-gray-500"}`}>
-                      {input.length}/{MAX_CHARS}
-                    </span>
+                  {loading && (
+                    <div className="flex">
+                      <div className="bg-white dark:bg-gray-800/80 px-4 py-3 rounded-2xl flex items-center gap-2 border border-gray-200 dark:border-gray-700/50">
+                        <div className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: "0ms" }} />
+                        <div className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: "150ms" }} />
+                        <div className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: "300ms" }} />
+                      </div>
+                    </div>
                   )}
-                  <button
-                    type="submit"
-                    disabled={!input.trim() || loading}
-                    className="w-12 h-12 rounded-xl bg-blue-600 hover:bg-blue-500 flex items-center justify-center text-white disabled:opacity-40 disabled:bg-gray-800 disabled:text-gray-500 transition-all active:scale-95 mx-1"
-                  >
-                    <svg className="w-5 h-5 translate-x-[1px]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                    </svg>
-                  </button>
-                </form>
-              </div>
+
+                  <div ref={endRef} />
+                </div>
+              )}
             </div>
-          </div>
+
+            <div className="px-3 sm:px-4 pb-4 pt-2 border-t border-gray-200 dark:border-white/10">
+              <form onSubmit={sendMessage} className="rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700/50 shadow-lg flex items-center px-2">
+                <button
+                  type="button"
+                  onClick={() => inputRef.current?.focus()}
+                  className="w-9 h-9 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                >
+                  <svg className="w-5 h-5 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                </button>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value.slice(0, MAX_CHARS))}
+                  placeholder={t("inputPlaceholder", { lang: targetLangName })}
+                  className="flex-1 bg-transparent border-none text-gray-900 dark:text-white focus:ring-0 placeholder-gray-500 px-2 text-base h-12 outline-none"
+                  autoComplete="off"
+                  disabled={loading}
+                />
+                {input.length > 0 && (
+                  <span className={`text-xs px-2 flex-shrink-0 ${input.length >= MAX_CHARS ? "text-red-400" : input.length > MAX_CHARS * 0.8 ? "text-amber-400" : "text-gray-400 dark:text-gray-500"}`}>
+                    {input.length}/{MAX_CHARS}
+                  </span>
+                )}
+                <button
+                  type="submit"
+                  disabled={!input.trim() || loading}
+                  className="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium disabled:opacity-40 disabled:bg-gray-800 disabled:text-gray-500 transition-all mr-1"
+                >
+                  Send
+                </button>
+              </form>
+            </div>
+          </section>
+
+          <aside className="hidden lg:flex flex-col rounded-3xl border border-gray-200 dark:border-white/10 bg-white/90 dark:bg-gray-900/80 backdrop-blur-xl shadow-xl p-4">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold">Practice</h2>
+              <span className="inline-flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                <FlagIcon code={targetLang} className="w-4 h-3" />
+                {targetLangName}
+              </span>
+            </div>
+
+            <div className="space-y-2">
+              {promptSuggestions.map((suggestion) => (
+                <button
+                  key={suggestion}
+                  onClick={() => {
+                    setInput(suggestion);
+                    inputRef.current?.focus();
+                  }}
+                  className="w-full text-left rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 px-3 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:border-blue-400/50 dark:hover:border-blue-500/40 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-all"
+                >
+                  {suggestion}
+                </button>
+              ))}
+            </div>
+
+            <div className="mt-5 pt-4 border-t border-gray-200 dark:border-white/10 space-y-2 text-sm">
+              <Link href="/progress" className="block rounded-xl px-3 py-2 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                My Progress
+              </Link>
+              <Link href="/vocabulary" className="block rounded-xl px-3 py-2 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                Vocabulary
+              </Link>
+              <Link href="/blogs" className="block rounded-xl px-3 py-2 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                {tNav("blogs")}
+              </Link>
+              <Link href="/documents" className="block rounded-xl px-3 py-2 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                {tNav("documents")}
+              </Link>
+              {user.role === "admin" && (
+                <Link href="/admin" className="block rounded-xl px-3 py-2 text-amber-500 hover:bg-amber-500/10 transition-colors">
+                  {tNav("adminPanel")}
+                </Link>
+              )}
+            </div>
+          </aside>
         </div>
       </div>
     </div>
