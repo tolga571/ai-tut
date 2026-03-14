@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { SAMPLE_BLOG_POST } from "@/lib/sampleBlogPost";
 
 export default async function BlogsPage() {
   const t = await getTranslations("blogs");
@@ -19,6 +20,27 @@ export default async function BlogsPage() {
     },
   });
 
+  const visiblePosts =
+    posts.length > 0
+      ? posts.map((post) => ({
+          id: post.id,
+          title: post.title,
+          slug: post.slug,
+          language: post.language,
+          createdAt: post.createdAt,
+          authorName: post.author?.name ?? null,
+        }))
+      : [
+          {
+            id: SAMPLE_BLOG_POST.id,
+            title: SAMPLE_BLOG_POST.title,
+            slug: SAMPLE_BLOG_POST.slug,
+            language: SAMPLE_BLOG_POST.language,
+            createdAt: SAMPLE_BLOG_POST.createdAt,
+            authorName: SAMPLE_BLOG_POST.authorName,
+          },
+        ];
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white transition-colors">
       <header className="px-4 sm:px-6 py-4 glass-nav border-b border-gray-200 dark:border-white/5 flex items-center justify-between gap-3">
@@ -33,28 +55,20 @@ export default async function BlogsPage() {
       </header>
 
       <div className="max-w-3xl mx-auto px-4 py-10">
-        {posts.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-24 text-center">
-            <div className="text-5xl mb-4">📝</div>
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">{t("empty.title")}</h2>
-            <p className="text-gray-600 dark:text-gray-400 text-sm">{t("empty.description")}</p>
-          </div>
-        ) : (
-          <ul className="space-y-4">
-            {posts.map((post) => (
-              <li key={post.id} className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-white/10 rounded-2xl p-5 hover:border-gray-300 dark:hover:border-white/20 transition-all">
-                <Link href={`/blogs/${post.slug}`} className="block group">
-                  <h2 className="text-gray-900 dark:text-white font-semibold text-base group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors mb-1">
-                    {post.title}
-                  </h2>
-                  <p className="text-xs text-gray-600 dark:text-gray-500">
-                    {post.author?.name ?? t("unknownAuthor")} · {new Date(post.createdAt).toLocaleDateString()} · {post.language.toUpperCase()}
-                  </p>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
+        <ul className="space-y-4">
+          {visiblePosts.map((post) => (
+            <li key={post.id} className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-white/10 rounded-2xl p-5 hover:border-gray-300 dark:hover:border-white/20 transition-all">
+              <Link href={`/blogs/${post.slug}`} className="block group">
+                <h2 className="text-gray-900 dark:text-white font-semibold text-base group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors mb-1">
+                  {post.title}
+                </h2>
+                <p className="text-xs text-gray-600 dark:text-gray-500">
+                  {post.authorName ?? t("unknownAuthor")} | {new Date(post.createdAt).toLocaleDateString()} | {post.language.toUpperCase()}
+                </p>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { SAMPLE_BLOG_POST } from "@/lib/sampleBlogPost";
 
 export default async function BlogDetailPage({
   params,
@@ -26,11 +27,35 @@ export default async function BlogDetailPage({
     },
   });
 
-  if (!post || post.category !== "blog" || !post.published) {
+  const visiblePost = post
+    ? {
+        id: post.id,
+        title: post.title,
+        content: post.content,
+        language: post.language,
+        category: post.category,
+        published: post.published,
+        createdAt: post.createdAt,
+        authorName: post.author?.name ?? null,
+      }
+    : slug === SAMPLE_BLOG_POST.slug
+      ? {
+          id: SAMPLE_BLOG_POST.id,
+          title: SAMPLE_BLOG_POST.title,
+          content: SAMPLE_BLOG_POST.content,
+          language: SAMPLE_BLOG_POST.language,
+          category: "blog",
+          published: true,
+          createdAt: SAMPLE_BLOG_POST.createdAt,
+          authorName: SAMPLE_BLOG_POST.authorName,
+        }
+      : null;
+
+  if (!visiblePost || visiblePost.category !== "blog" || !visiblePost.published) {
     notFound();
   }
 
-  const paragraphs = post.content.split(/\n{2,}/).filter(Boolean);
+  const paragraphs = visiblePost.content.split(/\n{2,}/).filter(Boolean);
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white transition-colors">
@@ -45,17 +70,16 @@ export default async function BlogDetailPage({
           <span className="hidden sm:inline">{t("backToBlogs")}</span>
         </Link>
         <span className="text-xs font-mono text-gray-500 uppercase tracking-wider">
-          {post.language}
+          {visiblePost.language}
         </span>
         <ThemeToggle />
       </header>
 
       <article className="max-w-3xl mx-auto px-4 py-10">
         <header className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white leading-tight mb-4">{post.title}</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white leading-tight mb-4">{visiblePost.title}</h1>
           <p className="text-sm text-gray-600 dark:text-gray-500">
-            {t("by")} {post.author?.name ?? t("unknownAuthor")} ·{" "}
-            {new Date(post.createdAt).toLocaleDateString()}
+            {t("by")} {visiblePost.authorName ?? t("unknownAuthor")} | {new Date(visiblePost.createdAt).toLocaleDateString()}
           </p>
         </header>
 
