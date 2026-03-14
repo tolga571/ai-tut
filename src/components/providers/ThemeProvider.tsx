@@ -11,9 +11,10 @@ export function ThemeProvider({ children }: Props) {
   return (
     <NextThemesProvider
       attribute="class"
-      defaultTheme="system"
+      defaultTheme="dark"
       enableSystem
       disableTransitionOnChange
+      storageKey="aitut-theme"
     >
       {children}
     </NextThemesProvider>

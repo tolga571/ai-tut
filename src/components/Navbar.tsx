@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { usePathname, Link, useRouter } from "@/i18n/navigation";
 import { useTheme } from "next-themes";
@@ -9,10 +10,13 @@ import { UserMenu } from "./UserMenu";
 export function Navbar() {
   const { data: session, status } = useSession();
   const pathname = usePathname();
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const locale = useLocale();
   const router = useRouter();
   const t = useTranslations("nav");
+
+  useEffect(() => setMounted(true), []);
 
   // Chat pages have their own layout — hide global navbar only there
   if (pathname?.includes("/chat")) {
@@ -55,19 +59,21 @@ export function Navbar() {
             </select>
 
             {/* Theme toggle */}
-            <button
-              type="button"
-              aria-label="Toggle theme"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="w-9 h-9 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-xs text-gray-200 hover:bg-white/10 transition-colors"
-            >
-              <span className="hidden md:inline">
-                {theme === "dark" ? t("light") : t("dark")}
-              </span>
-              <span className="md:hidden">
-                {theme === "dark" ? "☀" : "☾"}
-              </span>
-            </button>
+            {mounted && (
+              <button
+                type="button"
+                aria-label="Toggle theme"
+                onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+                className="w-9 h-9 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-xs text-gray-200 hover:bg-white/10 transition-colors"
+              >
+                <span className="hidden md:inline">
+                  {resolvedTheme === "dark" ? t("light") : t("dark")}
+                </span>
+                <span className="md:hidden">
+                  {resolvedTheme === "dark" ? "☀" : "☾"}
+                </span>
+              </button>
+            )}
 
             {status === "loading" ? (
               <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />

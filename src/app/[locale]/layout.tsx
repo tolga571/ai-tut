@@ -1,7 +1,6 @@
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { AuthProvider } from "@/components/providers/AuthProvider";
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { Toaster } from "react-hot-toast";
 import { Navbar } from "@/components/Navbar";
 import { LayoutWrapper } from "@/components/LayoutWrapper";
@@ -25,13 +24,11 @@ export default async function LocaleLayout({
   return (
     <div dir={locale === "ar" ? "rtl" : "ltr"}>
       <NextIntlClientProvider messages={messages}>
-        <ThemeProvider>
-          <AuthProvider>
+        <AuthProvider>
             <Navbar />
             <LayoutWrapper>{children}</LayoutWrapper>
             <Toaster position="bottom-right" />
           </AuthProvider>
-        </ThemeProvider>
       </NextIntlClientProvider>
     </div>
   );
