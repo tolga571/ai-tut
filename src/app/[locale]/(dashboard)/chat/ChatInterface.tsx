@@ -51,7 +51,6 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
 
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const prevIsMobileRef = useRef<boolean | null>(null);
   const searchParams = useSearchParams();
   const convFromUrl = searchParams?.get("conv");
 
@@ -63,16 +62,9 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
     const handleResize = () => {
       const mobile = window.innerWidth < 768;
       setIsMobile(mobile);
-
-      if (prevIsMobileRef.current === null) {
-        // Initial mount: mobile starts closed, desktop starts open.
-        setSidebarOpen(!mobile);
-      } else if (prevIsMobileRef.current !== mobile) {
-        // Breakpoint transition: keep UX predictable.
-        setSidebarOpen(!mobile);
+      if (!mobile) {
+        setSidebarOpen(true);
       }
-
-      prevIsMobileRef.current = mobile;
     };
 
     handleResize();
@@ -233,7 +225,7 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <header className="px-4 sm:px-6 py-3 sm:py-4 glass-nav border-b border-gray-200 dark:border-white/5 flex items-center justify-between z-10 flex-shrink-0 gap-2">
+      <header className="px-4 sm:px-6 py-3 sm:py-4 glass-nav border-b border-gray-200 dark:border-white/5 flex items-center justify-between z-10 flex-shrink-0">
         <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <button
             onClick={() => setSidebarOpen((v) => !v)}
@@ -250,9 +242,7 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
           </div>
         </div>
         <div className="flex items-center gap-2 sm:gap-4">
-          <div className="hidden sm:block">
-            <ThemeToggle />
-          </div>
+          <ThemeToggle />
           <div className="hidden sm:block text-sm text-gray-600 dark:text-gray-400">
             {t("learningLabel")}:{" "}
             <span className="text-gray-900 dark:text-white font-medium">{targetLangFlag} {targetLangName}</span>
