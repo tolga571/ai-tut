@@ -33,7 +33,7 @@ export async function GET() {
   }
 
   try {
-    const [conversations, messageCount, recentConversations] = await Promise.all([
+    const [conversations, messageCount, recentConversations, userData] = await Promise.all([
       prisma.conversation.findMany({
         where: { userId },
         select: { id: true, createdAt: true, updatedAt: true, messages: { select: { id: true } } },
@@ -56,6 +56,7 @@ export async function GET() {
           },
         },
       }),
+      prisma.user.findUnique({ where: { id: userId }, select: { xp: true } }),
     ]);
 
     const activityDates = conversations.flatMap((c) => [c.createdAt, c.updatedAt]);
@@ -68,11 +69,18 @@ export async function GET() {
         c.messages[0]?.content?.slice(0, 40) || new Date(c.updatedAt).toLocaleDateString(),
     }));
 
+    const xp = userData?.xp ?? 0;
+    const level = Math.floor(xp / 100) + 1;
+    const xpInLevel = xp % 100;
+
     return NextResponse.json({
       streak,
       totalConversations: conversations.length,
       totalMessages: messageCount,
       recentConversations: recent,
+      xp,
+      level,
+      xpInLevel,
     });
   } catch (error) {
     console.error("[DASHBOARD_API]", error);

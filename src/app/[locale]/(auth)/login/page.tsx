@@ -7,11 +7,19 @@ import { Link } from "@/i18n/navigation";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 
+const TEST_EMAIL = "test@aitut.com";
+const TEST_PASSWORD = "Test123!";
+
 export default function LoginPage() {
   const router = useRouter();
   const t = useTranslations("login");
   const [data, setData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
+
+  const fillTestCredentials = () => {
+    setData({ email: TEST_EMAIL, password: TEST_PASSWORD });
+    toast.success(t("testCredentialsFilled"));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,6 +82,31 @@ export default function LoginPage() {
             )}
           </button>
         </form>
+
+        {/* Test credentials - for development/testing */}
+        <div className="mt-6 p-4 rounded-xl bg-amber-500/10 dark:bg-amber-500/10 border border-amber-500/20 dark:border-amber-500/20">
+          <p className="text-xs font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wider mb-2">
+            {t("testMode")}
+          </p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+            {t("testCredentialsHint")}
+          </p>
+          <div className="flex flex-wrap items-center gap-2">
+            <code className="text-xs bg-white/50 dark:bg-black/20 px-2 py-1 rounded text-gray-700 dark:text-gray-300">
+              {TEST_EMAIL}
+            </code>
+            <code className="text-xs bg-white/50 dark:bg-black/20 px-2 py-1 rounded text-gray-700 dark:text-gray-300">
+              {TEST_PASSWORD}
+            </code>
+            <button
+              type="button"
+              onClick={fillTestCredentials}
+              className="text-xs px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 dark:bg-amber-500/20 dark:hover:bg-amber-500/30 text-amber-700 dark:text-amber-400 rounded-lg font-medium transition-colors"
+            >
+              {t("fillTestCredentials")}
+            </button>
+          </div>
+        </div>
 
         <p className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
           {t("noAccount")}{" "}

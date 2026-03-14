@@ -25,6 +25,7 @@ model User {
   role             String           @default("user")
   paddleCustomerId String?
   planStatus       String           @default("inactive")
+  xp               Int              @default(0)
   conversations    Conversation[]
   posts            Post[]
   vocabulary       VocabularyWord[]

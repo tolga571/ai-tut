@@ -150,17 +150,29 @@ export async function POST(req: Request) {
       parsedResult = { content: aiResponseText, translation: "", correction: "" };
     }
 
-    const savedAiMsg = await prisma.message.create({
-      data: {
-        conversationId: currentConvId,
-        role: "ai",
-        content:    parsedResult.content,
-        translation: parsedResult.translation || "",
-        correction:  parsedResult.correction  || "",
-      },
-    });
+    const [savedAiMsg, updatedUser] = await Promise.all([
+      prisma.message.create({
+        data: {
+          conversationId: currentConvId,
+          role: "ai",
+          content:    parsedResult.content,
+          translation: parsedResult.translation || "",
+          correction:  parsedResult.correction  || "",
+        },
+      }),
+      prisma.user.update({
+        where: { id: userId },
+        data: { xp: { increment: 10 } },
+        select: { xp: true },
+      }),
+    ]);
 
-    return NextResponse.json({ message: savedAiMsg, conversationId: currentConvId });
+    return NextResponse.json({
+      message: savedAiMsg,
+      conversationId: currentConvId,
+      xp: updatedUser.xp,
+      xpAwarded: 10,
+    });
   } catch (error) {
     console.error("[CHAT_POST]", error);
     return new NextResponse("Internal Error", { status: 500 });

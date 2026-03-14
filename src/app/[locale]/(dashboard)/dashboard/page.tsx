@@ -12,6 +12,9 @@ type DashboardData = {
   totalConversations: number;
   totalMessages: number;
   recentConversations: { id: string; updatedAt: string; title: string }[];
+  xp: number;
+  level: number;
+  xpInLevel: number;
 };
 
 const DAILY_TIPS = [
@@ -109,6 +112,30 @@ export default function DashboardPage() {
             <p className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">{dailyTip}</p>
           </div>
         </header>
+
+        {/* XP / Level bar */}
+        <div className="mb-6 p-4 rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-900/50">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2">
+              <span className="text-lg">⭐</span>
+              <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                Level {loading ? "—" : (data?.level ?? 1)}
+              </span>
+            </div>
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              {loading ? "—" : `${data?.xpInLevel ?? 0} / 100 XP`}
+            </span>
+          </div>
+          <div className="w-full h-2 bg-gray-200 dark:bg-white/10 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-700"
+              style={{ width: loading ? "0%" : `${data?.xpInLevel ?? 0}%` }}
+            />
+          </div>
+          <p className="text-xs text-gray-500 dark:text-gray-500 mt-1.5">
+            {loading ? "" : `${data?.xp ?? 0} total XP · +10 XP per message · +5 XP per saved word`}
+          </p>
+        </div>
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">

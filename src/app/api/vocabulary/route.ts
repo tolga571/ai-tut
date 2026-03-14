@@ -30,9 +30,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "word, translation and language are required" }, { status: 400 });
   }
 
-  const created = await prisma.vocabularyWord.create({
-    data: { userId: user.id, word: word.trim(), translation: translation.trim(), language, example: example?.trim() || null },
-  });
+  const [created] = await Promise.all([
+    prisma.vocabularyWord.create({
+      data: { userId: user.id, word: word.trim(), translation: translation.trim(), language, example: example?.trim() || null },
+    }),
+    prisma.user.update({ where: { id: user.id }, data: { xp: { increment: 5 } } }),
+  ]);
 
   return NextResponse.json(created, { status: 201 });
 }

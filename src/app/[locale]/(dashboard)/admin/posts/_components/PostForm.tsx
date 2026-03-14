@@ -113,8 +113,8 @@ export default function PostForm({ initialData }: PostFormProps) {
   };
 
   const inputCls =
-    "w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all";
-  const labelCls = "block text-sm font-medium text-gray-400 mb-1";
+    "w-full px-4 py-3 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all";
+  const labelCls = "block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -168,7 +168,7 @@ export default function PostForm({ initialData }: PostFormProps) {
             className={`${inputCls} cursor-pointer`}
           >
             {CATEGORIES.map((c) => (
-              <option key={c} value={c} className="bg-gray-800">
+              <option key={c} value={c} className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
                 {t(`categories.${c}`)}
               </option>
             ))}
@@ -188,7 +188,7 @@ export default function PostForm({ initialData }: PostFormProps) {
                   </option>
                 ))
               : LEARNING_LANGUAGES.map((lang) => (
-                  <option key={lang.code} value={lang.code} className="bg-gray-800">
+                  <option key={lang.code} value={lang.code} className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
                     {lang.nameEn}
                   </option>
                 ))}
@@ -217,13 +217,13 @@ export default function PostForm({ initialData }: PostFormProps) {
             role="switch"
             aria-checked={form.published}
             onClick={() => set("published", !form.published)}
-            className={`w-10 h-6 rounded-full transition-colors ${form.published ? "bg-blue-600" : "bg-gray-700"}`}
+            className={`w-10 h-6 rounded-full transition-colors ${form.published ? "bg-blue-600" : "bg-gray-300 dark:bg-gray-700"}`}
           >
             <span
               className={`block w-4 h-4 bg-white rounded-full shadow transition-transform mx-1 ${form.published ? "translate-x-4" : "translate-x-0"}`}
             />
           </button>
-          <span className="text-sm text-gray-300">{t("form.published")}</span>
+          <span className="text-sm text-gray-700 dark:text-gray-300">{t("form.published")}</span>
         </label>
 
         {form.category === "document" && (
@@ -233,13 +233,13 @@ export default function PostForm({ initialData }: PostFormProps) {
               role="switch"
               aria-checked={form.isPremium}
               onClick={() => set("isPremium", !form.isPremium)}
-              className={`w-10 h-6 rounded-full transition-colors ${form.isPremium ? "bg-yellow-500" : "bg-gray-700"}`}
+              className={`w-10 h-6 rounded-full transition-colors ${form.isPremium ? "bg-yellow-500" : "bg-gray-300 dark:bg-gray-700"}`}
             >
               <span
                 className={`block w-4 h-4 bg-white rounded-full shadow transition-transform mx-1 ${form.isPremium ? "translate-x-4" : "translate-x-0"}`}
               />
             </button>
-            <span className="text-sm text-gray-300">
+            <span className="text-sm text-gray-700 dark:text-gray-300">
               {t("form.premium")}
               <span className="ml-1 text-yellow-400 text-xs">⭐ {t("form.premiumHint")}</span>
             </span>
@@ -261,7 +261,7 @@ export default function PostForm({ initialData }: PostFormProps) {
           <button
             type="button"
             onClick={() => router.push("/admin/posts")}
-            className="px-5 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-sm text-gray-300 transition-all"
+            className="px-5 py-3 bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 rounded-xl text-sm text-gray-700 dark:text-gray-300 transition-all"
           >
             {t("form.cancel")}
           </button>

@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { getLocale } from "next-intl/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -37,23 +38,23 @@ export default async function DocumentDetailPage({
   // ── Auth gate: all documents require a signed-in user ─────────────────────
   if (!session) {
     return (
-      <div className="min-h-screen bg-gray-950 text-white">
-        <header className="px-6 py-4 glass-nav border-b border-white/5 flex items-center justify-between">
+      <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white transition-colors">
+        <header className="px-6 py-4 glass-nav border-b border-gray-200 dark:border-white/5 flex items-center justify-between">
           <Link
             href="/documents"
-            className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm"
+            className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors text-sm"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             {t("backToDocs")}
           </Link>
-          <div className="w-24" />
+          <ThemeToggle />
         </header>
         <div className="flex flex-col items-center justify-center py-32 text-center px-4">
           <div className="text-5xl mb-4">🔒</div>
-          <h2 className="text-xl font-semibold text-white mb-2">{t("loginRequired")}</h2>
-          <p className="text-gray-400 text-sm mb-6 max-w-sm">{t("loginDesc")}</p>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">{t("loginRequired")}</h2>
+          <p className="text-gray-600 dark:text-gray-400 text-sm mb-6 max-w-sm">{t("loginDesc")}</p>
           <Link
             href="/login"
             className="px-6 py-3 bg-blue-600 hover:bg-blue-500 rounded-xl text-sm font-semibold transition-all"
@@ -99,11 +100,11 @@ export default async function DocumentDetailPage({
   const paragraphs = post.content.split(/\n{2,}/).filter(Boolean);
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
-      <header className="px-6 py-4 glass-nav border-b border-white/5 flex items-center justify-between">
+    <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white transition-colors">
+      <header className="px-6 py-4 glass-nav border-b border-gray-200 dark:border-white/5 flex items-center justify-between">
         <Link
           href="/documents"
-          className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm"
+          className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors text-sm"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -128,13 +129,13 @@ export default async function DocumentDetailPage({
           )}
         </div>
 
-        <div className="w-24" />
+        <ThemeToggle />
       </header>
 
       <div className="max-w-3xl mx-auto px-4 py-10">
         {/* Translation notice: shown when UI lang differs from source lang */}
         {isViewingDifferentLang && !isLocked && (
-          <div className="mb-6 px-4 py-3 bg-blue-500/5 border border-blue-500/20 rounded-xl text-sm text-blue-300/80">
+          <div className="mb-6 px-4 py-3 bg-blue-500/5 border border-blue-500/20 rounded-xl text-sm text-blue-700 dark:text-blue-300/80">
             {t("translationNote", { lang: sourceLangName })}
           </div>
         )}
@@ -143,8 +144,8 @@ export default async function DocumentDetailPage({
         {isLocked ? (
           <div className="flex flex-col items-center justify-center py-24 text-center">
             <div className="text-5xl mb-4">⭐</div>
-            <h2 className="text-xl font-semibold text-white mb-2">{t("premium")}</h2>
-            <p className="text-gray-400 text-sm mb-6 max-w-sm">{t("premiumNote")}</p>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">{t("premium")}</h2>
+            <p className="text-gray-600 dark:text-gray-400 text-sm mb-6 max-w-sm">{t("premiumNote")}</p>
             <Link
               href="/pricing"
               className="px-6 py-3 bg-gradient-to-r from-yellow-600 to-amber-500 hover:from-yellow-500 hover:to-amber-400 rounded-xl text-sm font-semibold text-white transition-all"
@@ -155,8 +156,8 @@ export default async function DocumentDetailPage({
         ) : (
           <article>
             <header className="mb-8">
-              <h1 className="text-3xl font-bold text-white leading-tight mb-4">{post.title}</h1>
-              <p className="text-sm text-gray-500">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white leading-tight mb-4">{post.title}</h1>
+              <p className="text-sm text-gray-600 dark:text-gray-500">
                 {t("by")} {post.author?.name ?? t("unknownAuthor")} ·{" "}
                 {new Date(post.createdAt).toLocaleDateString()}
               </p>
@@ -164,7 +165,7 @@ export default async function DocumentDetailPage({
 
             <div className="space-y-5">
               {paragraphs.map((para, i) => (
-                <p key={i} className="text-gray-300 leading-relaxed whitespace-pre-wrap">
+                <p key={i} className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
                   {para}
                 </p>
               ))}
