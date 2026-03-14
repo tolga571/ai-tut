@@ -5,7 +5,12 @@
     "register": "始める",
     "goToChat": "チャットへ",
     "light": "ライト",
-    "dark": "ダーク"
+    "dark": "ダーク",
+    "blogs": "ブログ",
+    "pages": "ページ",
+    "documents": "ドキュメント",
+    "adminPanel": "管理パネル",
+    "explore": "探索"
   },
   "home": {
     "badge": "gemini-2.5-flash 搭載",

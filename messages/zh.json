@@ -5,7 +5,12 @@
     "register": "开始使用",
     "goToChat": "前往聊天",
     "light": "浅色",
-    "dark": "深色"
+    "dark": "深色",
+    "blogs": "博客",
+    "pages": "页面",
+    "documents": "文档",
+    "adminPanel": "管理面板",
+    "explore": "探索"
   },
   "home": {
     "badge": "由 gemini-2.5-flash 驱动",

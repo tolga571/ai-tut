@@ -73,13 +73,29 @@ export function Navbar() {
               <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />
             ) : session ? (
               <>
+                <div className="hidden md:flex items-center gap-1 mr-1">
+                  <Link href="/blogs" className="px-3 py-1.5 text-sm text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/5">
+                    {t("blogs")}
+                  </Link>
+                  <Link href="/pages" className="px-3 py-1.5 text-sm text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/5">
+                    {t("pages")}
+                  </Link>
+                  <Link href="/documents" className="px-3 py-1.5 text-sm text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/5">
+                    {t("documents")}
+                  </Link>
+                  {(session.user as { role?: string }).role === "admin" && (
+                    <Link href="/admin" className="px-3 py-1.5 text-sm text-amber-400 hover:text-amber-300 transition-colors rounded-lg hover:bg-amber-500/10">
+                      {t("adminPanel")}
+                    </Link>
+                  )}
+                </div>
                 <Link
                   href="/chat"
                   className="px-4 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-500 text-white rounded-full transition-all active:scale-95"
                 >
                   {t("goToChat")}
                 </Link>
-                <UserMenu user={session.user ?? {}} />
+                <UserMenu user={session.user ?? {}} role={(session.user as { role?: string }).role} />
               </>
             ) : (
               <>

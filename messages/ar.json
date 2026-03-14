@@ -5,7 +5,12 @@
     "register": "ابدأ الآن",
     "goToChat": "الذهاب إلى المحادثة",
     "light": "فاتح",
-    "dark": "داكن"
+    "dark": "داكن",
+    "blogs": "المدونة",
+    "pages": "الصفحات",
+    "documents": "المستندات",
+    "adminPanel": "لوحة الإدارة",
+    "explore": "استكشاف"
   },
   "home": {
     "badge": "مدعوم بـ gemini-2.5-flash",

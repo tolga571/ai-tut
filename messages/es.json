@@ -5,7 +5,12 @@
     "register": "Comenzar",
     "goToChat": "Ir al chat",
     "light": "Claro",
-    "dark": "Oscuro"
+    "dark": "Oscuro",
+    "blogs": "Blogs",
+    "pages": "Páginas",
+    "documents": "Documentos",
+    "adminPanel": "Panel de Admin",
+    "explore": "Explorar"
   },
   "home": {
     "badge": "Impulsado por gemini-2.5-flash",
