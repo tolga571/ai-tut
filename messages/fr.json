@@ -1,5 +1,6 @@
 {
   "nav": {
+    "dashboard": "Tableau de bord",
     "pricing": "Tarifs",
     "login": "Se connecter",
     "register": "Commencer",
@@ -18,6 +19,28 @@
     "titleAccent": "propulsées par l'IA.",
     "description": "Arrêtez de mémoriser du vocabulaire et commencez à parler. Discutez naturellement avec notre tuteur IA bilingue et obtenez des traductions instantanées et des corrections en temps réel.",
     "cta": "Commençons"
+  },
+  "dashboard": {
+    "welcome": "Bon retour, {name} !",
+    "subtitle": "Continue à pratiquer {lang}",
+    "streak": "Série de jours",
+    "conversations": "Conversations",
+    "messages": "Messages",
+    "startChat": "Démarrer le chat",
+    "recentConversations": "Conversations récentes",
+    "viewAll": "Tout voir",
+    "noConversations": "Pas encore de conversations",
+    "startFirst": "Commence ta première conversation",
+    "explore": "Explorer",
+    "blogsDesc": "Lisez des articles dans votre langue cible",
+    "pagesDesc": "Guides et ressources d'apprentissage",
+    "documentsDesc": "Documents et matériaux premium",
+    "time": {
+      "justNow": "À l'instant",
+      "minutesAgo": "il y a {count} min",
+      "hoursAgo": "il y a {count} h",
+      "daysAgo": "il y a {count} j"
+    }
   },
   "login": {
     "title": "Bon retour",

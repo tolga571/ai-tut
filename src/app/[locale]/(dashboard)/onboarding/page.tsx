@@ -35,7 +35,7 @@ export default function OnboardingPage() {
 
       await update();
       toast.success(t("success"));
-      router.push("/chat");
+      router.push("/dashboard");
     } catch {
       toast.error(t("errors.generic"));
     } finally {

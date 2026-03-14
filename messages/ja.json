@@ -1,5 +1,6 @@
 {
   "nav": {
+    "dashboard": "ダッシュボード",
     "pricing": "料金",
     "login": "ログイン",
     "register": "始める",
@@ -18,6 +19,28 @@
     "titleAccent": "AIの力で。",
     "description": "単語の暗記をやめて、話し始めましょう。バイリンガルAIチューターと自然に会話し、即時翻訳とリアルタイム修正を受け取りましょう。",
     "cta": "始めましょう"
+  },
+  "dashboard": {
+    "welcome": "おかえりなさい、{name}さん！",
+    "subtitle": "{lang}の練習を続けましょう",
+    "streak": "連続日数",
+    "conversations": "会話数",
+    "messages": "メッセージ数",
+    "startChat": "チャットを開始",
+    "recentConversations": "最近の会話",
+    "viewAll": "すべて表示",
+    "noConversations": "まだ会話がありません",
+    "startFirst": "最初の会話を始める",
+    "explore": "探索",
+    "blogsDesc": "目標言語で記事を読む",
+    "pagesDesc": "ガイドと学習リソース",
+    "documentsDesc": "プレミアムドキュメントと資料",
+    "time": {
+      "justNow": "たった今",
+      "minutesAgo": "{count}分前",
+      "hoursAgo": "{count}時間前",
+      "daysAgo": "{count}日前"
+    }
   },
   "login": {
     "title": "おかえりなさい",

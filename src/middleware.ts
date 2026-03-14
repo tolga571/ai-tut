@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { routing } from "./i18n/routing";
 
-const PROTECTED_PATHS = ["/chat", "/profile", "/onboarding", "/documents"];
+const PROTECTED_PATHS = ["/dashboard", "/chat", "/profile", "/onboarding", "/documents"];
 const ADMIN_PATHS = ["/admin"];
 
 const intlMiddleware = createMiddleware(routing);
@@ -42,7 +42,7 @@ export default async function middleware(req: NextRequest) {
     }
 
     if (isAdmin && (token as any).role !== "admin") {
-      return NextResponse.redirect(new URL(`/${locale}/chat`, req.url));
+      return NextResponse.redirect(new URL(`/${locale}/dashboard`, req.url));
     }
   }
 

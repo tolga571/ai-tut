@@ -26,7 +26,7 @@ export default function LoginPage() {
       toast.error(res.error);
     } else {
       toast.success(t("success"));
-      router.push("/chat");
+      router.push("/dashboard");
     }
     setLoading(false);
   };

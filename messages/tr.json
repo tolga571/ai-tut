@@ -1,5 +1,6 @@
 {
   "nav": {
+    "dashboard": "Kontrol Paneli",
     "pricing": "Fiyatlar",
     "login": "Giriş Yap",
     "register": "Başla",
@@ -13,6 +14,28 @@
     "titleAccent": "AI ile güçlendirilmiş.",
     "description": "Kelime ezberlemeyi bırakın, konuşmaya başlayın. İki dilli AI öğretmenimizle doğal sohbet edin, anlık çeviriler ve gerçek zamanlı düzeltmeler alın.",
     "cta": "Hadi Başlayalım"
+  },
+  "dashboard": {
+    "welcome": "Tekrar hoş geldin, {name}!",
+    "subtitle": "{lang} pratiğine devam et",
+    "streak": "Gün serisi",
+    "conversations": "Sohbetler",
+    "messages": "Mesajlar",
+    "startChat": "Sohbete Başla",
+    "recentConversations": "Son sohbetler",
+    "viewAll": "Tümünü gör",
+    "noConversations": "Henüz sohbet yok",
+    "startFirst": "İlk sohbetini başlat",
+    "explore": "Keşfet",
+    "blogsDesc": "Hedef dilde makaleler oku",
+    "pagesDesc": "Rehberler ve öğrenme kaynakları",
+    "documentsDesc": "Premium belgeler ve materyaller",
+    "time": {
+      "justNow": "Az önce",
+      "minutesAgo": "{count} dk önce",
+      "hoursAgo": "{count} sa önce",
+      "daysAgo": "{count} gün önce"
+    }
   },
   "login": {
     "title": "Tekrar hoş geldiniz",

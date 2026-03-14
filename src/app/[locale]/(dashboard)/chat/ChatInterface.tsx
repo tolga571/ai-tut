@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import toast from "react-hot-toast";
 import { UserMenu } from "@/components/UserMenu";
@@ -44,6 +45,8 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
 
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const searchParams = useSearchParams();
+  const convFromUrl = searchParams?.get("conv");
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -80,11 +83,14 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
     const init = async () => {
       setLoadingHistory(true);
       const convs = await fetchConversations();
-      if (convs.length > 0) await loadConversation(convs[0].id);
+      if (convs.length > 0) {
+        const targetId = convFromUrl && convs.some((c) => c.id === convFromUrl) ? convFromUrl : convs[0].id;
+        await loadConversation(targetId);
+      }
       setLoadingHistory(false);
     };
     init();
-  }, [fetchConversations, loadConversation]);
+  }, [fetchConversations, loadConversation, convFromUrl]);
 
   const handleNewChat = () => {
     setActiveConvId(null);

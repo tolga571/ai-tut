@@ -1,5 +1,6 @@
 {
   "nav": {
+    "dashboard": "Dashboard",
     "pricing": "Pricing",
     "login": "Sign In",
     "register": "Get Started",
@@ -18,6 +19,28 @@
     "titleAccent": "powered by AI.",
     "description": "Stop memorizing vocabulary and start speaking. Chat naturally with our bilingual AI tutor and get instant translations and real-time corrections.",
     "cta": "Let's Get Started"
+  },
+  "dashboard": {
+    "welcome": "Welcome back, {name}!",
+    "subtitle": "Keep practicing {lang}",
+    "streak": "Day streak",
+    "conversations": "Conversations",
+    "messages": "Messages",
+    "startChat": "Start Chat",
+    "recentConversations": "Recent conversations",
+    "viewAll": "View all",
+    "noConversations": "No conversations yet",
+    "startFirst": "Start your first chat",
+    "explore": "Explore",
+    "blogsDesc": "Read articles in your target language",
+    "pagesDesc": "Guides and learning resources",
+    "documentsDesc": "Premium documents and materials",
+    "time": {
+      "justNow": "Just now",
+      "minutesAgo": "{count}m ago",
+      "hoursAgo": "{count}h ago",
+      "daysAgo": "{count}d ago"
+    }
   },
   "login": {
     "title": "Welcome back",

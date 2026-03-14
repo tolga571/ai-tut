@@ -1,5 +1,6 @@
 {
   "nav": {
+    "dashboard": "仪表板",
     "pricing": "价格",
     "login": "登录",
     "register": "开始使用",
@@ -18,6 +19,28 @@
     "titleAccent": "由AI驱动。",
     "description": "停止死记硬背词汇，开始开口说话。与我们的双语AI导师自然对话，获得即时翻译和实时纠错。",
     "cta": "马上开始"
+  },
+  "dashboard": {
+    "welcome": "欢迎回来，{name}！",
+    "subtitle": "继续练习 {lang}",
+    "streak": "连续天数",
+    "conversations": "对话数",
+    "messages": "消息数",
+    "startChat": "开始聊天",
+    "recentConversations": "最近对话",
+    "viewAll": "查看全部",
+    "noConversations": "还没有对话",
+    "startFirst": "开始你的第一次对话",
+    "explore": "探索",
+    "blogsDesc": "用目标语言阅读文章",
+    "pagesDesc": "指南和学习资源",
+    "documentsDesc": "高级文档和资料",
+    "time": {
+      "justNow": "刚刚",
+      "minutesAgo": "{count} 分钟前",
+      "hoursAgo": "{count} 小时前",
+      "daysAgo": "{count} 天前"
+    }
   },
   "login": {
     "title": "欢迎回来",

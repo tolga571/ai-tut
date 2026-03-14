@@ -8,7 +8,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const locale = await getLocale();
 
   if (!session || (session.user as any)?.role !== "admin") {
-    redirect({ href: "/chat", locale });
+    redirect({ href: "/dashboard", locale });
   }
 
   return <>{children}</>;

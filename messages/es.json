@@ -1,5 +1,6 @@
 {
   "nav": {
+    "dashboard": "Panel",
     "pricing": "Precios",
     "login": "Iniciar sesión",
     "register": "Comenzar",
@@ -18,6 +19,28 @@
     "titleAccent": "impulsadas por IA.",
     "description": "Deja de memorizar vocabulario y empieza a hablar. Chatea de forma natural con nuestro tutor de IA bilingüe y obtén traducciones instantáneas y correcciones en tiempo real.",
     "cta": "Empecemos"
+  },
+  "dashboard": {
+    "welcome": "¡Bienvenido de nuevo, {name}!",
+    "subtitle": "Sigue practicando {lang}",
+    "streak": "Racha de días",
+    "conversations": "Conversaciones",
+    "messages": "Mensajes",
+    "startChat": "Iniciar chat",
+    "recentConversations": "Conversaciones recientes",
+    "viewAll": "Ver todo",
+    "noConversations": "Aún no hay conversaciones",
+    "startFirst": "Inicia tu primera conversación",
+    "explore": "Explorar",
+    "blogsDesc": "Lee artículos en tu idioma objetivo",
+    "pagesDesc": "Guías y recursos de aprendizaje",
+    "documentsDesc": "Documentos y materiales premium",
+    "time": {
+      "justNow": "Ahora mismo",
+      "minutesAgo": "hace {count} min",
+      "hoursAgo": "hace {count} h",
+      "daysAgo": "hace {count} días"
+    }
   },
   "login": {
     "title": "Bienvenido de vuelta",

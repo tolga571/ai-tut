@@ -1,5 +1,6 @@
 {
   "nav": {
+    "dashboard": "لوحة التحكم",
     "pricing": "الأسعار",
     "login": "تسجيل الدخول",
     "register": "ابدأ الآن",
@@ -18,6 +19,28 @@
     "titleAccent": "مدعومة بالذكاء الاصطناعي.",
     "description": "توقف عن حفظ المفردات وابدأ في التحدث. تحدث بشكل طبيعي مع مدرسنا الذكاء الاصطناعي ثنائي اللغة واحصل على ترجمات فورية وتصحيحات في الوقت الفعلي.",
     "cta": "لنبدأ"
+  },
+  "dashboard": {
+    "welcome": "مرحباً بعودتك، {name}!",
+    "subtitle": "واصل التدرب على {lang}",
+    "streak": "سلسلة الأيام",
+    "conversations": "المحادثات",
+    "messages": "الرسائل",
+    "startChat": "بدء المحادثة",
+    "recentConversations": "المحادثات الأخيرة",
+    "viewAll": "عرض الكل",
+    "noConversations": "لا توجد محادثات بعد",
+    "startFirst": "ابدأ أول محادثة",
+    "explore": "استكشف",
+    "blogsDesc": "اقرأ المقالات بلغتك المستهدفة",
+    "pagesDesc": "أدلة وموارد التعلم",
+    "documentsDesc": "مستندات ومواد مميزة",
+    "time": {
+      "justNow": "الآن",
+      "minutesAgo": "منذ {count} د",
+      "hoursAgo": "منذ {count} س",
+      "daysAgo": "منذ {count} يوم"
+    }
   },
   "login": {
     "title": "مرحباً بعودتك",

@@ -30,7 +30,7 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
+          <Link href={session ? "/dashboard" : "/"} className="flex items-center gap-2 group">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center font-bold text-white shadow-lg group-hover:scale-110 transition-transform">
               A
             </div>
@@ -74,6 +74,9 @@ export function Navbar() {
             ) : session ? (
               <>
                 <div className="hidden md:flex items-center gap-1 mr-1">
+                  <Link href="/dashboard" className="px-3 py-1.5 text-sm text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/5">
+                    {t("dashboard")}
+                  </Link>
                   <Link href="/blogs" className="px-3 py-1.5 text-sm text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/5">
                     {t("blogs")}
                   </Link>

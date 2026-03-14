@@ -29,7 +29,7 @@ export default function RegisterPage() {
         setData((prev) => ({ ...prev, name: user.name || "", email: user.email || "" }));
         setStep(2);
       } else if (user.planStatus === "active") {
-        router.push("/chat");
+        router.push("/dashboard");
       }
     }
   }, [session, router]);
@@ -73,7 +73,7 @@ export default function RegisterPage() {
   const handlePlanContinue = () => {
     if (!selectedPlan) return;
     toast.success(t("planStep.note"));
-    router.push("/chat");
+    router.push("/dashboard");
   };
 
   if (step === 2) {

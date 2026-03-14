@@ -1,5 +1,6 @@
 {
   "nav": {
+    "dashboard": "Dashboard",
     "pricing": "Preise",
     "login": "Anmelden",
     "register": "Loslegen",
@@ -18,6 +19,28 @@
     "titleAccent": "unterstützt durch KI.",
     "description": "Hör auf, Vokabeln auswendig zu lernen, und fang an zu sprechen. Chatte natürlich mit unserem zweisprachigen KI-Tutor und erhalte sofortige Übersetzungen und Echtzeit-Korrekturen.",
     "cta": "Jetzt starten"
+  },
+  "dashboard": {
+    "welcome": "Willkommen zurück, {name}!",
+    "subtitle": "Übe weiter {lang}",
+    "streak": "Tage-Serie",
+    "conversations": "Gespräche",
+    "messages": "Nachrichten",
+    "startChat": "Chat starten",
+    "recentConversations": "Letzte Gespräche",
+    "viewAll": "Alle anzeigen",
+    "noConversations": "Noch keine Gespräche",
+    "startFirst": "Starte dein erstes Gespräch",
+    "explore": "Entdecken",
+    "blogsDesc": "Artikel in deiner Zielsprache lesen",
+    "pagesDesc": "Anleitungen und Lernressourcen",
+    "documentsDesc": "Premium-Dokumente und Materialien",
+    "time": {
+      "justNow": "Gerade eben",
+      "minutesAgo": "vor {count} Min.",
+      "hoursAgo": "vor {count} Std.",
+      "daysAgo": "vor {count} T."
+    }
   },
   "login": {
     "title": "Willkommen zurück",
