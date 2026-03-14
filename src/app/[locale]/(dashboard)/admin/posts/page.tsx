@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const CATEGORY_ICONS: Record<string, string> = {
   blog:     "📝",
@@ -27,17 +28,17 @@ export default async function AdminPostsPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white transition-colors">
-      <header className="px-4 sm:px-6 py-4 glass-nav border-b border-gray-200 dark:border-white/5 flex items-center justify-between gap-3">
-        <Link href="/chat" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors text-sm flex-shrink-0">
+      <header className="px-6 py-4 glass-nav border-b border-gray-200 dark:border-white/5 flex items-center justify-between">
+        <Link href="/chat" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors text-sm">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
-          <span className="hidden sm:inline">{t("backToChat")}</span>
+          {t("backToChat")}
         </Link>
-        <h1 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white truncate">{t("postsTitle")}</h1>
+        <h1 className="text-lg font-semibold text-gray-900 dark:text-white">{t("postsTitle")}</h1>
         <Link
           href="/admin/posts/new"
-          className="px-3 sm:px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl text-sm font-medium transition-all flex-shrink-0"
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl text-sm font-medium transition-all"
         >
           + {t("newPost")}
         </Link>

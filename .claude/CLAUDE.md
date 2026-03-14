@@ -21,14 +21,12 @@ This file defines how Claude behaves, which rules to apply, and which workflows 
 │   ├── 09-github.md                ← Git workflow, commits, PROJECT.md
 │   ├── 10-feature-completeness.md  ← Full domain thinking, no half-features
 │   ├── 11-testing.md               ← Jest, Vitest, Supertest
-│   ├── 12-production.md            ← Logging, caching, deploy, SEO, GDPR
-│   └── 13-agent-roles.md           ← Agent Team Specialized Roles
+│   └── 12-production.md            ← Logging, caching, deploy, SEO, GDPR
 ├── workflows/
 │   ├── 01-new-project.md
 │   ├── 02-feature-development.md
 │   ├── 03-api-development.md
-│   ├── 04-database.md
-│   └── 05-team-management.md       ← How to manage Agent Teams
+│   └── 04-database.md
 └── skills/
     ├── mern-stack.md
     ├── nextjs.md
@@ -93,7 +91,6 @@ This file defines how Claude behaves, which rules to apply, and which workflows 
 | Error / edge cases | `skills/error-handling.md` + `rules/08-performance.md` |
 | Writing tests | `rules/10-testing.md` |
 | Going to production | `rules/11-production.md` |
-| Managing Agent Teams | `workflows/05-team-management.md` + `rules/13-agent-roles.md` |
 
 ---
 

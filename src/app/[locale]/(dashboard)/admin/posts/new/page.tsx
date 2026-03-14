@@ -8,14 +8,14 @@ export default async function NewPostPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white transition-colors">
-      <header className="px-4 sm:px-6 py-4 glass-nav border-b border-gray-200 dark:border-white/5 flex items-center justify-between gap-3">
-        <Link href="/admin/posts" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors text-sm flex-shrink-0">
+      <header className="px-6 py-4 glass-nav border-b border-gray-200 dark:border-white/5 flex items-center justify-between">
+        <Link href="/admin/posts" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors text-sm">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
-          <span className="hidden sm:inline">{t("backToPosts")}</span>
+          {t("backToPosts")}
         </Link>
-        <h1 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white truncate">{t("newPostTitle")}</h1>
+        <h1 className="text-lg font-semibold text-gray-900 dark:text-white">{t("newPostTitle")}</h1>
         <ThemeToggle />
       </header>
 
