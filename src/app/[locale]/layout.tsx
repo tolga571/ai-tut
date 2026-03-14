@@ -22,7 +22,7 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <div dir={locale === "ar" ? "rtl" : "ltr"}>
+    <div dir={locale === "ar" ? "rtl" : "ltr"} className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white transition-colors">
       <NextIntlClientProvider messages={messages}>
         <AuthProvider>
             <Navbar />

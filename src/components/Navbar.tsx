@@ -30,7 +30,7 @@ export function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 w-full z-50 transition-all border-b border-white/5 bg-gray-950/80 backdrop-blur-xl">
+    <nav className="fixed top-0 w-full z-50 transition-colors border-b border-gray-200 dark:border-white/5 bg-white/90 dark:bg-gray-950/80 backdrop-blur-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
@@ -49,10 +49,10 @@ export function Navbar() {
               value={locale}
               onChange={handleLocaleChange}
               aria-label="Switch UI language"
-              className="h-9 px-2 rounded-full border border-white/10 bg-gray-900 text-xs font-semibold text-gray-200 hover:bg-white/10 transition-colors cursor-pointer focus:outline-none"
+              className="h-9 px-2 rounded-full border border-gray-300 dark:border-white/10 bg-gray-100 dark:bg-gray-900 text-xs font-semibold text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors cursor-pointer focus:outline-none"
             >
               {UI_LOCALES.map((l) => (
-                <option key={l} value={l} className="bg-gray-900">
+                <option key={l} value={l} className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
                   {l.toUpperCase()}
                 </option>
               ))}
@@ -64,7 +64,7 @@ export function Navbar() {
                 type="button"
                 aria-label="Toggle theme"
                 onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-                className="w-9 h-9 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-xs text-gray-200 hover:bg-white/10 transition-colors"
+                className="w-9 h-9 rounded-full border border-gray-300 dark:border-white/10 bg-gray-100 dark:bg-white/5 flex items-center justify-center text-xs text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors"
               >
                 <span className="hidden md:inline">
                   {resolvedTheme === "dark" ? t("light") : t("dark")}
@@ -76,20 +76,20 @@ export function Navbar() {
             )}
 
             {status === "loading" ? (
-              <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />
+              <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-white/5 animate-pulse" />
             ) : session ? (
               <>
                 <div className="hidden md:flex items-center gap-1 mr-1">
-                  <Link href="/dashboard" className="px-3 py-1.5 text-sm text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/5">
+                  <Link href="/dashboard" className="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-white/5">
                     {t("dashboard")}
                   </Link>
-                  <Link href="/blogs" className="px-3 py-1.5 text-sm text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/5">
+                  <Link href="/blogs" className="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-white/5">
                     {t("blogs")}
                   </Link>
-                  <Link href="/pages" className="px-3 py-1.5 text-sm text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/5">
+                  <Link href="/pages" className="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-white/5">
                     {t("pages")}
                   </Link>
-                  <Link href="/documents" className="px-3 py-1.5 text-sm text-gray-400 hover:text-white transition-colors rounded-lg hover:bg-white/5">
+                  <Link href="/documents" className="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-white/5">
                     {t("documents")}
                   </Link>
                   {(session.user as { role?: string }).role === "admin" && (
@@ -111,14 +111,14 @@ export function Navbar() {
                 <div className="hidden md:flex items-center gap-6 mr-2">
                   <Link
                     href="/pricing"
-                    className="text-sm font-medium text-gray-400 hover:text-white transition-colors"
+                    className="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
                   >
                     {t("pricing")}
                   </Link>
                 </div>
                 <Link
                   href="/login"
-                  className="text-sm font-medium text-gray-400 hover:text-white transition-colors"
+                  className="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
                 >
                   {t("login")}
                 </Link>

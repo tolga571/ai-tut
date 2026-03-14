@@ -28,6 +28,19 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+(function() {
+  var k='aitut-theme';
+  var v=localStorage.getItem(k)||'dark';
+  document.documentElement.classList.toggle('dark',v==='dark');
+})();
+`,
+          }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground min-h-screen transition-colors`}
       >

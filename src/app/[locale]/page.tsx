@@ -17,7 +17,7 @@ function HomeContent() {
   const t = useTranslations("home");
 
   return (
-    <div className="relative min-h-screen bg-gray-950 text-white overflow-hidden selection:bg-blue-500/30">
+    <div className="relative min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white overflow-hidden selection:bg-blue-500/30 transition-colors">
       {/* Background gradients */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/20 blur-[120px] rounded-full mix-blend-screen pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/20 blur-[120px] rounded-full mix-blend-screen pointer-events-none" />
@@ -25,7 +25,7 @@ function HomeContent() {
       {/* Hero Section */}
       <main className="relative z-0 flex flex-col items-center justify-center min-h-screen px-4 text-center">
         <div className="max-w-4xl space-y-8 animate-fade-in-up mt-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm text-blue-300 backdrop-blur-md mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-sm text-blue-600 dark:text-blue-300 backdrop-blur-md mb-4">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
@@ -33,7 +33,7 @@ function HomeContent() {
             {t("badge")}
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-400">
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
             {t("title")}
             <br />
             <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-indigo-500 bg-clip-text text-transparent">
@@ -41,7 +41,7 @@ function HomeContent() {
             </span>
           </h1>
 
-          <p className="max-w-2xl mx-auto text-lg md:text-xl text-gray-400 font-light leading-relaxed">
+          <p className="max-w-2xl mx-auto text-lg md:text-xl text-gray-600 dark:text-gray-400 font-light leading-relaxed">
             {t("description")}
           </p>
 
@@ -59,9 +59,9 @@ function HomeContent() {
         </div>
 
         {/* Demo Chat Snippet */}
-        <div className="w-full max-w-3xl mt-24 mb-12 p-1 rounded-2xl bg-gradient-to-b from-white/10 to-transparent shadow-2xl backdrop-blur-xl">
-          <div className="bg-gray-950/80 rounded-xl p-6 overflow-hidden">
-            <div className="flex items-center gap-2 mb-6 border-b border-gray-800 pb-4">
+        <div className="w-full max-w-3xl mt-24 mb-12 p-1 rounded-2xl bg-gray-100 dark:bg-gradient-to-b dark:from-white/10 dark:to-transparent shadow-2xl backdrop-blur-xl border border-gray-200 dark:border-transparent">
+          <div className="bg-white/80 dark:bg-gray-950/80 rounded-xl p-6 overflow-hidden border border-gray-200 dark:border-gray-800">
+            <div className="flex items-center gap-2 mb-6 border-b border-gray-200 dark:border-gray-800 pb-4">
               <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
               <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
               <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
@@ -70,15 +70,15 @@ function HomeContent() {
 
             <div className="space-y-6 text-left">
               <div className="flex flex-col gap-1 items-end">
-                <div className="bg-blue-600/20 text-blue-100 px-5 py-3 rounded-2xl rounded-tr-sm max-w-[80%] border border-blue-500/20">
+                <div className="bg-blue-600/20 text-blue-900 dark:text-blue-100 px-5 py-3 rounded-2xl rounded-tr-sm max-w-[80%] border border-blue-500/20">
                   <p className="text-base">Hola! Necesito ayuda para ordenar un café.</p>
                 </div>
               </div>
 
               <div className="flex flex-col gap-1 items-start">
-                <div className="bg-white/5 border border-white/10 px-5 py-3 rounded-2xl rounded-tl-sm max-w-[80%]">
-                  <p className="text-base text-gray-200">¡Por supuesto! Puedes decir: <strong>&quot;Quisiera un café con leche, por favor.&quot;</strong></p>
-                  <p className="text-sm text-gray-400 mt-2 pt-2 border-t border-white/10">Of course! You can say: &quot;I would like a coffee with milk, please.&quot;</p>
+                <div className="bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 px-5 py-3 rounded-2xl rounded-tl-sm max-w-[80%]">
+                  <p className="text-base text-gray-800 dark:text-gray-200">¡Por supuesto! Puedes decir: <strong>&quot;Quisiera un café con leche, por favor.&quot;</strong></p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 pt-2 border-t border-gray-200 dark:border-white/10">Of course! You can say: &quot;I would like a coffee with milk, please.&quot;</p>
                 </div>
               </div>
             </div>

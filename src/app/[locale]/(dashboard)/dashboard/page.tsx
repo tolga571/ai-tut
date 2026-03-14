@@ -53,7 +53,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white transition-colors">
       {/* Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-600/10 blur-[120px] rounded-full" />
@@ -63,10 +63,10 @@ export default function DashboardPage() {
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Header */}
         <header className="mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
+          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-500 dark:from-white dark:via-gray-200 dark:to-gray-400 bg-clip-text text-transparent">
             {t("welcome", { name: user?.name?.split(" ")[0] || "there" })}
           </h1>
-          <p className="mt-2 text-gray-400 text-lg">
+          <p className="mt-2 text-gray-600 dark:text-gray-400 text-lg">
             {t("subtitle", { lang: `${targetLangFlag} ${targetLangName}` })}
           </p>
         </header>
@@ -81,7 +81,7 @@ export default function DashboardPage() {
               </div>
               <div>
                 {loading ? (
-                  <div className="h-8 w-16 bg-white/10 rounded animate-pulse" />
+                  <div className="h-8 w-16 bg-gray-300 dark:bg-white/10 rounded animate-pulse" />
                 ) : (
                   <p className="text-3xl font-bold text-orange-400">{data?.streak ?? 0}</p>
                 )}
@@ -91,35 +91,35 @@ export default function DashboardPage() {
           </div>
 
           {/* Conversations */}
-          <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-6 transition-all hover:border-blue-500/30 hover:bg-white/[0.07]">
+          <div className="group relative overflow-hidden rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 backdrop-blur-sm p-6 transition-all hover:border-blue-500/30 hover:bg-gray-100 dark:hover:bg-white/[0.07]">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-xl bg-blue-500/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                 💬
               </div>
               <div>
                 {loading ? (
-                  <div className="h-8 w-16 bg-white/10 rounded animate-pulse" />
+                  <div className="h-8 w-16 bg-gray-300 dark:bg-white/10 rounded animate-pulse" />
                 ) : (
                   <p className="text-3xl font-bold text-blue-400">{data?.totalConversations ?? 0}</p>
                 )}
-                <p className="text-sm text-gray-400">{t("conversations")}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t("conversations")}</p>
               </div>
             </div>
           </div>
 
           {/* Messages */}
-          <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-6 transition-all hover:border-purple-500/30 hover:bg-white/[0.07]">
+          <div className="group relative overflow-hidden rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 backdrop-blur-sm p-6 transition-all hover:border-purple-500/30 hover:bg-gray-100 dark:hover:bg-white/[0.07]">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-xl bg-purple-500/20 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                 ✉️
               </div>
               <div>
                 {loading ? (
-                  <div className="h-8 w-16 bg-white/10 rounded animate-pulse" />
+                  <div className="h-8 w-16 bg-gray-300 dark:bg-white/10 rounded animate-pulse" />
                 ) : (
                   <p className="text-3xl font-bold text-purple-400">{data?.totalMessages ?? 0}</p>
                 )}
-                <p className="text-sm text-gray-400">{t("messages")}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t("messages")}</p>
               </div>
             </div>
           </div>
@@ -141,9 +141,9 @@ export default function DashboardPage() {
         {/* Two columns: Recent + Quick Links */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Recent Conversations */}
-          <div className="lg:col-span-2 rounded-2xl border border-white/10 bg-gray-900/50 backdrop-blur-sm overflow-hidden">
-            <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-white">{t("recentConversations")}</h2>
+          <div className="lg:col-span-2 rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-900/50 backdrop-blur-sm overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-white/10 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t("recentConversations")}</h2>
               <Link
                 href="/chat"
                 className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
@@ -164,13 +164,13 @@ export default function DashboardPage() {
                     <Link
                       key={conv.id}
                       href={`/chat?conv=${conv.id}`}
-                      className="flex items-center justify-between p-4 rounded-xl hover:bg-white/5 transition-colors group"
+                      className="flex items-center justify-between p-4 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 transition-colors group"
                     >
-                      <p className="text-gray-200 group-hover:text-white truncate flex-1 mr-3">
+                      <p className="text-gray-700 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-white truncate flex-1 mr-3">
                         {conv.title}
                         {conv.title.length >= 40 ? "…" : ""}
                       </p>
-                      <span className="text-xs text-gray-500 flex-shrink-0">
+                      <span className="text-xs text-gray-500 dark:text-gray-500 flex-shrink-0">
                         {getRelativeTime(conv.updatedAt)}
                       </span>
                       <svg
@@ -186,7 +186,7 @@ export default function DashboardPage() {
                 </div>
               ) : (
                 <div className="py-12 text-center">
-                  <p className="text-gray-500 mb-4">{t("noConversations")}</p>
+                  <p className="text-gray-600 dark:text-gray-500 mb-4">{t("noConversations")}</p>
                   <Link
                     href="/chat"
                     className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 rounded-xl text-sm font-medium transition-colors"
@@ -203,17 +203,17 @@ export default function DashboardPage() {
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-white px-1">{t("explore")}</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white px-1">{t("explore")}</h2>
             <Link
               href="/blogs"
-              className="flex items-center gap-4 p-4 rounded-2xl border border-white/10 bg-gray-900/50 hover:border-blue-500/30 hover:bg-white/5 transition-all group"
+              className="flex items-center gap-4 p-4 rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-900/50 hover:border-blue-500/30 hover:bg-gray-100 dark:hover:bg-white/5 transition-all group"
             >
               <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                 📚
               </div>
               <div>
-                <p className="font-medium text-white">{tNav("blogs")}</p>
-                <p className="text-sm text-gray-500">{t("blogsDesc")}</p>
+                <p className="font-medium text-gray-900 dark:text-white">{tNav("blogs")}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-500">{t("blogsDesc")}</p>
               </div>
               <svg className="w-5 h-5 text-gray-500 group-hover:text-blue-400 ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -221,14 +221,14 @@ export default function DashboardPage() {
             </Link>
             <Link
               href="/pages"
-              className="flex items-center gap-4 p-4 rounded-2xl border border-white/10 bg-gray-900/50 hover:border-purple-500/30 hover:bg-white/5 transition-all group"
+              className="flex items-center gap-4 p-4 rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-900/50 hover:border-purple-500/30 hover:bg-gray-100 dark:hover:bg-white/5 transition-all group"
             >
               <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                 📄
               </div>
               <div>
-                <p className="font-medium text-white">{tNav("pages")}</p>
-                <p className="text-sm text-gray-500">{t("pagesDesc")}</p>
+                <p className="font-medium text-gray-900 dark:text-white">{tNav("pages")}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-500">{t("pagesDesc")}</p>
               </div>
               <svg className="w-5 h-5 text-gray-500 group-hover:text-purple-400 ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -236,14 +236,14 @@ export default function DashboardPage() {
             </Link>
             <Link
               href="/documents"
-              className="flex items-center gap-4 p-4 rounded-2xl border border-white/10 bg-gray-900/50 hover:border-amber-500/30 hover:bg-white/5 transition-all group"
+              className="flex items-center gap-4 p-4 rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-gray-900/50 hover:border-amber-500/30 hover:bg-gray-100 dark:hover:bg-white/5 transition-all group"
             >
               <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
                 📁
               </div>
               <div>
-                <p className="font-medium text-white">{tNav("documents")}</p>
-                <p className="text-sm text-gray-500">{t("documentsDesc")}</p>
+                <p className="font-medium text-gray-900 dark:text-white">{tNav("documents")}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-500">{t("documentsDesc")}</p>
               </div>
               <svg className="w-5 h-5 text-gray-500 group-hover:text-amber-400 ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
