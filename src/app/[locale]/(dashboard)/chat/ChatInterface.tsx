@@ -6,7 +6,6 @@ import { Link } from "@/i18n/navigation";
 import toast from "react-hot-toast";
 import { UserMenu } from "@/components/UserMenu";
 import { useTranslations, useLocale } from "next-intl";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { FlagIcon } from "@/components/FlagIcon";
 
 type Message = {
@@ -228,7 +227,6 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
     { href: "/profile", label: "Profile" },
   ] as const;
   const quickLinks = [
-    { href: "/progress", label: "My Progress" },
     { href: "/vocabulary", label: "Vocabulary" },
     { href: "/blogs", label: tNav("blogs") },
     { href: "/documents", label: tNav("documents") },
@@ -402,7 +400,6 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
                 </nav>
               </div>
               <div className="flex items-center gap-2 sm:gap-3">
-                <ThemeToggle />
                 <span className="hidden sm:inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                   <FlagIcon code={targetLang} className="w-5 h-4" />
                   {targetLangName}
