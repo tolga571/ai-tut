@@ -243,7 +243,7 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
           <aside
             className={`${
               isMobile
-                ? `absolute inset-y-3 left-3 z-40 w-[84vw] max-w-[320px] transform transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-[110%]"}`
+                ? `absolute top-3 left-3 right-3 z-40 max-h-[78vh] transform transition-all duration-300 ${sidebarOpen ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0 pointer-events-none"}`
                 : "relative"
             } flex flex-col rounded-3xl border border-gray-200 dark:border-white/10 bg-white/90 dark:bg-gray-900/80 backdrop-blur-xl shadow-xl overflow-hidden`}
           >
@@ -368,8 +368,8 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
           </aside>
 
           <section className="min-w-0 rounded-3xl border border-gray-200 dark:border-white/10 bg-white/90 dark:bg-gray-900/70 backdrop-blur-xl shadow-xl overflow-hidden flex flex-col">
-            <header className="px-4 py-3 border-b border-gray-200 dark:border-white/10 flex items-center justify-between">
-              <div className="flex items-center gap-2">
+            <header className="px-4 py-3 border-b border-gray-200 dark:border-white/10 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 min-w-0">
                 <button
                   onClick={() => setSidebarOpen((v) => !v)}
                   className="p-2 rounded-xl bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 transition-all text-gray-600 dark:text-gray-400 lg:hidden"
@@ -379,7 +379,18 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                   </svg>
                 </button>
-                <h1 className="font-semibold text-lg">AiTut Chat</h1>
+                <h1 className="font-semibold text-lg whitespace-nowrap">AiTut Chat</h1>
+                <nav className="hidden lg:flex items-center gap-1 ml-3">
+                  <Link href="/dashboard" className="px-3 py-1.5 rounded-lg text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white transition-colors">
+                    Dashboard
+                  </Link>
+                  <Link href="/progress" className="px-3 py-1.5 rounded-lg text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white transition-colors">
+                    Progress
+                  </Link>
+                  <Link href="/profile" className="px-3 py-1.5 rounded-lg text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white transition-colors">
+                    Profile
+                  </Link>
+                </nav>
               </div>
               <div className="flex items-center gap-2 sm:gap-3">
                 <ThemeToggle />
