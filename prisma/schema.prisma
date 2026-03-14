@@ -15,22 +15,36 @@ datasource db {
 }
 
 model User {
-  id               String         @id @default(cuid())
-  email            String         @unique
+  id               String           @id @default(cuid())
+  email            String           @unique
   name             String?
   password         String?
-  nativeLang       String         @default("tr")
-  targetLang       String         @default("en")
-  cefrLevel        String         @default("A1")
-  role             String         @default("user")
+  nativeLang       String           @default("tr")
+  targetLang       String           @default("en")
+  cefrLevel        String           @default("A1")
+  role             String           @default("user")
   paddleCustomerId String?
-  planStatus       String         @default("inactive")
+  planStatus       String           @default("inactive")
   conversations    Conversation[]
   posts            Post[]
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+  vocabulary       VocabularyWord[]
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
   accounts         Account[]
   sessions         Session[]
+}
+
+model VocabularyWord {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  word        String
+  translation String
+  language    String
+  example     String?
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
 }
 
 model Conversation {
