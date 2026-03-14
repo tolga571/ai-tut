@@ -222,6 +222,19 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
   const filteredConversations = conversations.filter((conv) =>
     searchQuery.trim() === "" || getConvTitle(conv).toLowerCase().includes(searchQuery.toLowerCase())
   );
+  const desktopNavLinks = [
+    { href: "/dashboard", label: "Dashboard" },
+    { href: "/progress", label: "Progress" },
+    { href: "/profile", label: "Profile" },
+  ] as const;
+  const quickLinks = [
+    { href: "/progress", label: "My Progress" },
+    { href: "/vocabulary", label: "Vocabulary" },
+    { href: "/blogs", label: tNav("blogs") },
+    { href: "/documents", label: tNav("documents") },
+  ] as const;
+  const headerNavLinkCls = "px-3 py-1.5 rounded-lg text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white transition-colors";
+  const quickLinkCls = "block rounded-xl px-3 py-2 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors";
 
   return (
     <div className="h-full min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white transition-colors">
@@ -381,15 +394,11 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
                 </button>
                 <h1 className="font-semibold text-lg whitespace-nowrap">AiTut Chat</h1>
                 <nav className="hidden lg:flex items-center gap-1 ml-3">
-                  <Link href="/dashboard" className="px-3 py-1.5 rounded-lg text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white transition-colors">
-                    Dashboard
-                  </Link>
-                  <Link href="/progress" className="px-3 py-1.5 rounded-lg text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white transition-colors">
-                    Progress
-                  </Link>
-                  <Link href="/profile" className="px-3 py-1.5 rounded-lg text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white transition-colors">
-                    Profile
-                  </Link>
+                  {desktopNavLinks.map((link) => (
+                    <Link key={link.href} href={link.href} className={headerNavLinkCls}>
+                      {link.label}
+                    </Link>
+                  ))}
                 </nav>
               </div>
               <div className="flex items-center gap-2 sm:gap-3">
@@ -539,18 +548,11 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
             </div>
 
             <div className="mt-5 pt-4 border-t border-gray-200 dark:border-white/10 space-y-2 text-sm">
-              <Link href="/progress" className="block rounded-xl px-3 py-2 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
-                My Progress
-              </Link>
-              <Link href="/vocabulary" className="block rounded-xl px-3 py-2 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
-                Vocabulary
-              </Link>
-              <Link href="/blogs" className="block rounded-xl px-3 py-2 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
-                {tNav("blogs")}
-              </Link>
-              <Link href="/documents" className="block rounded-xl px-3 py-2 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
-                {tNav("documents")}
-              </Link>
+              {quickLinks.map((link) => (
+                <Link key={link.href} href={link.href} className={quickLinkCls}>
+                  {link.label}
+                </Link>
+              ))}
               {user.role === "admin" && (
                 <Link href="/admin" className="block rounded-xl px-3 py-2 text-amber-500 hover:bg-amber-500/10 transition-colors">
                   {tNav("adminPanel")}
