@@ -6,6 +6,7 @@ import { Link } from "@/i18n/navigation";
 import toast from "react-hot-toast";
 import { useTranslations, useLocale } from "next-intl";
 import { LEARNING_LANGUAGES, CEFR_LEVELS, type CefrLevel } from "@/constants/languages";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function ProfilePage() {
   const { data: session, update: updateSession } = useSession();
@@ -76,29 +77,29 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
-      <header className="px-6 py-4 glass-nav border-b border-white/5 flex items-center justify-between">
-        <Link href="/chat" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
+    <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white transition-colors">
+      <header className="px-4 sm:px-6 py-4 glass-nav border-b border-gray-200 dark:border-white/5 flex items-center justify-between gap-3">
+        <Link href="/chat" className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors text-sm flex-shrink-0">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
-          {t("backToChat")}
+          <span className="hidden sm:inline">{t("backToChat")}</span>
         </Link>
-        <h1 className="text-lg font-semibold text-white">{t("title")}</h1>
-        <div className="w-20" />
+        <h1 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white truncate">{t("title")}</h1>
+        <ThemeToggle />
       </header>
 
       <div className="max-w-3xl mx-auto px-4 py-10 space-y-6">
-        <div className="bg-gray-900 border border-white/10 rounded-2xl p-6 shadow-xl space-y-5">
-          <h2 className="text-lg font-semibold text-white">{t("personalInfo")}</h2>
+        <div className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-white/10 rounded-2xl p-6 shadow-xl space-y-5">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t("personalInfo")}</h2>
           <div className="space-y-1">
-            <label className="block text-sm font-medium text-gray-400">{t("fullName")}</label>
+            <label className="block text-sm font-medium text-gray-600 dark:text-gray-400">{t("fullName")}</label>
             <div className="flex gap-3">
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="flex-1 px-4 py-3 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 placeholder={t("namePlaceholder")}
               />
               <button
@@ -111,46 +112,46 @@ export default function ProfilePage() {
             </div>
           </div>
           <div className="space-y-1">
-            <label className="block text-sm font-medium text-gray-400">{t("email")}</label>
-            <p className="px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-gray-300">{user?.email}</p>
-            <p className="text-xs text-gray-600">{t("emailNote")}</p>
+            <label className="block text-sm font-medium text-gray-600 dark:text-gray-400">{t("email")}</label>
+            <p className="px-4 py-3 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-700 dark:text-gray-300">{user?.email}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-600">{t("emailNote")}</p>
           </div>
         </div>
 
-        <div className="bg-gray-900 border border-white/10 rounded-2xl p-6 shadow-xl space-y-5">
-          <h2 className="text-lg font-semibold text-white">{t("languageSettings")}</h2>
+        <div className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-white/10 rounded-2xl p-6 shadow-xl space-y-5">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t("languageSettings")}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="block text-sm font-medium text-gray-400">{t("nativeLanguage")}</label>
+              <label className="block text-sm font-medium text-gray-600 dark:text-gray-400">{t("nativeLanguage")}</label>
               <select value={nativeLang} onChange={(e) => setNativeLang(e.target.value)}
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none cursor-pointer">
+                className="w-full px-4 py-3 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none cursor-pointer">
                 {LEARNING_LANGUAGES.map((lang) => (
-                  <option key={lang.code} value={lang.code} className="bg-gray-800 text-white">{lang.nameEn}</option>
+                  <option key={lang.code} value={lang.code} className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white">{lang.nameEn}</option>
                 ))}
               </select>
             </div>
             <div className="space-y-1">
-              <label className="block text-sm font-medium text-gray-400">{t("learningLanguage")}</label>
+              <label className="block text-sm font-medium text-gray-600 dark:text-gray-400">{t("learningLanguage")}</label>
               <select value={targetLang} onChange={(e) => setTargetLang(e.target.value)}
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none cursor-pointer">
+                className="w-full px-4 py-3 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none cursor-pointer">
                 {LEARNING_LANGUAGES.map((lang) => (
-                  <option key={lang.code} value={lang.code} className="bg-gray-800 text-white">{lang.nameEn}</option>
+                  <option key={lang.code} value={lang.code} className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white">{lang.nameEn}</option>
                 ))}
               </select>
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-400">{t("cefrLevel")}</label>
-            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+            <label className="block text-sm font-medium text-gray-600 dark:text-gray-400">{t("cefrLevel")}</label>
+            <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-6 gap-2">
               {CEFR_LEVELS.map((level) => (
                 <button key={level} type="button" onClick={() => setCefrLevel(level)}
-                  className={`py-2 px-3 rounded-xl text-sm font-semibold border-2 transition-all focus:outline-none ${cefrLevel === level ? "border-blue-500 bg-blue-500/10 text-blue-300" : "border-gray-700 bg-gray-800/50 text-gray-400 hover:border-gray-600"}`}>
+                  className={`py-2 px-3 rounded-xl text-sm font-semibold border-2 transition-all focus:outline-none ${cefrLevel === level ? "border-blue-500 bg-blue-500/10 text-blue-600 dark:text-blue-300" : "border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800/50 text-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-600"}`}>
                   {level}
                 </button>
               ))}
             </div>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-600 dark:text-gray-500 mt-1">
               {(tOnboarding.raw(`levels.${cefrLevel}`) as { label: string; description: string }).description}
             </p>
           </div>
@@ -171,14 +172,14 @@ export default function ProfilePage() {
           </button>
         </div>
 
-        <div className="bg-gray-900 border border-white/10 rounded-2xl p-6 shadow-xl">
-          <h2 className="text-lg font-semibold text-white mb-4">{t("planStatus")}</h2>
+        <div className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-white/10 rounded-2xl p-6 shadow-xl">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">{t("planStatus")}</h2>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className={`w-2.5 h-2.5 rounded-full ${user?.planStatus === "active" ? "bg-green-400" : "bg-yellow-400"}`} />
               <div>
-                <p className="text-white font-medium">{user?.planStatus === "active" ? t("activePlan") : t("freeTier")}</p>
-                <p className="text-sm text-gray-400">{user?.planStatus === "active" ? t("fullAccess") : t("limitedAccess")}</p>
+                <p className="text-gray-900 dark:text-white font-medium">{user?.planStatus === "active" ? t("activePlan") : t("freeTier")}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{user?.planStatus === "active" ? t("fullAccess") : t("limitedAccess")}</p>
               </div>
             </div>
             {user?.planStatus !== "active" && (
@@ -189,9 +190,9 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        <div className="bg-gray-900 border border-red-500/20 rounded-2xl p-6 shadow-xl">
-          <h2 className="text-lg font-semibold text-white mb-1">{t("session")}</h2>
-          <p className="text-sm text-gray-400 mb-4">{t("signOutDesc")}</p>
+        <div className="bg-gray-50 dark:bg-gray-900 border border-red-500/20 rounded-2xl p-6 shadow-xl">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">{t("session")}</h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">{t("signOutDesc")}</p>
           <button onClick={() => signOut({ callbackUrl: `${window.location.origin}/${locale}/login` })}
             className="px-5 py-2.5 bg-red-600/20 hover:bg-red-600/30 border border-red-500/30 rounded-xl text-sm font-medium text-red-400 hover:text-red-300 transition-all">
             {t("signOut")}

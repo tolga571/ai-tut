@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { LANG_FLAG } from "@/constants/languages";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 type DashboardData = {
   streak: number;
@@ -87,17 +88,20 @@ export default function DashboardPage() {
         {/* Header */}
         <header className="mb-10">
           <div className="flex items-start justify-between gap-4 flex-wrap">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-500 dark:from-white dark:via-gray-200 dark:to-gray-400 bg-clip-text text-transparent">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-500 dark:from-white dark:via-gray-200 dark:to-gray-400 bg-clip-text text-transparent">
                 {t("welcome", { name: user?.name?.split(" ")[0] || "there" })}
               </h1>
-              <p className="mt-2 text-gray-600 dark:text-gray-400 text-lg">
+              <p className="mt-2 text-gray-600 dark:text-gray-400 text-base sm:text-lg">
                 {t("subtitle", { lang: `${targetLangFlag} ${targetLangName}` })}
               </p>
             </div>
-            <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold border ${cefrColor} flex-shrink-0`}>
-              {cefrLevel}
-            </span>
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-semibold border ${cefrColor}`}>
+                {cefrLevel}
+              </span>
+              <ThemeToggle />
+            </div>
           </div>
           {/* Daily tip */}
           <div className="mt-5 flex items-start gap-3 px-4 py-3 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20">

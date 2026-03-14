@@ -4,10 +4,10 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import toast from "react-hot-toast";
-import { useTheme } from "next-themes";
 import { UserMenu } from "@/components/UserMenu";
 import { useTranslations, useLocale } from "next-intl";
 import { LANG_FLAG } from "@/constants/languages";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 type Message = {
   id: string;
@@ -30,9 +30,6 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
   const tNav = useTranslations("nav");
   const tLangs = useTranslations("languages");
   const locale = useLocale();
-  const { resolvedTheme, setTheme } = useTheme();
-  const [themeMounted, setThemeMounted] = useState(false);
-  useEffect(() => setThemeMounted(true), []);
 
   const targetLang = (user as { targetLang?: string }).targetLang?.toLowerCase() ?? "en";
   const targetLangName = tLangs(targetLang as Parameters<typeof tLangs>[0], { defaultValue: targetLang.toUpperCase() });
@@ -207,16 +204,7 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
           AiTut Chat
         </div>
         <div className="flex items-center gap-4">
-          {themeMounted && (
-            <button
-              type="button"
-              aria-label="Toggle theme"
-              onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-              className="w-9 h-9 rounded-full border border-gray-200 dark:border-white/10 bg-gray-100 dark:bg-white/5 flex items-center justify-center text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors"
-            >
-              {resolvedTheme === "dark" ? "☀" : "☾"}
-            </button>
-          )}
+          <ThemeToggle />
           <div className="text-sm text-gray-600 dark:text-gray-400">
             {t("learningLabel")}:{" "}
             <span className="text-gray-900 dark:text-white font-medium">{targetLangFlag} {targetLangName}</span>

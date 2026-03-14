@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Link } from "@/i18n/navigation";
 import toast from "react-hot-toast";
 import { LANG_FLAG } from "@/constants/languages";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 type Word = {
   id: string;
@@ -77,28 +78,31 @@ export default function VocabularyPage() {
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white transition-colors">
       {/* Header */}
       <header className="px-6 py-4 border-b border-gray-200 dark:border-white/5 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 min-w-0">
           <Link
             href="/dashboard"
-            className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+            className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors flex-shrink-0"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            Dashboard
+            <span className="hidden sm:inline">Dashboard</span>
           </Link>
-          <span className="text-gray-300 dark:text-gray-700">/</span>
-          <h1 className="text-lg font-semibold">📖 Vocabulary</h1>
+          <span className="hidden sm:inline text-gray-300 dark:text-gray-700">/</span>
+          <h1 className="text-base sm:text-lg font-semibold truncate">📖 Vocabulary</h1>
         </div>
-        <button
-          onClick={() => setShowForm((v) => !v)}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-medium transition-all"
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
-          Add Word
-        </button>
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <ThemeToggle />
+          <button
+            onClick={() => setShowForm((v) => !v)}
+            className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-medium transition-all"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            <span className="hidden sm:inline">Add Word</span>
+          </button>
+        </div>
       </header>
 
       <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">

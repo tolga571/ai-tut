@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { LEARNING_LANGUAGES, CEFR_LEVELS, type CefrLevel } from "@/constants/languages";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -44,30 +45,33 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white flex flex-col items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white flex flex-col items-center justify-center p-4 relative overflow-hidden transition-colors">
+      <div className="absolute top-4 right-4 z-20">
+        <ThemeToggle />
+      </div>
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/10 blur-[100px] rounded-full mix-blend-screen pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/10 blur-[100px] rounded-full mix-blend-screen pointer-events-none" />
 
-      <div className="w-full max-w-lg z-10 glass-panel border border-white/5 rounded-3xl p-8 shadow-2xl bg-gray-900/50 backdrop-blur-xl">
+      <div className="w-full max-w-lg z-10 glass-panel border border-gray-200 dark:border-white/5 rounded-3xl p-8 shadow-2xl bg-white/80 dark:bg-gray-900/50 backdrop-blur-xl">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent mb-3">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 bg-clip-text text-transparent mb-3">
             {t("title")}
           </h1>
-          <p className="text-gray-400 text-sm">{t("subtitle")}</p>
+          <p className="text-gray-600 dark:text-gray-400 text-sm">{t("subtitle")}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Language pair */}
           <div className="space-y-4">
             <div className="group">
-              <label className="block text-sm font-medium text-gray-300 mb-2 transition-colors group-hover:text-blue-400">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors group-hover:text-blue-500 dark:group-hover:text-blue-400">
                 {t("nativeLang")}
               </label>
               <div className="relative">
                 <select
                   value={nativeLang}
                   onChange={(e) => setNativeLang(e.target.value)}
-                  className="w-full appearance-none px-4 py-3 bg-gray-950/50 border border-gray-800 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 text-white transition-all outline-none"
+                  className="w-full appearance-none px-4 py-3 bg-gray-50 dark:bg-gray-950/50 border border-gray-300 dark:border-gray-800 rounded-xl focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 text-gray-900 dark:text-white transition-all outline-none"
                 >
                   {LEARNING_LANGUAGES.map((lang) => (
                     <option key={lang.code} value={lang.code}>{lang.nameEn}</option>
@@ -82,14 +86,14 @@ export default function OnboardingPage() {
             </div>
 
             <div className="group">
-              <label className="block text-sm font-medium text-gray-300 mb-2 transition-colors group-hover:text-purple-400">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 transition-colors group-hover:text-purple-500 dark:group-hover:text-purple-400">
                 {t("targetLang")}
               </label>
               <div className="relative">
                 <select
                   value={targetLang}
                   onChange={(e) => setTargetLang(e.target.value)}
-                  className="w-full appearance-none px-4 py-3 bg-gray-950/50 border border-gray-800 rounded-xl focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 text-white transition-all outline-none"
+                  className="w-full appearance-none px-4 py-3 bg-gray-50 dark:bg-gray-950/50 border border-gray-300 dark:border-gray-800 rounded-xl focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 text-gray-900 dark:text-white transition-all outline-none"
                 >
                   {LEARNING_LANGUAGES.map((lang) => (
                     <option key={lang.code} value={lang.code}>{lang.nameEn}</option>
@@ -106,8 +110,8 @@ export default function OnboardingPage() {
 
           {/* CEFR level selection */}
           <div>
-            <p className="text-sm font-semibold text-gray-200 mb-1">{t("cefrTitle")}</p>
-            <p className="text-xs text-gray-500 mb-4">{t("cefrSubtitle")}</p>
+            <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-1">{t("cefrTitle")}</p>
+            <p className="text-xs text-gray-600 dark:text-gray-500 mb-4">{t("cefrSubtitle")}</p>
             <div className="grid grid-cols-2 gap-3">
               {CEFR_LEVELS.map((level) => {
                 const levelData = t.raw(`levels.${level}`) as { label: string; description: string };
@@ -119,13 +123,13 @@ export default function OnboardingPage() {
                     className={`text-left px-4 py-3 rounded-xl border-2 transition-all focus:outline-none ${
                       cefrLevel === level
                         ? "border-blue-500 bg-blue-500/10 shadow-[0_4px_20px_rgba(59,130,246,0.25)]"
-                        : "border-gray-800 bg-gray-900/40 hover:border-gray-700"
+                        : "border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-900/40 hover:border-gray-300 dark:hover:border-gray-700"
                     }`}
                   >
-                    <p className={`text-sm font-semibold ${cefrLevel === level ? "text-blue-300" : "text-gray-300"}`}>
+                    <p className={`text-sm font-semibold ${cefrLevel === level ? "text-blue-600 dark:text-blue-300" : "text-gray-700 dark:text-gray-300"}`}>
                       {levelData.label}
                     </p>
-                    <p className="text-xs text-gray-500 mt-0.5 leading-snug">{levelData.description}</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-500 mt-0.5 leading-snug">{levelData.description}</p>
                   </button>
                 );
               })}
