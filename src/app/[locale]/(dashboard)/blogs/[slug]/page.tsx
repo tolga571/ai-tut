@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SAMPLE_BLOG_POST } from "@/lib/sampleBlogPost";
+import Image from "next/image";
 
 export default async function BlogDetailPage({
   params,
@@ -82,6 +83,17 @@ export default async function BlogDetailPage({
             {t("by")} {visiblePost.authorName ?? t("unknownAuthor")} | {new Date(visiblePost.createdAt).toLocaleDateString()}
           </p>
         </header>
+
+        <div className="mb-8 overflow-hidden rounded-2xl border border-gray-200 dark:border-white/10">
+          <Image
+            src={`https://picsum.photos/seed/${encodeURIComponent(slug)}/1400/780`}
+            alt={visiblePost.title}
+            width={1400}
+            height={780}
+            sizes="(max-width: 1024px) 100vw, 1024px"
+            className="w-full h-auto object-cover"
+          />
+        </div>
 
         <div className="prose-dark space-y-5">
           {paragraphs.map((para, i) => (

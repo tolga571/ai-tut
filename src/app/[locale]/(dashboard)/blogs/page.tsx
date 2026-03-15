@@ -3,6 +3,7 @@ import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SAMPLE_BLOG_POST } from "@/lib/sampleBlogPost";
+import Image from "next/image";
 
 export default async function BlogsPage() {
   const t = await getTranslations("blogs");
@@ -59,6 +60,17 @@ export default async function BlogsPage() {
           {visiblePosts.map((post) => (
             <li key={post.id} className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-white/10 rounded-2xl p-5 hover:border-gray-300 dark:hover:border-white/20 transition-all">
               <Link href={`/blogs/${post.slug}`} className="block group">
+                <div className="mb-4 overflow-hidden rounded-xl border border-gray-200 dark:border-white/10">
+                  <Image
+                    src={`https://picsum.photos/seed/${encodeURIComponent(post.slug)}/1200/630`}
+                    alt={post.title}
+                    width={1200}
+                    height={630}
+                    sizes="(max-width: 768px) 100vw, 768px"
+                    className="w-full h-44 object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    loading="lazy"
+                  />
+                </div>
                 <h2 className="text-gray-900 dark:text-white font-semibold text-base group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors mb-1">
                   {post.title}
                 </h2>
