@@ -24,15 +24,16 @@ type Conversation = {
   messages: Message[];
 };
 
-const CONVERSATIONS_CACHE_KEY = "chat_conversations_cache_v1";
+const CONVERSATIONS_CACHE_KEY_PREFIX = "chat_conversations_cache_v1";
 
-export default function ChatInterface({ user }: { user: { name?: string | null; email?: string | null; targetLang?: string; nativeLang?: string; role?: string } }) {
+export default function ChatInterface({ user }: { user: { id?: string; name?: string | null; email?: string | null; targetLang?: string; nativeLang?: string; role?: string } }) {
   const t = useTranslations("chat");
   const tNav = useTranslations("nav");
   const tLangs = useTranslations("languages");
   const locale = useLocale();
 
   const targetLang = (user as { targetLang?: string }).targetLang?.toLowerCase() ?? "en";
+  const conversationsCacheKey = `${CONVERSATIONS_CACHE_KEY_PREFIX}:${user.id ?? user.email ?? "anonymous"}`;
   const targetLangName = tLangs(targetLang as Parameters<typeof tLangs>[0], { defaultValue: targetLang.toUpperCase() });
 
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -82,29 +83,31 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
 
   const readConversationsCache = useCallback((): Conversation[] => {
     try {
-      const raw = localStorage.getItem(CONVERSATIONS_CACHE_KEY);
+      const raw = localStorage.getItem(conversationsCacheKey);
       if (!raw) return [];
       const parsed = JSON.parse(raw);
       return Array.isArray(parsed) ? (parsed as Conversation[]) : [];
     } catch {
       return [];
     }
-  }, []);
+  }, [conversationsCacheKey]);
 
   useEffect(() => {
     const cached = readConversationsCache();
     if (cached.length > 0) {
       setConversations(cached);
+    } else {
+      setConversations([]);
     }
   }, [readConversationsCache]);
 
   useEffect(() => {
     try {
-      localStorage.setItem(CONVERSATIONS_CACHE_KEY, JSON.stringify(conversations));
+      localStorage.setItem(conversationsCacheKey, JSON.stringify(conversations));
     } catch {
       // ignore storage errors
     }
-  }, [conversations]);
+  }, [conversations, conversationsCacheKey]);
 
   const fetchConversations = useCallback(async (): Promise<Conversation[]> => {
     try {
@@ -128,7 +131,7 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
 
   const loadConversation = useCallback(async (convId: string) => {
     try {
-      const res = await fetch(`/api/chat?id=${convId}`);
+      const res = await fetch(`/api/chat?id=${convId}&limit=100`, { cache: "no-store" });
       if (res.ok) {
         const data = await res.json();
         setActiveConvId(data.id || null);
@@ -264,7 +267,7 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
     }
   };
 
-  const MAX_CHARS = 500;
+  const MAX_CHARS = 2000;
 
   const copyMessage = async (id: string, text: string) => {
     await navigator.clipboard.writeText(text);

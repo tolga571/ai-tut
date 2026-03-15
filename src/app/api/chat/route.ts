@@ -92,10 +92,7 @@ export async function POST(req: Request) {
 
     let currentConvId = conversationId;
 
-    if (!currentConvId) {
-      const conv = await prisma.conversation.create({ data: { userId } });
-      currentConvId = conv.id;
-    } else {
+    if (currentConvId) {
       const conv = await prisma.conversation.findFirst({
         where: { id: currentConvId, userId },
       });
@@ -104,20 +101,18 @@ export async function POST(req: Request) {
       }
     }
 
-    await prisma.message.create({
-      data: { conversationId: currentConvId, role: "user", content: message },
-    });
-
-    const history = await prisma.message.findMany({
-      where: { conversationId: currentConvId },
-      orderBy: { createdAt: "asc" },
-      take: 20,
-    });
-
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       return NextResponse.json({ error: "API key missing" }, { status: 500 });
     }
+
+    const history = currentConvId
+      ? await prisma.message.findMany({
+          where: { conversationId: currentConvId },
+          orderBy: { createdAt: "asc" },
+          take: 20,
+        })
+      : [];
 
     const chatHistory = history.map((msg) => ({
       role: msg.role === "user" ? "user" : "model",
@@ -167,27 +162,52 @@ export async function POST(req: Request) {
       parsedResult = { content: aiResponseText, translation: "", correction: "" };
     }
 
-    const [savedAiMsg, updatedUser] = await Promise.all([
-      prisma.message.create({
+    const normalizedResult = {
+      content: typeof parsedResult.content === "string" ? parsedResult.content : aiResponseText,
+      translation: typeof parsedResult.translation === "string" ? parsedResult.translation : "",
+      correction: typeof parsedResult.correction === "string" ? parsedResult.correction : "",
+    };
+
+    const persisted = await prisma.$transaction(async (tx) => {
+      let persistedConvId = currentConvId;
+
+      if (!persistedConvId) {
+        const conv = await tx.conversation.create({ data: { userId } });
+        persistedConvId = conv.id;
+      } else {
+        await tx.conversation.update({
+          where: { id: persistedConvId },
+          data: { updatedAt: new Date() },
+        });
+      }
+
+      await tx.message.create({
+        data: { conversationId: persistedConvId, role: "user", content: message },
+      });
+
+      const savedAiMsg = await tx.message.create({
         data: {
-          conversationId: currentConvId,
+          conversationId: persistedConvId,
           role: "ai",
-          content:    parsedResult.content,
-          translation: parsedResult.translation || "",
-          correction:  parsedResult.correction  || "",
+          content: normalizedResult.content,
+          translation: normalizedResult.translation,
+          correction: normalizedResult.correction,
         },
-      }),
-      prisma.user.update({
+      });
+
+      const updatedUser = await tx.user.update({
         where: { id: userId },
         data: { xp: { increment: 10 } },
         select: { xp: true },
-      }),
-    ]);
+      });
+
+      return { savedAiMsg, updatedUser, conversationId: persistedConvId };
+    });
 
     return NextResponse.json({
-      message: savedAiMsg,
-      conversationId: currentConvId,
-      xp: updatedUser.xp,
+      message: persisted.savedAiMsg,
+      conversationId: persisted.conversationId,
+      xp: persisted.updatedUser.xp,
       xpAwarded: 10,
     });
   } catch (error) {
@@ -207,22 +227,33 @@ export async function GET(req: Request) {
     const userId = (session.user as { id?: string }).id ?? "";
     const { searchParams } = new URL(req.url);
     const conversationId = searchParams.get("id");
+    const limitParam = Number(searchParams.get("limit") ?? "100");
+    const limit = Number.isFinite(limitParam)
+      ? Math.min(Math.max(limitParam, 1), 100)
+      : 100;
 
     let conv;
     if (conversationId) {
       conv = await prisma.conversation.findFirst({
         where: { id: conversationId, userId },
-        include: { messages: { orderBy: { createdAt: "asc" } } },
+        include: { messages: { orderBy: { createdAt: "desc" }, take: limit } },
       });
     } else {
       conv = await prisma.conversation.findFirst({
         where: { userId },
         orderBy: { updatedAt: "desc" },
-        include: { messages: { orderBy: { createdAt: "asc" } } },
+        include: { messages: { orderBy: { createdAt: "desc" }, take: limit } },
       });
     }
 
-    return NextResponse.json(conv || { messages: [] });
+    if (!conv) {
+      return NextResponse.json({ messages: [] });
+    }
+
+    return NextResponse.json({
+      ...conv,
+      messages: [...conv.messages].reverse(),
+    });
   } catch (error) {
     console.error("[CHAT_GET]", error);
     const message = error instanceof Error ? error.message : "Internal Error";
