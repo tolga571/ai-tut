@@ -74,6 +74,29 @@ export async function GET() {
     });
   } catch (error) {
     console.error("[PROGRESS_API]", error);
-    return NextResponse.json({ error: "Failed to load progress" }, { status: 500 });
+    // Return safe defaults on transient DB outages to avoid breaking the chat layout.
+    return NextResponse.json(
+      {
+        days: Array.from({ length: 7 }, (_, i) => {
+          const d = new Date();
+          d.setDate(d.getDate() - (6 - i));
+          return { date: d.toISOString().slice(0, 10), messages: 0, words: 0 };
+        }),
+        totalMessages7d: 0,
+        totalWords7d: 0,
+        correctionsReceived: 0,
+        xp: 0,
+        level: 1,
+        xpInLevel: 0,
+        cefrLevel: "A1",
+        targetLang: "en",
+        memberSince: null,
+        degraded: true,
+      },
+      {
+        status: 200,
+        headers: { "x-degraded": "progress-db-error" },
+      }
+    );
   }
 }
