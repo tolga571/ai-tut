@@ -23,25 +23,34 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Invalid credentials");
         }
-        
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email }
-        });
-        
-        if (!user || !user?.password) {
-          throw new Error("Invalid credentials");
+
+        try {
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email }
+          });
+
+          if (!user || !user?.password) {
+            throw new Error("Invalid credentials");
+          }
+
+          const isCorrectPassword = await bcrypt.compare(
+            credentials.password,
+            user.password
+          );
+
+          if (!isCorrectPassword) {
+            throw new Error("Invalid credentials");
+          }
+
+          return user;
+        } catch (error) {
+          // Preserve credential error, map infra/db errors to a clear message.
+          if (error instanceof Error && error.message === "Invalid credentials") {
+            throw error;
+          }
+          console.error("[AUTH_AUTHORIZE_DB]", error);
+          throw new Error("Database connection error. Please try again.");
         }
-        
-        const isCorrectPassword = await bcrypt.compare(
-          credentials.password,
-          user.password
-        );
-        
-        if (!isCorrectPassword) {
-          throw new Error("Invalid credentials");
-        }
-        
-        return user;
       }
     })
   ],
@@ -49,18 +58,28 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (token && session.user) {
         (session.user as any).id = token.id as string;
-        // Fetch latest user data including plan status and native/target languages
-        const dbUser = await prisma.user.findUnique({
-          where: { id: token.id as string },
-          select: { name: true, planStatus: true, nativeLang: true, targetLang: true, cefrLevel: true, role: true }
-        });
-        if (dbUser) {
-          session.user.name = dbUser.name;
-          (session.user as any).planStatus = dbUser.planStatus;
-          (session.user as any).nativeLang = dbUser.nativeLang;
-          (session.user as any).targetLang = dbUser.targetLang;
-          (session.user as any).cefrLevel = dbUser.cefrLevel;
-          (session.user as any).role = dbUser.role;
+        try {
+          // Fetch latest user data including plan status and native/target languages
+          const dbUser = await prisma.user.findUnique({
+            where: { id: token.id as string },
+            select: { name: true, planStatus: true, nativeLang: true, targetLang: true, cefrLevel: true, role: true }
+          });
+          if (dbUser) {
+            session.user.name = dbUser.name;
+            (session.user as any).planStatus = dbUser.planStatus;
+            (session.user as any).nativeLang = dbUser.nativeLang;
+            (session.user as any).targetLang = dbUser.targetLang;
+            (session.user as any).cefrLevel = dbUser.cefrLevel;
+            (session.user as any).role = dbUser.role;
+          }
+        } catch (error) {
+          console.error("[AUTH_SESSION_DB]", error);
+          // Fallback to token values if DB is temporarily unavailable.
+          (session.user as any).planStatus = token.planStatus;
+          (session.user as any).nativeLang = token.nativeLang;
+          (session.user as any).targetLang = token.targetLang;
+          (session.user as any).cefrLevel = token.cefrLevel;
+          (session.user as any).role = token.role;
         }
       }
       return session;
