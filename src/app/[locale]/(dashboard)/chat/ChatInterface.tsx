@@ -166,7 +166,16 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
         }),
       });
 
-      if (!res.ok) throw new Error("Chat failed");
+      if (!res.ok) {
+        let apiError = "Chat failed";
+        try {
+          const errorData = await res.json();
+          if (errorData?.error) apiError = String(errorData.error);
+        } catch {
+          // no-op
+        }
+        throw new Error(apiError);
+      }
 
       const data = await res.json();
       const newConvId = data.conversationId;
@@ -183,8 +192,9 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
       }
 
       setMessages((prev) => [...prev, data.message]);
-    } catch {
-      toast.error(t("sendError"));
+    } catch (err) {
+      const message = err instanceof Error ? err.message : t("sendError");
+      toast.error(message || t("sendError"));
       setMessages((prev) => prev.slice(0, -1));
     } finally {
       setLoading(false);

@@ -61,6 +61,9 @@ export async function POST(req: Request) {
     }
 
     const userId = (session.user as { id?: string }).id ?? "";
+    if (!userId) {
+      return NextResponse.json({ error: "Invalid session" }, { status: 401 });
+    }
     if (!checkRateLimit(`chat:${userId}`, 30, 60 * 1000)) {
       return NextResponse.json(
         { error: "Too many messages, please slow down" },
@@ -116,13 +119,6 @@ export async function POST(req: Request) {
       return new NextResponse("API Key missing", { status: 500 });
     }
 
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({
-      model: "gemini-2.5-flash",
-      systemInstruction: buildSystemPrompt(targetLang, nativeLang, cefrLevel),
-      generationConfig: { responseMimeType: "application/json" },
-    });
-
     const chatHistory = history.map((msg) => ({
       role: msg.role === "user" ? "user" : "model",
       parts: [
@@ -138,10 +134,31 @@ export async function POST(req: Request) {
         },
       ],
     }));
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const modelCandidates = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"];
+    let aiResponseText = "";
+    let modelError: unknown = null;
 
-    const chat = model.startChat({ history: chatHistory.slice(0, -1) });
-    const aiResult = await chat.sendMessage(message);
-    const aiResponseText = aiResult.response.text();
+    for (const modelName of modelCandidates) {
+      try {
+        const model = genAI.getGenerativeModel({
+          model: modelName,
+          systemInstruction: buildSystemPrompt(targetLang, nativeLang, cefrLevel),
+          generationConfig: { responseMimeType: "application/json" },
+        });
+        const chat = model.startChat({ history: chatHistory.slice(0, -1) });
+        const aiResult = await chat.sendMessage(message);
+        aiResponseText = aiResult.response.text();
+        if (aiResponseText) break;
+      } catch (err) {
+        modelError = err;
+      }
+    }
+
+    if (!aiResponseText) {
+      console.error("[CHAT_MODEL_ERROR]", modelError);
+      return NextResponse.json({ error: "AI response unavailable, please try again" }, { status: 502 });
+    }
 
     let parsedResult: { content: string; translation: string; correction?: string };
     try {
@@ -175,7 +192,8 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     console.error("[CHAT_POST]", error);
-    return new NextResponse("Internal Error", { status: 500 });
+    const message = error instanceof Error ? error.message : "Internal Error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
