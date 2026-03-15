@@ -600,7 +600,7 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
                 <button
                   type="submit"
                   disabled={!input.trim() || loading}
-                  className="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium disabled:opacity-40 disabled:bg-gray-800 disabled:text-gray-500 transition-all mr-1"
+                  className="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium disabled:opacity-40 disabled:bg-gray-300 dark:disabled:bg-gray-800 disabled:text-gray-400 dark:disabled:text-gray-500 transition-all mr-1"
                 >
                   Send
                 </button>
