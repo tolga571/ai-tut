@@ -24,6 +24,8 @@ type Conversation = {
   messages: Message[];
 };
 
+const CONVERSATIONS_CACHE_KEY = "chat_conversations_cache_v1";
+
 export default function ChatInterface({ user }: { user: { name?: string | null; email?: string | null; targetLang?: string; nativeLang?: string; role?: string } }) {
   const t = useTranslations("chat");
   const tNav = useTranslations("nav");
@@ -66,19 +68,51 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
     return () => window.removeEventListener("resize", check);
   }, []);
 
+  const readConversationsCache = useCallback((): Conversation[] => {
+    try {
+      const raw = localStorage.getItem(CONVERSATIONS_CACHE_KEY);
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? (parsed as Conversation[]) : [];
+    } catch {
+      return [];
+    }
+  }, []);
+
+  useEffect(() => {
+    const cached = readConversationsCache();
+    if (cached.length > 0) {
+      setConversations(cached);
+    }
+  }, [readConversationsCache]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(CONVERSATIONS_CACHE_KEY, JSON.stringify(conversations));
+    } catch {
+      // ignore storage errors
+    }
+  }, [conversations]);
+
   const fetchConversations = useCallback(async (): Promise<Conversation[]> => {
     try {
-      const res = await fetch("/api/conversations");
-      if (res.ok) {
-        const data = await res.json();
-        setConversations(data);
-        return data;
+      const res = await fetch("/api/conversations", { cache: "no-store" });
+      if (!res.ok) {
+        throw new Error("Failed to fetch conversations");
       }
+      const data = await res.json();
+      const normalized = Array.isArray(data) ? (data as Conversation[]) : [];
+      setConversations(normalized);
+      return normalized;
     } catch {
-      // silent
+      const cached = readConversationsCache();
+      if (cached.length > 0) {
+        setConversations(cached);
+        return cached;
+      }
     }
     return [];
-  }, []);
+  }, [readConversationsCache]);
 
   const loadConversation = useCallback(async (convId: string) => {
     try {
