@@ -47,15 +47,27 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
   const [searchQuery, setSearchQuery] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [progressPct, setProgressPct] = useState(0);
+  const [showComingSoon, setShowComingSoon] = useState(false);
 
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const comingSoonRef = useRef<HTMLDivElement>(null);
   const searchParams = useSearchParams();
   const convFromUrl = searchParams?.get("conv");
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, loading]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (comingSoonRef.current && !comingSoonRef.current.contains(e.target as Node)) {
+        setShowComingSoon(false);
+      }
+    };
+    if (showComingSoon) document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showComingSoon]);
 
   useEffect(() => {
     const check = () => {
@@ -548,15 +560,28 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
 
             <div className="px-3 sm:px-4 pb-4 pt-2 border-t border-gray-200 dark:border-white/10">
               <form onSubmit={sendMessage} className="rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700/50 shadow-lg flex items-center px-2">
-                <button
-                  type="button"
-                  onClick={() => inputRef.current?.focus()}
-                  className="w-9 h-9 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                >
-                  <svg className="w-5 h-5 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                </button>
+                <div className="relative" ref={comingSoonRef}>
+                  <button
+                    type="button"
+                    onClick={() => setShowComingSoon((v) => !v)}
+                    className="w-9 h-9 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                  >
+                    <svg className="w-5 h-5 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                  </button>
+                  {showComingSoon && (
+                    <div className="absolute bottom-12 left-0 z-50 w-64 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 shadow-xl p-4 animate-in fade-in slide-in-from-bottom-2 duration-200">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-lg">✨</span>
+                        <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">Coming Soon</p>
+                      </div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                        File sharing, voice messages, and more exciting features are on the way. Stay tuned! 🚀
+                      </p>
+                    </div>
+                  )}
+                </div>
                 <input
                   ref={inputRef}
                   type="text"
@@ -580,6 +605,7 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
                   Send
                 </button>
               </form>
+
             </div>
           </section>
 
