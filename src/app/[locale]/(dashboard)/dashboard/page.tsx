@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import { Link } from "@/i18n/navigation";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
-import { LANG_FLAG } from "@/constants/languages";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { FlagIcon } from "@/components/FlagIcon";
 
 type DashboardData = {
   streak: number;
@@ -66,7 +66,6 @@ export default function DashboardPage() {
   const targetLangName = tLangs(targetLang as Parameters<typeof tLangs>[0], {
     defaultValue: targetLang.toUpperCase(),
   });
-  const targetLangFlag = LANG_FLAG[targetLang] ?? "🌐";
   const cefrLevel = user?.cefrLevel ?? "A1";
   const cefrColor = CEFR_COLORS[cefrLevel] ?? CEFR_COLORS.A1;
   const dailyTip = DAILY_TIPS[new Date().getDay() % DAILY_TIPS.length];
@@ -114,7 +113,7 @@ export default function DashboardPage() {
                 {t("welcome", { name: user?.name?.split(" ")[0] || "there" })}
               </h1>
               <p className="mt-2 text-gray-600 dark:text-gray-400 text-base sm:text-lg">
-                {t("subtitle", { lang: `${targetLangFlag} ${targetLangName}` })}
+                {t("subtitle", { lang: targetLangName })}
               </p>
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
@@ -123,6 +122,12 @@ export default function DashboardPage() {
               </span>
               <ThemeToggle />
             </div>
+          </div>
+          <div className="mt-3">
+            <span className="inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+              <FlagIcon code={targetLang} className="w-5 h-4" />
+              <span>{targetLangName}</span>
+            </span>
           </div>
           {/* Daily tip */}
           <div className="mt-5 flex items-start gap-3 px-4 py-3 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20">

@@ -6,18 +6,19 @@ import { usePathname, Link, useRouter } from "@/i18n/navigation";
 import { useTheme } from "next-themes";
 import { useLocale, useTranslations } from "next-intl";
 import { UserMenu } from "./UserMenu";
+import { FlagIcon } from "./FlagIcon";
 
 // Only show global Navbar on public marketing pages
 const PUBLIC_PATHS = ["/", "/login", "/register", "/pricing"];
 
 const LANGUAGE_CONFIG = {
-  ar: { name: "العربية", flag: "🇸🇦" },
-  de: { name: "Deutsch", flag: "🇩🇪" },
-  en: { name: "English", flag: "🇺🇸" },
-  es: { name: "Español", flag: "🇪🇸" },
-  fr: { name: "Français", flag: "🇫🇷" },
-  ja: { name: "日本語", flag: "🇯🇵" },
-  zh: { name: "中文", flag: "🇨🇳" },
+  ar: { name: "العربية" },
+  de: { name: "Deutsch" },
+  en: { name: "English" },
+  es: { name: "Español" },
+  fr: { name: "Français" },
+  ja: { name: "日本語" },
+  zh: { name: "中文" },
 } as const;
 
 export function Navbar() {
@@ -37,8 +38,6 @@ export function Navbar() {
   );
 
   if (!isPublic) return null;
-
-  const UI_LOCALES = ["ar", "de", "en", "es", "fr", "ja", "zh"] as const;
 
   const handleLocaleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     router.replace(pathname, { locale: e.target.value });
@@ -65,24 +64,27 @@ export function Navbar() {
           {/* Desktop right side */}
           <div className="hidden md:flex items-center gap-3">
             {/* Locale switcher */}
-            <select
-              value={locale}
-              onChange={handleLocaleChange}
-              aria-label="Switch UI language"
-              className="h-9 px-3 pr-8 rounded-full border border-gray-300 dark:border-white/10 bg-gray-100 dark:bg-gray-900 text-xs font-semibold text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors cursor-pointer focus:outline-none appearance-none"
-              style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'right 0.75rem center',
-                backgroundSize: '1rem'
-              }}
-            >
-              {Object.entries(LANGUAGE_CONFIG).map(([code, { name, flag }]) => (
-                <option key={code} value={code} className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
-                  {flag} {name}
-                </option>
-              ))}
-            </select>
+            <div className="flex items-center gap-2">
+              <FlagIcon code={locale} className="w-5 h-4" />
+              <select
+                value={locale}
+                onChange={handleLocaleChange}
+                aria-label="Switch UI language"
+                className="h-9 px-3 pr-8 rounded-full border border-gray-300 dark:border-white/10 bg-gray-100 dark:bg-gray-900 text-xs font-semibold text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors cursor-pointer focus:outline-none appearance-none"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "right 0.75rem center",
+                  backgroundSize: "1rem",
+                }}
+              >
+                {Object.entries(LANGUAGE_CONFIG).map(([code, { name }]) => (
+                  <option key={code} value={code} className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+                    {name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             {/* Theme toggle */}
             {mounted && (
@@ -181,23 +183,26 @@ export function Navbar() {
       {/* Mobile menu */}
       {mobileOpen && (
         <div className="md:hidden border-t border-gray-200 dark:border-white/5 glass-nav px-4 py-4 space-y-3">
-          <select
-            value={locale}
-            onChange={handleLocaleChange}
-            className="w-full h-10 px-3 pr-10 rounded-xl border border-gray-300 dark:border-white/10 bg-gray-100 dark:bg-gray-900 text-sm text-gray-800 dark:text-gray-200 focus:outline-none appearance-none"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'right 1rem center',
-              backgroundSize: '1.25rem'
-            }}
-          >
-            {Object.entries(LANGUAGE_CONFIG).map(([code, { name, flag }]) => (
-              <option key={code} value={code} className="bg-white dark:bg-gray-900">
-                {flag} {name}
-              </option>
-            ))}
-          </select>
+          <div className="flex items-center gap-2">
+            <FlagIcon code={locale} className="w-5 h-4 flex-shrink-0" />
+            <select
+              value={locale}
+              onChange={handleLocaleChange}
+              className="w-full h-10 px-3 pr-10 rounded-xl border border-gray-300 dark:border-white/10 bg-gray-100 dark:bg-gray-900 text-sm text-gray-800 dark:text-gray-200 focus:outline-none appearance-none"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "right 1rem center",
+                backgroundSize: "1.25rem",
+              }}
+            >
+              {Object.entries(LANGUAGE_CONFIG).map(([code, { name }]) => (
+                <option key={code} value={code} className="bg-white dark:bg-gray-900">
+                  {name}
+                </option>
+              ))}
+            </select>
+          </div>
 
           {session ? (
             <>

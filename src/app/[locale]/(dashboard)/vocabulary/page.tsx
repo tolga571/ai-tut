@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "@/i18n/navigation";
 import toast from "react-hot-toast";
-import { LANG_FLAG } from "@/constants/languages";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { FlagIcon } from "@/components/FlagIcon";
 
 type Word = {
   id: string;
@@ -236,7 +236,7 @@ export default function VocabularyPage() {
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-base">{LANG_FLAG[w.language] ?? "🌐"}</span>
+                      <FlagIcon code={w.language} className="w-5 h-4" />
                       <span className="font-semibold text-gray-900 dark:text-white truncate">{w.word}</span>
                     </div>
                     <p className="text-sm text-blue-600 dark:text-blue-400 font-medium">{w.translation}</p>

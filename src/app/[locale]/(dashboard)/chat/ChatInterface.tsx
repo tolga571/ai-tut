@@ -44,6 +44,7 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [progressPct, setProgressPct] = useState(0);
 
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -104,6 +105,17 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
     };
     init();
   }, [fetchConversations, loadConversation, convFromUrl]);
+
+  useEffect(() => {
+    fetch("/api/user/progress", { cache: "no-store" })
+      .then((r) => r.ok ? r.json() : null)
+      .then((d: { xp?: number } | null) => {
+        if (d && typeof d.xp === "number") {
+          setProgressPct(d.xp % 100);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const handleNewChat = () => {
     setActiveConvId(null);
@@ -235,7 +247,6 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
   };
 
   const promptSuggestions = [t("suggestion1"), t("suggestion2"), t("suggestion3"), t("suggestion4")];
-  const progressPct = Math.max(20, Math.min(92, 38 + conversations.length * 7 + messages.length * 2));
   const filteredConversations = conversations.filter((conv) =>
     searchQuery.trim() === "" || getConvTitle(conv).toLowerCase().includes(searchQuery.toLowerCase())
   );
