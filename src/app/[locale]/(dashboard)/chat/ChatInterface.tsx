@@ -57,7 +57,7 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
 
   useEffect(() => {
     const check = () => {
-      const mobile = window.innerWidth < 1024;
+      const mobile = window.innerWidth < 1280;
       setIsMobile(mobile);
       setSidebarOpen(!mobile);
     };
@@ -279,7 +279,7 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
           />
         )}
 
-        <div className="h-[calc(100vh-1.5rem)] sm:h-[calc(100vh-2rem)] grid grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)_290px] gap-3">
+        <div className="h-[calc(100vh-1.5rem)] sm:h-[calc(100vh-2rem)] grid grid-cols-1 xl:grid-cols-[280px_minmax(0,1fr)_290px] gap-3">
           <aside
             className={`${
               isMobile
@@ -300,7 +300,7 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
                 </div>
                 <button
                   onClick={() => setSidebarOpen(false)}
-                  className="lg:hidden p-2 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                  className="xl:hidden p-2 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                   aria-label={t("hideHistory")}
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -409,18 +409,18 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
 
           <section className="min-w-0 rounded-3xl border border-gray-200 dark:border-white/10 bg-white/90 dark:bg-gray-900/70 backdrop-blur-xl shadow-xl overflow-hidden flex flex-col">
             <header className="px-4 py-3 border-b border-gray-200 dark:border-white/10 flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2 min-w-0">
+              <div className="flex items-center gap-2 min-w-0 flex-1">
                 <button
                   onClick={() => setSidebarOpen((v) => !v)}
-                  className="p-2 rounded-xl bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 transition-all text-gray-600 dark:text-gray-400 lg:hidden"
+                  className="p-2 rounded-xl bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 transition-all text-gray-600 dark:text-gray-400 xl:hidden"
                   title={sidebarOpen ? t("hideHistory") : t("showHistory")}
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                   </svg>
                 </button>
-                <h1 className="font-semibold text-lg whitespace-nowrap">AiTut Chat</h1>
-                <nav className="hidden lg:flex items-center gap-1 ml-3">
+                <h1 className="font-semibold text-lg truncate">AiTut Chat</h1>
+                <nav className="hidden xl:flex items-center gap-1 ml-3">
                   {desktopNavLinks.map((link) => (
                     <Link key={link.href} href={link.href} className={headerNavLinkCls}>
                       {link.label}
@@ -428,8 +428,8 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
                   ))}
                 </nav>
               </div>
-              <div className="flex items-center gap-2 sm:gap-3">
-                <span className="hidden sm:inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+              <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                <span className="hidden xl:inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                   <FlagIcon code={targetLang} className="w-5 h-4" />
                   {targetLangName}
                 </span>
@@ -549,7 +549,7 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
             </div>
           </section>
 
-          <aside className="hidden lg:flex flex-col rounded-3xl border border-gray-200 dark:border-white/10 bg-white/90 dark:bg-gray-900/80 backdrop-blur-xl shadow-xl p-4">
+          <aside className="hidden xl:flex flex-col rounded-3xl border border-gray-200 dark:border-white/10 bg-white/90 dark:bg-gray-900/80 backdrop-blur-xl shadow-xl p-4">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold">Practice</h2>
               <span className="inline-flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
