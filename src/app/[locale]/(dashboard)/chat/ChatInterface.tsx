@@ -160,7 +160,10 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMessage.content, conversationId: activeConvId }),
+        body: JSON.stringify({
+          message: userMessage.content,
+          ...(activeConvId ? { conversationId: activeConvId } : {}),
+        }),
       });
 
       if (!res.ok) throw new Error("Chat failed");
