@@ -57,7 +57,7 @@ export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);
     if (!session || !session.user) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const userId = (session.user as { id?: string }).id ?? "";
@@ -116,7 +116,7 @@ export async function POST(req: Request) {
 
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      return new NextResponse("API Key missing", { status: 500 });
+      return NextResponse.json({ error: "API key missing" }, { status: 500 });
     }
 
     const chatHistory = history.map((msg) => ({
@@ -201,7 +201,7 @@ export async function GET(req: Request) {
   try {
     const session = await getServerSession(authOptions);
     if (!session || !session.user) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const userId = (session.user as { id?: string }).id ?? "";
@@ -225,6 +225,7 @@ export async function GET(req: Request) {
     return NextResponse.json(conv || { messages: [] });
   } catch (error) {
     console.error("[CHAT_GET]", error);
-    return new NextResponse("Internal Error", { status: 500 });
+    const message = error instanceof Error ? error.message : "Internal Error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

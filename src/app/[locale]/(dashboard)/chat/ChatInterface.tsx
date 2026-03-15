@@ -172,9 +172,14 @@ export default function ChatInterface({ user }: { user: { name?: string | null; 
           const errorData = await res.json();
           if (errorData?.error) apiError = String(errorData.error);
         } catch {
-          // no-op
+          try {
+            const textError = await res.text();
+            if (textError?.trim()) apiError = textError.trim();
+          } catch {
+            // no-op
+          }
         }
-        throw new Error(apiError);
+        throw new Error(`${apiError} (HTTP ${res.status})`);
       }
 
       const data = await res.json();
