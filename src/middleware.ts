@@ -4,7 +4,17 @@ import { getToken } from "next-auth/jwt";
 import type { JWT } from "next-auth/jwt";
 import { routing } from "./i18n/routing";
 
-const PROTECTED_PATHS = ["/dashboard", "/chat", "/profile", "/onboarding", "/documents"];
+const PROTECTED_PATHS = [
+  "/dashboard",
+  "/chat",
+  "/profile",
+  "/onboarding",
+  "/documents",
+  "/vocabulary",
+  "/progress",
+  "/blogs",
+  "/pages",
+];
 const ADMIN_PATHS = ["/admin"];
 
 const intlMiddleware = createMiddleware(routing);
