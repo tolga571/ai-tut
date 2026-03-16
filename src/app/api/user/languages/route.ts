@@ -28,6 +28,7 @@ export async function POST(req: Request) {
         targetLang,
         nativeLang,
         ...(cefrLevel ? { cefrLevel } : {}),
+        onboardingCompleted: true,
       },
     });
 

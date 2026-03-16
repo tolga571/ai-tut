@@ -10,6 +10,7 @@ declare module "next-auth" {
       nativeLang: string;
       targetLang: string;
       cefrLevel: string;
+      onboardingCompleted?: boolean;
     } & DefaultSession["user"];
   }
 
@@ -20,6 +21,7 @@ declare module "next-auth" {
     nativeLang: string;
     targetLang: string;
     cefrLevel: string;
+    onboardingCompleted?: boolean;
   }
 }
 
@@ -31,5 +33,6 @@ declare module "next-auth/jwt" {
     nativeLang: string;
     targetLang: string;
     cefrLevel: string;
+    onboardingCompleted?: boolean;
   }
 }

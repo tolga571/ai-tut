@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
@@ -10,12 +10,20 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function OnboardingPage() {
   const router = useRouter();
-  const { update } = useSession();
+  const { data: session, update } = useSession();
   const t = useTranslations("onboarding");
   const [loading, setLoading] = useState(false);
   const [nativeLang, setNativeLang] = useState("en");
   const [targetLang, setTargetLang] = useState("es");
   const [cefrLevel, setCefrLevel] = useState<CefrLevel>("A1");
+
+  // If onboarding is already completed, skip this step.
+  useEffect(() => {
+    const user = session?.user as { onboardingCompleted?: boolean } | undefined;
+    if (user?.onboardingCompleted) {
+      router.replace("/dashboard");
+    }
+  }, [router, session]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

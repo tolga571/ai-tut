@@ -45,7 +45,7 @@ Her faz için önce onay alınacak, onay sonrası uygulama yapılacak.
 
 **Çıktı:** Bu sayfalar sadece oturum açmış kullanıcıya açık; değilse locale’li login’e yönlendirilir.
 
-**Onay:** [ ] Bekliyor
+**Onay:** [x] Uygulandı (Faz 3)
 
 ---
 
@@ -60,7 +60,7 @@ Her faz için önce onay alınacak, onay sonrası uygulama yapılacak.
 
 **Çıktı:** Yeni kullanıcılar en az bir kez hedef dil ve CEFR seviyesi seçer.
 
-**Onay:** [ ] Bekliyor
+**Onay:** [x] Uygulandı (Faz 4)
 
 ---
 

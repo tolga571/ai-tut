@@ -23,14 +23,15 @@ model User {
   role             String           @default("user")
   paddleCustomerId String?
   planStatus       String           @default("inactive")
-  xp               Int              @default(0)
-  conversations    Conversation[]
-  posts            Post[]
-  vocabulary       VocabularyWord[]
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  accounts         Account[]
-  sessions         Session[]
+  xp                 Int              @default(0)
+  conversations      Conversation[]
+  posts              Post[]
+  vocabulary         VocabularyWord[]
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  accounts           Account[]
+  sessions           Session[]
+  onboardingCompleted Boolean         @default(false)
 }
 
 model VocabularyWord {

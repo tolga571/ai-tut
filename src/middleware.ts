@@ -41,10 +41,10 @@ export default async function middleware(req: NextRequest) {
   );
 
   if (isProtected || isAdmin) {
-    const token = await getToken({
+    const token = (await getToken({
       req,
       secret: process.env.NEXTAUTH_SECRET,
-    });
+    })) as JWT | null;
 
     const locale = hasLocale ? segments[1] : routing.defaultLocale;
 
@@ -52,7 +52,16 @@ export default async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL(`/${locale}/login`, req.url));
     }
 
-    if (isAdmin && (token as JWT)?.role !== "admin") {
+    // Force onboarding before accessing other protected routes
+    if (
+      isProtected &&
+      pathWithoutLocale !== "/onboarding" &&
+      token.onboardingCompleted === false
+    ) {
+      return NextResponse.redirect(new URL(`/${locale}/onboarding`, req.url));
+    }
+
+    if (isAdmin && token.role !== "admin") {
       return NextResponse.redirect(new URL(`/${locale}/dashboard`, req.url));
     }
   }
