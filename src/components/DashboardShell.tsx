@@ -9,7 +9,14 @@ import { DashboardAppBar } from "@/components/DashboardAppBar";
  */
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isChatPage = pathname === "/chat" || pathname?.startsWith("/chat/");
+
+  // Pathname comes with locale prefix, e.g. /en/chat or /de/chat/...
+  // Normalize by stripping the first segment (locale) before checking.
+  const segments = pathname?.split("/") ?? [];
+  const normalizedPath =
+    segments.length > 2 ? `/${segments.slice(2).join("/")}` : "/";
+  const isChatPage =
+    normalizedPath === "/chat" || normalizedPath.startsWith("/chat/");
 
   if (isChatPage) {
     return <>{children}</>;
