@@ -22,6 +22,8 @@ type Conversation = {
   createdAt: string;
   updatedAt: string;
   messages: Message[];
+  topicId?: string | null;
+  topicLabel?: string | null;
 };
 
 const CONVERSATIONS_CACHE_KEY_PREFIX = "chat_conversations_cache_v1";
@@ -198,6 +200,15 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
   const handleNewChat = () => {
     setActiveConvId(null);
     setMessages([]);
+    setSelectedTopic(null);
+    inputRef.current?.focus();
+    if (isMobile) setSidebarOpen(false);
+  };
+
+  const handleSelectTopic = (topicId: string) => {
+    setSelectedTopic(topicId);
+    setActiveConvId(null);
+    setMessages([]);
     inputRef.current?.focus();
     if (isMobile) setSidebarOpen(false);
   };
@@ -306,6 +317,7 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
   };
 
   const getConvTitle = (conv: Conversation): string => {
+    if (conv.topicLabel) return conv.topicLabel;
     const first = conv.messages[0];
     if (!first) return new Date(conv.createdAt).toLocaleDateString(locale === "tr" ? "tr-TR" : "en-US");
     const text = first.content;
@@ -600,7 +612,7 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
                     <button
                       key={topic.id}
                       type="button"
-                      onClick={() => setSelectedTopic(active ? null : topic.id)}
+                      onClick={() => handleSelectTopic(topic.id)}
                       className={`shrink-0 px-3 py-2 rounded-xl border text-xs text-left transition-colors ${
                         active
                           ? "bg-blue-600 text-white border-blue-500"

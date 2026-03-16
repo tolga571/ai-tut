@@ -205,7 +205,23 @@ export async function POST(req: Request) {
     const persisted = await prisma.$transaction(async (tx) => {
 
       if (!persistedConvId) {
-        const conv = await tx.conversation.create({ data: { userId } });
+        const conv = await tx.conversation.create({
+          data: {
+            userId,
+            ...(topicId
+              ? {
+                  topicId,
+                  topicLabel:
+                    (topicId === "cafe" && "Kafede sipariş") ||
+                    (topicId === "travel-hotel" && "Otel resepsiyonu") ||
+                    (topicId === "job-interview" && "İş görüşmesi") ||
+                    (topicId === "friends" && "Günlük sohbet") ||
+                    (topicId === "small-talk" && "Small talk") ||
+                    topicId,
+                }
+              : {}),
+          },
+        });
         persistedConvId = conv.id;
       } else {
         await tx.conversation.update({
