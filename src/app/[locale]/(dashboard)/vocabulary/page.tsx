@@ -231,23 +231,29 @@ export default function VocabularyPage() {
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {filtered.map((w) => (
               <div
                 key={w.id}
-                className="group relative bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-white/10 rounded-2xl p-4 hover:border-blue-400/40 dark:hover:border-blue-500/30 transition-all"
+                className="group relative bg-gray-50/80 dark:bg-gray-900/70 border border-gray-200/80 dark:border-white/10 rounded-2xl p-4 hover:border-blue-400/50 dark:hover:border-blue-500/40 hover:shadow-md transition-all"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                       <FlagIcon code={w.language} className="w-5 h-4" />
-                      <span className="font-semibold text-gray-900 dark:text-white">{w.word}</span>
+                      <span className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base leading-snug">
+                        {w.word}
+                      </span>
                     </div>
-                    <p className="text-sm text-blue-600 dark:text-blue-400 font-medium">{w.translation}</p>
+                    <p className="mt-0.5 text-xs sm:text-sm text-blue-600 dark:text-blue-400 font-medium">
+                      {w.translation}
+                    </p>
                     {w.example && (
-                      <p className="text-xs text-gray-500 dark:text-gray-500 mt-1.5 italic leading-relaxed">
-                        &ldquo;{w.example}&rdquo;
-                      </p>
+                      <div className="mt-2 rounded-xl bg-white/70 dark:bg-black/20 px-3 py-2 border border-gray-200/80 dark:border-white/5">
+                        <p className="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 italic leading-relaxed">
+                          &ldquo;{w.example}&rdquo;
+                        </p>
+                      </div>
                     )}
                   </div>
                   <button
