@@ -582,16 +582,15 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
                                   toast.error("Bu cevaptan kelime çıkarmak için uygun veri yok. Lütfen Vocabulary sayfasından manuel ekleyin.");
                                   return;
                                 }
-                                const snippet = baseWord.length > 80 ? `${baseWord.slice(0, 77)}...` : baseWord;
                                 try {
                                   const res = await fetch("/api/vocabulary", {
                                     method: "POST",
                                     headers: { "Content-Type": "application/json" },
                                     body: JSON.stringify({
-                                      word: snippet,
+                                      word: baseWord,
                                       translation: baseTranslation,
                                       language: targetLang,
-                                      example: baseWord,
+                                      example: msg.correction ?? baseWord,
                                     }),
                                   });
                                   if (!res.ok) throw new Error();

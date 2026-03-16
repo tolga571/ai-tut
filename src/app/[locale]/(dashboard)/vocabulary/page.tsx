@@ -241,7 +241,7 @@ export default function VocabularyPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                       <FlagIcon code={w.language} className="w-5 h-4" />
-                      <span className="font-semibold text-gray-900 dark:text-white truncate">{w.word}</span>
+                      <span className="font-semibold text-gray-900 dark:text-white">{w.word}</span>
                     </div>
                     <p className="text-sm text-blue-600 dark:text-blue-400 font-medium">{w.translation}</p>
                     {w.example && (
