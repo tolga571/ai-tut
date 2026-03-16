@@ -59,8 +59,8 @@ export default function Home() {
               
               <div className="flex flex-col gap-1 items-start">
                 <div className="bg-white/5 border border-white/10 px-5 py-3 rounded-2xl rounded-tl-sm max-w-[80%]">
-                  <p className="text-base text-gray-200">¡Por supuesto! Puedes decir: <strong>"Quisiera un café con leche, por favor."</strong></p>
-                  <p className="text-sm text-gray-400 mt-2 pt-2 border-t border-white/10">Of course! You can say: "I would like a coffee with milk, please."</p>
+                  <p className="text-base text-gray-200">¡Por supuesto! Puedes decir: <strong>&quot;Quisiera un café con leche, por favor.&quot;</strong></p>
+                  <p className="text-sm text-gray-400 mt-2 pt-2 border-t border-white/10">Of course! You can say: &quot;I would like a coffee with milk, please.&quot;</p>
                 </div>
               </div>
             </div>

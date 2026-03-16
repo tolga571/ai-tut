@@ -1,6 +1,7 @@
 import createMiddleware from "next-intl/middleware";
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
+import type { JWT } from "next-auth/jwt";
 import { routing } from "./i18n/routing";
 
 const PROTECTED_PATHS = ["/dashboard", "/chat", "/profile", "/onboarding", "/documents"];
@@ -41,7 +42,7 @@ export default async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL(`/${locale}/login`, req.url));
     }
 
-    if (isAdmin && (token as any).role !== "admin") {
+    if (isAdmin && (token as JWT)?.role !== "admin") {
       return NextResponse.redirect(new URL(`/${locale}/dashboard`, req.url));
     }
   }

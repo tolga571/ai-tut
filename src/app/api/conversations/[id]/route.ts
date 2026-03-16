@@ -13,7 +13,7 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const userId = (session.user as any).id;
+    const userId = session.user.id;
     const { id } = params;
 
     const conv = await prisma.conversation.findFirst({

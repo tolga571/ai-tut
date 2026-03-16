@@ -18,10 +18,7 @@ export default function AnimatedFavicon() {
     const animate = () => {
       ctx.clearRect(0, 0, 32, 32);
 
-      // Background - Rounded square with gradient
-      const gradient = ctx.createLinearGradient(0, 0, 32, 32);
-      const hue = (frame * 2) % 360;
-      
+      // Background - Rounded square (solid color from transition)
       // Theme colors: Blue, Black, White transition
       // We'll use a smooth oscillating transition between these tones
       const transition = Math.sin(frame * 0.05) * 0.5 + 0.5; // 0 to 1

@@ -9,7 +9,7 @@ export default async function DocumentsPage() {
   const t = await getTranslations("documents");
 
   const session = await getServerSession(authOptions);
-  const isPaidUser = (session?.user as any)?.planStatus === "active";
+  const isPaidUser = session?.user?.planStatus === "active";
 
   const posts = await prisma.post.findMany({
     where: { published: true, category: "document" },

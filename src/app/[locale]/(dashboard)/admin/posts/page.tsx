@@ -1,8 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
-import { ThemeToggle } from '@/components/ThemeToggle';
-
 const CATEGORY_ICONS: Record<string, string> = {
   blog:     "📝",
   page:     "📄",

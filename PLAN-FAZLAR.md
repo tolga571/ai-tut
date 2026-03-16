@@ -31,7 +31,7 @@ Her faz için önce onay alınacak, onay sonrası uygulama yapılacak.
 
 **Çıktı:** `npm run build` hatasız tamamlanır; proje production build’e hazır.
 
-**Onay:** [ ] Bekliyor
+**Onay:** [x] Uygulandı (Faz 2)
 
 ---
 

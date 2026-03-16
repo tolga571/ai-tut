@@ -90,7 +90,7 @@ export async function POST(req: Request) {
     const nativeLang = user.nativeLang ?? "en";
     const cefrLevel  = user.cefrLevel  ?? "A1";
 
-    let currentConvId = conversationId;
+    const currentConvId = conversationId;
 
     if (currentConvId) {
       const conv = await prisma.conversation.findFirst({
@@ -168,8 +168,8 @@ export async function POST(req: Request) {
       correction: typeof parsedResult.correction === "string" ? parsedResult.correction : "",
     };
 
+    let persistedConvId = currentConvId;
     const persisted = await prisma.$transaction(async (tx) => {
-      let persistedConvId = currentConvId;
 
       if (!persistedConvId) {
         const conv = await tx.conversation.create({ data: { userId } });

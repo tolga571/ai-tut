@@ -7,7 +7,7 @@ import { z } from "zod";
 
 async function requireAdmin() {
   const session = await getServerSession(authOptions);
-  if (!session || (session.user as any)?.role !== "admin") return null;
+  if (!session || session.user?.role !== "admin") return null;
   return session;
 }
 
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
-  const authorId = (session.user as any).id as string;
+  const authorId = session.user.id;
 
   try {
     const post = await prisma.post.create({

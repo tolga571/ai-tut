@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
+  void req;
   try {
     const apiKey = process.env.PADDLE_API_KEY;
     const clientToken = process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN;
@@ -52,21 +53,23 @@ export async function GET(req: Request) {
         baseUrl,
         isSandbox,
       });
-    } catch (fetchError: any) {
+    } catch (fetchError: unknown) {
+      const message = fetchError instanceof Error ? fetchError.message : String(fetchError);
       return NextResponse.json({
         status: "error",
         message: "Network fetch failed",
-        details: fetchError.message,
+        details: message,
         suggestion: "API Key may be invalid or revoke. Create a NEW API key in Paddle Dashboard.",
         baseUrl,
         isSandbox,
       }, { status: 500 });
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
     return NextResponse.json({
       status: "error",
-      message: error.message,
-      details: error.toString(),
+      message,
+      details: String(error),
     }, { status: 500 });
   }
 }
