@@ -558,21 +558,56 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
                           </p>
                         )}
                         {msg.role === "ai" && (
-                          <button
-                            onClick={() => copyMessage(msg.id, msg.content)}
-                            className="absolute -top-2 -right-2 p-1.5 rounded-lg opacity-0 group-hover:opacity-100 bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 text-gray-600 dark:text-gray-300 transition-all"
-                            title="Copy"
-                          >
-                            {copiedId === msg.id ? (
-                              <svg className="w-3.5 h-3.5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                              </svg>
-                            ) : (
+                          <div className="absolute -top-2 -right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button
+                              onClick={() => copyMessage(msg.id, msg.content)}
+                              className="p-1.5 rounded-lg bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 text-gray-600 dark:text-gray-300 transition-all"
+                              title="Copy"
+                            >
+                              {copiedId === msg.id ? (
+                                <svg className="w-3.5 h-3.5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                              ) : (
+                                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                              )}
+                            </button>
+                            <button
+                              onClick={async () => {
+                                const baseWord = msg.content.trim();
+                                const baseTranslation = msg.translation?.trim();
+                                if (!baseWord || !baseTranslation) {
+                                  toast.error("Bu cevaptan kelime çıkarmak için uygun veri yok. Lütfen Vocabulary sayfasından manuel ekleyin.");
+                                  return;
+                                }
+                                const snippet = baseWord.length > 80 ? `${baseWord.slice(0, 77)}...` : baseWord;
+                                try {
+                                  const res = await fetch("/api/vocabulary", {
+                                    method: "POST",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({
+                                      word: snippet,
+                                      translation: baseTranslation,
+                                      language: targetLang,
+                                      example: baseWord,
+                                    }),
+                                  });
+                                  if (!res.ok) throw new Error();
+                                  toast.success("Vocabulary listene eklendi");
+                                } catch {
+                                  toast.error("Kelime kaydedilemedi");
+                                }
+                              }}
+                              className="p-1.5 rounded-lg bg-blue-600/90 hover:bg-blue-500 text-white transition-all"
+                              title="Save to vocabulary"
+                            >
                               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v14l-7-3-7 3V5z" />
                               </svg>
-                            )}
-                          </button>
+                            </button>
+                          </div>
                         )}
                         {msg.correction && (
                           <div className="mt-2 text-xs rounded-lg px-2 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-300">

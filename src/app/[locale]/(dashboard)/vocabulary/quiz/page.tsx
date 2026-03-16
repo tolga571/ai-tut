@@ -4,7 +4,16 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "@/i18n/navigation";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
-type Word = { id: string; word: string; translation: string; language: string };
+type Word = {
+  id: string;
+  word: string;
+  translation: string;
+  language: string;
+  reviewCount?: number;
+  correctStreak?: number;
+  lastReviewedAt?: string | null;
+  nextReviewAt?: string | null;
+};
 type Phase = "loading" | "empty" | "question" | "result" | "done";
 
 function shuffle<T>(arr: T[]): T[] {
@@ -28,7 +37,10 @@ export default function VocabularyQuizPage() {
         if (data.length < 2) {
           setPhase("empty");
         } else {
-          startQuiz(data);
+          const now = new Date();
+          const due = data.filter((w) => !w.nextReviewAt || new Date(w.nextReviewAt) <= now);
+          const base = due.length > 0 ? due : data;
+          startQuiz(base);
         }
       })
       .catch(() => setPhase("empty"));
@@ -55,6 +67,14 @@ export default function VocabularyQuizPage() {
     setSelected(choice);
     const correct = choice === current.translation;
     setScore((s) => ({ correct: s.correct + (correct ? 1 : 0), total: s.total + 1 }));
+    // fire-and-forget review tracking
+    fetch(`/api/vocabulary/${current.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ correct }),
+    }).catch(() => {
+      // ignore review errors on quiz flow
+    });
     setPhase("result");
   };
 

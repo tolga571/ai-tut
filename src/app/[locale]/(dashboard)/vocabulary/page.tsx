@@ -13,6 +13,10 @@ type Word = {
   language: string;
   example: string | null;
   createdAt: string;
+  reviewCount?: number;
+  correctStreak?: number;
+  lastReviewedAt?: string | null;
+  nextReviewAt?: string | null;
 };
 
 export default function VocabularyPage() {
@@ -260,9 +264,14 @@ export default function VocabularyPage() {
                     )}
                   </button>
                 </div>
-                <p className="text-xs text-gray-400 dark:text-gray-600 mt-2">
-                  {new Date(w.createdAt).toLocaleDateString()}
-                </p>
+                <div className="mt-2 flex items-center justify-between text-xs text-gray-400 dark:text-gray-600">
+                  <span>{new Date(w.createdAt).toLocaleDateString()}</span>
+                  {typeof w.reviewCount === "number" && w.reviewCount > 0 && (
+                    <span>
+                      {w.reviewCount} review{w.reviewCount > 1 ? "s" : ""} · streak {w.correctStreak ?? 0}
+                    </span>
+                  )}
+                </div>
               </div>
             ))}
           </div>

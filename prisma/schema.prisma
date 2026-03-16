@@ -35,14 +35,19 @@ model User {
 }
 
 model VocabularyWord {
-  id          String   @id @default(cuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  word        String
-  translation String
-  language    String
-  example     String?
-  createdAt   DateTime @default(now())
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  word           String
+  translation    String
+  language       String
+  example        String?
+  createdAt      DateTime @default(now())
+  // lightweight review / spaced-repetition style fields
+  reviewCount    Int      @default(0)
+  correctStreak  Int      @default(0)
+  lastReviewedAt DateTime?
+  nextReviewAt   DateTime?
 
   @@index([userId])
 }
