@@ -235,46 +235,65 @@ export default function VocabularyPage() {
             {filtered.map((w) => (
               <div
                 key={w.id}
-                className="group relative bg-gray-50/80 dark:bg-gray-900/70 border border-gray-200/80 dark:border-white/10 rounded-2xl p-4 hover:border-blue-400/50 dark:hover:border-blue-500/40 hover:shadow-md transition-all"
+                className="group relative bg-white dark:bg-gray-900/80 border border-gray-200 dark:border-white/10 rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-gray-300 dark:hover:border-white/15 transition-all duration-200"
               >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <FlagIcon code={w.language} className="w-5 h-4" />
-                      <span className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base leading-snug">
-                        {w.word}
-                      </span>
-                    </div>
-                    <p className="mt-0.5 text-xs sm:text-sm text-blue-600 dark:text-blue-400 font-medium">
-                      {w.translation}
-                    </p>
-                    {w.example && (
-                      <div className="mt-2 rounded-xl bg-white/70 dark:bg-black/20 px-3 py-2 border border-gray-200/80 dark:border-white/5">
-                        <p className="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 italic leading-relaxed">
-                          &ldquo;{w.example}&rdquo;
-                        </p>
+                {/* Primary: word/phrase — single clear focus */}
+                <div className="p-4 pb-2">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="flex-shrink-0 rounded-md bg-gray-100 dark:bg-white/10 p-1">
+                          <FlagIcon code={w.language} className="w-4 h-3" />
+                        </span>
+                        <span className="text-xs font-medium uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                          {w.language}
+                        </span>
                       </div>
-                    )}
+                      <p className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white leading-snug break-words">
+                        {w.word}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => handleDelete(w.id)}
+                      disabled={deleting === w.id}
+                      className="flex-shrink-0 opacity-0 group-hover:opacity-100 p-1.5 rounded-lg hover:bg-red-500/10 text-gray-400 hover:text-red-500 transition-all disabled:opacity-50"
+                      aria-label="Delete"
+                    >
+                      {deleting === w.id ? (
+                        <span className="w-4 h-4 border-2 border-red-400/30 border-t-red-400 rounded-full animate-spin block" />
+                      ) : (
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      )}
+                    </button>
                   </div>
-                  <button
-                    onClick={() => handleDelete(w.id)}
-                    disabled={deleting === w.id}
-                    className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg hover:bg-red-500/15 text-gray-400 hover:text-red-400 transition-all flex-shrink-0 disabled:opacity-50"
-                  >
-                    {deleting === w.id ? (
-                      <span className="w-4 h-4 border-2 border-red-400/30 border-t-red-400 rounded-full animate-spin block" />
-                    ) : (
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    )}
-                  </button>
+                  {/* Translation — labeled, one level down */}
+                  <p className="mt-2 text-sm text-blue-600 dark:text-blue-400 font-medium leading-snug">
+                    {w.translation}
+                  </p>
                 </div>
-                <div className="mt-2 flex items-center justify-between text-xs text-gray-400 dark:text-gray-600">
-                  <span>{new Date(w.createdAt).toLocaleDateString()}</span>
+                {/* Note / grammar tip — clearly separated block with label */}
+                {w.example && (
+                  <div className="mx-4 mb-4">
+                    <div className="rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/50 px-3 py-2.5">
+                      <p className="text-[10px] font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400/90 mb-1.5">
+                        İpucu
+                      </p>
+                      <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed line-clamp-4">
+                        {w.example}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                {/* Footer: meta with labels */}
+                <div className="px-4 py-2.5 bg-gray-50/80 dark:bg-black/20 border-t border-gray-100 dark:border-white/5 flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-500">
+                  <span>
+                    Eklenme: {new Date(w.createdAt).toLocaleDateString("tr-TR", { day: "numeric", month: "short", year: "numeric" })}
+                  </span>
                   {typeof w.reviewCount === "number" && w.reviewCount > 0 && (
                     <span>
-                      {w.reviewCount} review{w.reviewCount > 1 ? "s" : ""} · streak {w.correctStreak ?? 0}
+                      {w.reviewCount} tekrar · seri {w.correctStreak ?? 0}
                     </span>
                   )}
                 </div>
