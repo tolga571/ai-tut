@@ -12,6 +12,7 @@ export const registerSchema = z.object({
 export const chatMessageSchema = z.object({
   message:        z.string().min(1).max(2000).trim(),
   conversationId: z.string().optional(),
+  topicId:        z.string().optional(),
 });
 
 export const profileSchema = z.object({

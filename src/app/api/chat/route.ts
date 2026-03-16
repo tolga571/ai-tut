@@ -16,14 +16,42 @@ const CEFR_GUIDE: Record<string, string> = {
   C2: "near-native mastery, any register, subtle nuance, complex structures",
 };
 
+function getTopicInstruction(topicId: string | undefined, targetLang: string): string {
+  switch (topicId) {
+    case "cafe":
+      return `Role-play a friendly barista in a café. Talk about coffee, pastries and light small talk in ${targetLang}.`;
+    case "travel-hotel":
+      return `Role-play a hotel receptionist. Help the guest with check-in, room preferences and local tips in ${targetLang}.`;
+    case "job-interview":
+      return `You are an interviewer in a job interview. Ask professional questions and give feedback in ${targetLang}.`;
+    case "friends":
+      return `You are a close friend chatting casually about daily life, plans and feelings in ${targetLang}.`;
+    case "small-talk":
+      return `Have light small talk about weather, hobbies and weekend plans in ${targetLang}.`;
+    default:
+      return "";
+  }
+}
+
 function buildSystemPrompt(
   targetLang: string,
   nativeLang: string,
-  cefrLevel: string
+  cefrLevel: string,
+  topicInstruction?: string
 ): string {
   const cefrHint = CEFR_GUIDE[cefrLevel] ?? CEFR_GUIDE["A1"];
+  const topicBlock = topicInstruction
+    ? `
+
+CONVERSATION CONTEXT:
+- ${topicInstruction}
+- Keep the conversation naturally within this scenario unless the student clearly changes the topic.`
+    : "";
+
   return `You are an enthusiastic, encouraging language tutor helping a student learn ${targetLang}.
 Their native language is ${nativeLang} and their current proficiency is CEFR level ${cefrLevel} (${cefrHint}).
+
+${topicBlock}
 
 PERSONALITY:
 - Be warm, friendly, and motivating — like a patient native-speaker friend
@@ -78,7 +106,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: message }, { status: 400 });
     }
 
-    const { message, conversationId } = result.data;
+    const { message, conversationId, topicId } = result.data;
     const user = session.user as {
       id?: string;
       targetLang?: string;
@@ -89,8 +117,8 @@ export async function POST(req: Request) {
     const targetLang = user.targetLang ?? "en";
     const nativeLang = user.nativeLang ?? "en";
     const cefrLevel  = user.cefrLevel  ?? "A1";
-
     const currentConvId = conversationId;
+    const topicInstruction = getTopicInstruction(topicId, targetLang);
 
     if (currentConvId) {
       const conv = await prisma.conversation.findFirst({
@@ -138,7 +166,12 @@ export async function POST(req: Request) {
       try {
         const model = genAI.getGenerativeModel({
           model: modelName,
-          systemInstruction: buildSystemPrompt(targetLang, nativeLang, cefrLevel),
+          systemInstruction: buildSystemPrompt(
+            targetLang,
+            nativeLang,
+            cefrLevel,
+            topicInstruction
+          ),
           generationConfig: { responseMimeType: "application/json" },
         });
         const chat = model.startChat({ history: chatHistory.slice(0, -1) });

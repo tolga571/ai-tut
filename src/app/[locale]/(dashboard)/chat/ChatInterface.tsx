@@ -26,6 +26,34 @@ type Conversation = {
 
 const CONVERSATIONS_CACHE_KEY_PREFIX = "chat_conversations_cache_v1";
 
+const CHAT_TOPICS = [
+  {
+    id: "cafe",
+    label: "Kafede sipariş",
+    description: "Baristadan kahve siparişi ver, küçük sohbet et.",
+  },
+  {
+    id: "travel-hotel",
+    label: "Otel resepsiyonu",
+    description: "Check-in, oda ve kahvaltı hakkında konuş.",
+  },
+  {
+    id: "job-interview",
+    label: "İş görüşmesi",
+    description: "Kendini tanıt, deneyimlerinden bahset.",
+  },
+  {
+    id: "friends",
+    label: "Günlük sohbet",
+    description: "Arkadaşınla günlük hayat ve planlardan bahset.",
+  },
+  {
+    id: "small-talk",
+    label: "Small talk",
+    description: "Hava durumu, hobiler ve hafta sonu üzerine sohbet et.",
+  },
+] as const;
+
 export default function ChatInterface({ user }: { user: { id?: string; name?: string | null; email?: string | null; targetLang?: string; nativeLang?: string; role?: string } }) {
   const t = useTranslations("chat");
   const tNav = useTranslations("nav");
@@ -49,6 +77,7 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [progressPct, setProgressPct] = useState(0);
   const [showComingSoon, setShowComingSoon] = useState(false);
+  const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
 
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -224,6 +253,7 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
         body: JSON.stringify({
           message: userMessage.content,
           ...(activeConvId ? { conversationId: activeConvId } : {}),
+          ...(selectedTopic ? { topicId: selectedTopic } : {}),
         }),
       });
 
@@ -561,7 +591,31 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
               )}
             </div>
 
-            <div className="px-3 sm:px-4 pb-4 pt-2 border-t border-gray-200 dark:border-white/10">
+            <div className="px-3 sm:px-4 pb-4 pt-2 border-t border-gray-200 dark:border-white/10 space-y-2">
+              {/* Topic shortcuts */}
+              <div className="flex gap-2 overflow-x-auto pb-1">
+                {CHAT_TOPICS.map((topic) => {
+                  const active = selectedTopic === topic.id;
+                  return (
+                    <button
+                      key={topic.id}
+                      type="button"
+                      onClick={() => setSelectedTopic(active ? null : topic.id)}
+                      className={`shrink-0 px-3 py-2 rounded-xl border text-xs text-left transition-colors ${
+                        active
+                          ? "bg-blue-600 text-white border-blue-500"
+                          : "bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:border-blue-400/60"
+                      }`}
+                    >
+                      <div className="font-semibold mb-0.5">{topic.label}</div>
+                      <div className="text-[10px] text-gray-500 dark:text-gray-400">
+                        {topic.description}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
               <form onSubmit={sendMessage} className="rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700/50 shadow-lg flex items-center px-2">
                 <div className="relative" ref={comingSoonRef}>
                   <button
