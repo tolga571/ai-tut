@@ -6,6 +6,11 @@ Tamamlananlar:
 - Chat için konu/senaryo butonları ve Gemini prompt’unda topic kullanımı (Faz 5)
 - Konu/senaryo için `Conversation.topicId/topicLabel` alanları eklenmesi ve schema/DB senkronu
 - Konu seçildiğinde her zaman yeni conversation açılması ve sol listede topic etiketinin gösterilmesi
+- Kelime/quiz akışının güçlendirilmesi:
+  - Chat içinde AI mesajlarından tek tıkla vocabulary’ye kelime/ifade ekleme
+  - `VocabularyWord` için hafif review alanları (`reviewCount`, `correctStreak`, `lastReviewedAt`, `nextReviewAt`)
+  - Quiz akışında doğru/yanlış cevaba göre review metriklerinin güncellenmesi ve öncelikle süresi gelen kelimelerin sorulması
+  - Railway tarafında Prisma migration’larının build sırasında otomatik çalışması (`prisma migrate deploy && next build`)
 
 Mevcut Durum:
 - Kod: `src/app/[locale]/(dashboard)/chat/ChatInterface.tsx` içinde topic seçimi yeni konuşma başlatıyor ve `getConvTitle` topic etiketini kullanıyor.
@@ -18,5 +23,5 @@ Kritik Değişkenler:
 - Chat modeli: `/api/chat` Gemini 2.x flash modellerini sırasıyla deniyor, response JSON formatında bekleniyor.
 
 Sıradaki Adım:
-- Kelime/quiz akışını güçlendirmek: chat mesajlarından tek tıkla vocabulary’ye kelime ekleme ve `VocabularyWord` için hafif bir tekrar (review) mantığı tasarlayıp uygulamak.
+- (Belirlenecek) Faz 6: Dashboard/Progress tarafında XP ve quiz performansını görselleştiren daha zengin bir ilerleme ekranı tasarlamak.
 
