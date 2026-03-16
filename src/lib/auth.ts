@@ -57,29 +57,29 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async session({ session, token }) {
       if (token && session.user) {
-        (session.user as any).id = token.id as string;
+        session.user.id = token.id;
         try {
           // Fetch latest user data including plan status and native/target languages
           const dbUser = await prisma.user.findUnique({
-            where: { id: token.id as string },
+            where: { id: token.id },
             select: { name: true, planStatus: true, nativeLang: true, targetLang: true, cefrLevel: true, role: true }
           });
           if (dbUser) {
             session.user.name = dbUser.name;
-            (session.user as any).planStatus = dbUser.planStatus;
-            (session.user as any).nativeLang = dbUser.nativeLang;
-            (session.user as any).targetLang = dbUser.targetLang;
-            (session.user as any).cefrLevel = dbUser.cefrLevel;
-            (session.user as any).role = dbUser.role;
+            session.user.planStatus = dbUser.planStatus;
+            session.user.nativeLang = dbUser.nativeLang;
+            session.user.targetLang = dbUser.targetLang;
+            session.user.cefrLevel = dbUser.cefrLevel;
+            session.user.role = dbUser.role;
           }
         } catch (error) {
           console.error("[AUTH_SESSION_DB]", error);
           // Fallback to token values if DB is temporarily unavailable.
-          (session.user as any).planStatus = token.planStatus;
-          (session.user as any).nativeLang = token.nativeLang;
-          (session.user as any).targetLang = token.targetLang;
-          (session.user as any).cefrLevel = token.cefrLevel;
-          (session.user as any).role = token.role;
+          session.user.planStatus = token.planStatus;
+          session.user.nativeLang = token.nativeLang;
+          session.user.targetLang = token.targetLang;
+          session.user.cefrLevel = token.cefrLevel;
+          session.user.role = token.role;
         }
       }
       return session;
@@ -87,11 +87,11 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
-        token.planStatus = (user as any).planStatus;
-        token.nativeLang = (user as any).nativeLang;
-        token.targetLang = (user as any).targetLang;
-        token.cefrLevel = (user as any).cefrLevel;
-        token.role = (user as any).role;
+        token.planStatus = user.planStatus;
+        token.nativeLang = user.nativeLang;
+        token.targetLang = user.targetLang;
+        token.cefrLevel = user.cefrLevel;
+        token.role = user.role;
       }
       // If we want to support dynamic updates (after payment)
       if (trigger === "update" && session?.planStatus) {
