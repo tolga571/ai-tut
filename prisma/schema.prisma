@@ -20,6 +20,8 @@ model User {
   nativeLang       String           @default("tr")
   targetLang       String           @default("en")
   cefrLevel        String           @default("A1")
+  learningGoal    String?
+  interestArea    String?
   role             String           @default("user")
   paddleCustomerId String?
   planStatus       String           @default("inactive")
@@ -126,4 +128,14 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expires   DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email])
 }

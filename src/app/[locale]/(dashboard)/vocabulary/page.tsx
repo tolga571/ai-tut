@@ -23,6 +23,7 @@ export default function VocabularyPage() {
   const [words, setWords] = useState<Word[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [speakingId, setSpeakingId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ word: "", translation: "", language: "en", example: "" });
@@ -70,6 +71,23 @@ export default function VocabularyPage() {
     } finally {
       setDeleting(null);
     }
+  };
+
+  const speakWord = (id: string, text: string, lang: string) => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+    if (speakingId === id) {
+      window.speechSynthesis.cancel();
+      setSpeakingId(null);
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = lang;
+    utterance.rate = 0.85;
+    utterance.onend = () => setSpeakingId(null);
+    utterance.onerror = () => setSpeakingId(null);
+    setSpeakingId(id);
+    window.speechSynthesis.speak(utterance);
   };
 
   const filtered = words.filter(
@@ -249,9 +267,28 @@ export default function VocabularyPage() {
                           {w.language}
                         </span>
                       </div>
-                      <p className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white leading-snug break-words">
-                        {w.word}
-                      </p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white leading-snug break-words">
+                          {w.word}
+                        </p>
+                        <button
+                          onClick={() => speakWord(w.id, w.word, w.language)}
+                          className={`flex-shrink-0 p-1 rounded-md transition-all ${speakingId === w.id ? "bg-blue-500 text-white" : "text-gray-400 hover:text-blue-500 hover:bg-blue-500/10"}`}
+                          title={speakingId === w.id ? "Stop" : "Listen"}
+                          aria-label={speakingId === w.id ? "Stop listening" : "Listen to pronunciation"}
+                        >
+                          {speakingId === w.id ? (
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10h6v4H9z" />
+                            </svg>
+                          ) : (
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M11 5L6 9H2v6h4l5 4V5z" />
+                            </svg>
+                          )}
+                        </button>
+                      </div>
                     </div>
                     <button
                       onClick={() => handleDelete(w.id)}

@@ -54,7 +54,36 @@
     "testMode": "测试模式",
     "testCredentialsHint": "使用以下凭据进行快速测试：",
     "fillTestCredentials": "填充测试凭据",
-    "testCredentialsFilled": "已填充测试凭据"
+    "testCredentialsFilled": "已填充测试凭据",
+    "forgotPassword": "Forgot password?"
+  },
+  "forgotPassword": {
+    "title": "Forgot Password",
+    "subtitle": "Enter your email and we'll send you a reset link",
+    "email": "Email",
+    "submit": "Send Reset Link",
+    "sent": "Reset link sent! Check your email.",
+    "checkEmail": "We've sent a password reset link to your email. Please check your inbox and spam folder.",
+    "backToLogin": "Back to Sign In",
+    "rememberPassword": "Remember your password?",
+    "signIn": "Sign In",
+    "error": "Something went wrong. Please try again."
+  },
+  "resetPassword": {
+    "title": "Reset Password",
+    "subtitle": "Enter your new password below",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "submit": "Reset Password",
+    "success": "Password reset successfully!",
+    "successMessage": "Your password has been updated. You can now sign in with your new password.",
+    "goToLogin": "Sign In",
+    "passwordMismatch": "Passwords do not match",
+    "passwordTooShort": "Password must be at least 8 characters",
+    "invalidLink": "Invalid Reset Link",
+    "invalidLinkDesc": "This password reset link is invalid or has expired.",
+    "requestNewLink": "Request a new reset link",
+    "error": "Something went wrong. Please try again."
   },
   "register": {
     "stepLabel": "第2步",

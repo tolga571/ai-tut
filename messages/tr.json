@@ -49,7 +49,36 @@
     "testMode": "Test Modu",
     "testCredentialsHint": "Hızlı test için bu bilgileri kullanın:",
     "fillTestCredentials": "Test bilgilerini doldur",
-    "testCredentialsFilled": "Test bilgileri dolduruldu"
+    "testCredentialsFilled": "Test bilgileri dolduruldu",
+    "forgotPassword": "Şifremi unuttum"
+  },
+  "forgotPassword": {
+    "title": "Şifremi Unuttum",
+    "subtitle": "E-postanızı girin, size bir sıfırlama bağlantısı gönderelim",
+    "email": "E-posta",
+    "submit": "Sıfırlama Bağlantısı Gönder",
+    "sent": "Sıfırlama bağlantısı gönderildi! E-postanızı kontrol edin.",
+    "checkEmail": "E-posta adresinize bir şifre sıfırlama bağlantısı gönderdik. Gelen kutunuzu ve spam klasörünü kontrol edin.",
+    "backToLogin": "Girişe Dön",
+    "rememberPassword": "Şifrenizi hatırlıyor musunuz?",
+    "signIn": "Giriş Yap",
+    "error": "Bir hata oluştu. Lütfen tekrar deneyin."
+  },
+  "resetPassword": {
+    "title": "Şifre Sıfırla",
+    "subtitle": "Yeni şifrenizi aşağıya girin",
+    "newPassword": "Yeni Şifre",
+    "confirmPassword": "Şifre Tekrar",
+    "submit": "Şifreyi Sıfırla",
+    "success": "Şifre başarıyla sıfırlandı!",
+    "successMessage": "Şifreniz güncellendi. Artık yeni şifrenizle giriş yapabilirsiniz.",
+    "goToLogin": "Giriş Yap",
+    "passwordMismatch": "Şifreler eşleşmiyor",
+    "passwordTooShort": "Şifre en az 8 karakter olmalıdır",
+    "invalidLink": "Geçersiz Sıfırlama Bağlantısı",
+    "invalidLinkDesc": "Bu şifre sıfırlama bağlantısı geçersiz veya süresi dolmuş.",
+    "requestNewLink": "Yeni sıfırlama bağlantısı iste",
+    "error": "Bir hata oluştu. Lütfen tekrar deneyin."
   },
   "register": {
     "stepLabel": "Adım 2",

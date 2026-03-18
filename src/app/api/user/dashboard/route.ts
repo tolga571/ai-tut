@@ -61,6 +61,8 @@ export async function GET() {
 
     const activityDates = conversations.flatMap((c) => [c.createdAt, c.updatedAt]);
     const streak = computeStreak(activityDates);
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const hasActivityToday = activityDates.some((d) => d.toISOString().slice(0, 10) === todayStr);
 
     const recent = recentConversations.map((c) => ({
       id: c.id,
@@ -75,6 +77,7 @@ export async function GET() {
 
     return NextResponse.json({
       streak,
+      hasActivityToday,
       totalConversations: conversations.length,
       totalMessages: messageCount,
       recentConversations: recent,

@@ -9,6 +9,7 @@ import { FlagIcon } from "@/components/FlagIcon";
 
 type DashboardData = {
   streak: number;
+  hasActivityToday: boolean;
   totalConversations: number;
   totalMessages: number;
   recentConversations: { id: string; updatedAt: string; title: string }[];
@@ -255,6 +256,35 @@ export default function DashboardPage() {
 
         {/* Primary CTA */}
         <div className="mb-10">
+          {!loading && data && !data.hasActivityToday && (
+            <div className="mb-5 p-4 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20">
+              <div className="flex items-start gap-3">
+                <div className="text-xl flex-shrink-0">⏰</div>
+                <div>
+                  <p className="text-sm font-semibold text-amber-900 dark:text-amber-200">
+                    No practice yet today.
+                  </p>
+                  <p className="text-sm text-amber-800/80 dark:text-amber-200/80">
+                    Send one message to keep your streak going.
+                  </p>
+                  <div className="mt-3 flex gap-2 flex-wrap">
+                    <Link
+                      href="/chat"
+                      className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-sm font-medium transition-all"
+                    >
+                      Practice now
+                    </Link>
+                    <Link
+                      href="/vocabulary"
+                      className="px-4 py-2 border border-amber-300/60 hover:border-amber-300 bg-transparent text-amber-900 dark:text-amber-200 rounded-lg text-sm font-medium transition-all"
+                    >
+                      Review words
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
           <Link
             href="/chat"
             className="flex items-center justify-center gap-3 w-full py-5 px-6 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-lg shadow-xl shadow-blue-600/25 transition-all hover:shadow-blue-600/40 hover:scale-[1.02] active:scale-[0.98]"

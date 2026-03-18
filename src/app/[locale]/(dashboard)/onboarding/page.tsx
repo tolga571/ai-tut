@@ -16,6 +16,23 @@ export default function OnboardingPage() {
   const [nativeLang, setNativeLang] = useState("en");
   const [targetLang, setTargetLang] = useState("es");
   const [cefrLevel, setCefrLevel] = useState<CefrLevel>("A1");
+  const [learningGoal, setLearningGoal] = useState("conversation");
+  const [interestArea, setInterestArea] = useState("general");
+
+  const LEARNING_GOALS: { id: string; label: string }[] = [
+    { id: "conversation", label: "Conversation" },
+    { id: "travel", label: "Travel" },
+    { id: "work", label: "Work" },
+    { id: "exam", label: "Exam Prep" },
+  ];
+
+  const INTEREST_AREAS: { id: string; label: string }[] = [
+    { id: "general", label: "General" },
+    { id: "tech", label: "Tech" },
+    { id: "movies", label: "Movies" },
+    { id: "sports", label: "Sports" },
+    { id: "business", label: "Business" },
+  ];
 
   // If onboarding is already completed, skip this step.
   useEffect(() => {
@@ -37,7 +54,7 @@ export default function OnboardingPage() {
       const res = await fetch("/api/user/languages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nativeLang, targetLang, cefrLevel }),
+        body: JSON.stringify({ nativeLang, targetLang, cefrLevel, learningGoal, interestArea }),
       });
 
       if (!res.ok) throw new Error("Failed to save preferences");
@@ -141,6 +158,52 @@ export default function OnboardingPage() {
                   </button>
                 );
               })}
+            </div>
+          </div>
+
+          {/* Learning goal */}
+          <div>
+            <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2">Your main goal</p>
+            <div className="grid grid-cols-2 gap-3">
+              {LEARNING_GOALS.map((g) => (
+                <button
+                  key={g.id}
+                  type="button"
+                  onClick={() => setLearningGoal(g.id)}
+                  className={`text-left px-4 py-3 rounded-xl border-2 transition-all focus:outline-none ${
+                    learningGoal === g.id
+                      ? "border-blue-500 bg-blue-500/10 shadow-[0_4px_20px_rgba(59,130,246,0.25)]"
+                      : "border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-900/40 hover:border-gray-300 dark:hover:border-gray-700"
+                  }`}
+                >
+                  <p className={`text-sm font-semibold ${learningGoal === g.id ? "text-blue-600 dark:text-blue-300" : "text-gray-700 dark:text-gray-300"}`}>
+                    {g.label}
+                  </p>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Interest area */}
+          <div>
+            <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2">Topics you enjoy</p>
+            <div className="grid grid-cols-2 gap-3">
+              {INTEREST_AREAS.map((a) => (
+                <button
+                  key={a.id}
+                  type="button"
+                  onClick={() => setInterestArea(a.id)}
+                  className={`text-left px-4 py-3 rounded-xl border-2 transition-all focus:outline-none ${
+                    interestArea === a.id
+                      ? "border-purple-500 bg-purple-500/10 shadow-[0_4px_20px_rgba(168,85,247,0.25)]"
+                      : "border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-900/40 hover:border-gray-300 dark:hover:border-gray-700"
+                  }`}
+                >
+                  <p className={`text-sm font-semibold ${interestArea === a.id ? "text-purple-600 dark:text-purple-300" : "text-gray-700 dark:text-gray-300"}`}>
+                    {a.label}
+                  </p>
+                </button>
+              ))}
             </div>
           </div>
 

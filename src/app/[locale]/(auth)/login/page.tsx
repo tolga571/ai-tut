@@ -1,23 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "@/i18n/navigation";
 import { Link } from "@/i18n/navigation";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 
-const TEST_EMAIL = "test@aitut.com";
-const TEST_PASSWORD = "Test123!";
+const IS_DEV = process.env.NODE_ENV === "development";
 
 export default function LoginPage() {
   const router = useRouter();
   const t = useTranslations("login");
   const [data, setData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
+  const [testCreds, setTestCreds] = useState<{ email: string; password: string } | null>(null);
+  const [testCredsLoading, setTestCredsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!IS_DEV) return;
+    setTestCredsLoading(true);
+    fetch("/api/auth/dev-test-credentials")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((json) => setTestCreds(json))
+      .catch(() => setTestCreds(null))
+      .finally(() => setTestCredsLoading(false));
+  }, []);
 
   const fillTestCredentials = () => {
-    setData({ email: TEST_EMAIL, password: TEST_PASSWORD });
+    if (!testCreds) return;
+    setData({ email: testCreds.email, password: testCreds.password });
     toast.success(t("testCredentialsFilled"));
   };
 
@@ -69,6 +81,11 @@ export default function LoginPage() {
               value={data.password}
               onChange={(e) => setData({ ...data, password: e.target.value })}
             />
+            <div className="mt-1 text-right">
+              <Link href="/forgot-password" className="text-sm text-blue-500 hover:text-blue-400 font-medium transition-colors">
+                {t("forgotPassword")}
+              </Link>
+            </div>
           </div>
           <button
             type="submit"
@@ -83,30 +100,38 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* Test credentials - for development/testing */}
-        <div className="mt-6 p-4 rounded-xl bg-amber-500/10 dark:bg-amber-500/10 border border-amber-500/20 dark:border-amber-500/20">
-          <p className="text-xs font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wider mb-2">
-            {t("testMode")}
-          </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-            {t("testCredentialsHint")}
-          </p>
-          <div className="flex flex-wrap items-center gap-2">
-            <code className="text-xs bg-white/50 dark:bg-black/20 px-2 py-1 rounded text-gray-700 dark:text-gray-300">
-              {TEST_EMAIL}
-            </code>
-            <code className="text-xs bg-white/50 dark:bg-black/20 px-2 py-1 rounded text-gray-700 dark:text-gray-300">
-              {TEST_PASSWORD}
-            </code>
-            <button
-              type="button"
-              onClick={fillTestCredentials}
-              className="text-xs px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 dark:bg-amber-500/20 dark:hover:bg-amber-500/30 text-amber-700 dark:text-amber-400 rounded-lg font-medium transition-colors"
-            >
-              {t("fillTestCredentials")}
-            </button>
+        {/* Test credentials - only visible in development */}
+        {IS_DEV && (
+          <div className="mt-6 p-4 rounded-xl bg-amber-500/10 dark:bg-amber-500/10 border border-amber-500/20 dark:border-amber-500/20">
+            <p className="text-xs font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wider mb-2">
+              {t("testMode")}
+            </p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+              {t("testCredentialsHint")}
+            </p>
+            {testCredsLoading ? (
+              <div className="text-sm text-gray-500 dark:text-gray-400">Loading test credentials...</div>
+            ) : testCreds ? (
+              <div className="flex flex-wrap items-center gap-2">
+                <code className="text-xs bg-white/50 dark:bg-black/20 px-2 py-1 rounded text-gray-700 dark:text-gray-300">
+                  {testCreds.email}
+                </code>
+                <code className="text-xs bg-white/50 dark:bg-black/20 px-2 py-1 rounded text-gray-700 dark:text-gray-300">
+                  {testCreds.password}
+                </code>
+                <button
+                  type="button"
+                  onClick={fillTestCredentials}
+                  className="text-xs px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 dark:bg-amber-500/20 dark:hover:bg-amber-500/30 text-amber-700 dark:text-amber-400 rounded-lg font-medium transition-colors"
+                >
+                  {t("fillTestCredentials")}
+                </button>
+              </div>
+            ) : (
+              <div className="text-sm text-gray-500 dark:text-gray-400">Test credentials unavailable.</div>
+            )}
           </div>
-        </div>
+        )}
 
         <p className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
           {t("noAccount")}{" "}

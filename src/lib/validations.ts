@@ -23,6 +23,8 @@ export const languagesSchema = z.object({
   targetLang: z.string().min(2).max(10).trim(),
   nativeLang: z.string().min(2).max(10).trim(),
   cefrLevel:  z.enum(VALID_CEFR).optional(),
+  learningGoal: z.string().min(2).max(50).trim().optional(),
+  interestArea: z.string().min(2).max(50).trim().optional(),
 });
 
 export const postSchema = z.object({
@@ -44,6 +46,15 @@ export const postSchema = z.object({
       path: ["language"],
     });
   }
+});
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email().toLowerCase().trim(),
+});
+
+export const resetPasswordSchema = z.object({
+  token: z.string().min(1),
+  password: z.string().min(8).max(128),
 });
 
 export const createTransactionSchema = z.object({

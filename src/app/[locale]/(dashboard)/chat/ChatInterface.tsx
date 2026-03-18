@@ -77,6 +77,7 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [speakingId, setSpeakingId] = useState<string | null>(null);
   const [progressPct, setProgressPct] = useState(0);
   const [showComingSoon, setShowComingSoon] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
@@ -314,6 +315,23 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
     await navigator.clipboard.writeText(text);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  const speakMessage = (id: string, text: string) => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+    if (speakingId === id) {
+      window.speechSynthesis.cancel();
+      setSpeakingId(null);
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = targetLang;
+    utterance.rate = 0.9;
+    utterance.onend = () => setSpeakingId(null);
+    utterance.onerror = () => setSpeakingId(null);
+    setSpeakingId(id);
+    window.speechSynthesis.speak(utterance);
   };
 
   const getConvTitle = (conv: Conversation): string => {
@@ -559,6 +577,22 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
                         )}
                         {msg.role === "ai" && (
                           <div className="absolute -top-2 -right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button
+                              onClick={() => speakMessage(msg.id, msg.content)}
+                              className={`p-1.5 rounded-lg transition-all ${speakingId === msg.id ? "bg-blue-500 text-white" : "bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 text-gray-600 dark:text-gray-300"}`}
+                              title={speakingId === msg.id ? "Stop" : "Listen"}
+                            >
+                              {speakingId === msg.id ? (
+                                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10h6v4H9z" />
+                                </svg>
+                              ) : (
+                                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M11 5L6 9H2v6h4l5 4V5z" />
+                                </svg>
+                              )}
+                            </button>
                             <button
                               onClick={() => copyMessage(msg.id, msg.content)}
                               className="p-1.5 rounded-lg bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 text-gray-600 dark:text-gray-300 transition-all"
