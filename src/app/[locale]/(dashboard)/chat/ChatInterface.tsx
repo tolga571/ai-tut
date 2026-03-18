@@ -439,11 +439,42 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
         utterances.push(targetUtter);
 
         if (explanationRaw) {
-          const nativeUtter = new SpeechSynthesisUtterance(cleanCorrectionExplanationForTTS(explanationRaw));
-          nativeUtter.lang = nativeSpeechLang;
-          nativeUtter.rate = 0.9;
-          if (nativeVoice) nativeUtter.voice = nativeVoice;
-          utterances.push(nativeUtter);
+          const cleanedExplanation = cleanCorrectionExplanationForTTS(explanationRaw);
+
+          // For better UX: pronounce ASCII (English/target) words inside native explanation
+          // with the target language voice instead of the native voice.
+          // Example: Turkish text containing "Coffee" should speak "Coffee" with English voice.
+          const asciiWordRegex = /[A-Za-z]+(?:'[A-Za-z]+)?/g;
+          const segments: { type: "native" | "target"; text: string }[] = [];
+
+          let lastIndex = 0;
+          let match: RegExpExecArray | null;
+
+          while ((match = asciiWordRegex.exec(cleanedExplanation)) !== null) {
+            const start = match.index;
+            const end = start + match[0].length;
+
+            const before = cleanedExplanation.slice(lastIndex, start);
+            if (before.trim()) segments.push({ type: "native", text: before });
+
+            segments.push({ type: "target", text: match[0] });
+            lastIndex = end;
+          }
+
+          const after = cleanedExplanation.slice(lastIndex);
+          if (after.trim()) segments.push({ type: "native", text: after });
+
+          for (const seg of segments) {
+            const normalized = seg.text.replace(/\s+/g, " ").trim();
+            if (!normalized) continue;
+
+            const segUtter = new SpeechSynthesisUtterance(normalized);
+            segUtter.lang = seg.type === "target" ? targetSpeechLang : nativeSpeechLang;
+            segUtter.rate = 0.9;
+            if (seg.type === "target" && targetPickedVoice) segUtter.voice = targetPickedVoice;
+            if (seg.type === "native" && nativeVoice) segUtter.voice = nativeVoice;
+            utterances.push(segUtter);
+          }
         }
       }
     }
