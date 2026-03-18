@@ -341,16 +341,6 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
     }
   };
 
-  const cleanCorrectionTargetPartForTTS = (correctionText: string) => {
-    // Keep arrow as readable text for the target language voice.
-    // Also remove pencil emoji so TTS doesn't read it.
-    return correctionText
-      .replace(/✏️/g, "")
-      .replace(/→/g, "to")
-      .replace(/\s+/g, " ")
-      .trim();
-  };
-
   const cleanCorrectionExplanationForTTS = (correctionText: string) => {
     // Strip UI markers so the native voice reads only the explanation text.
     return correctionText
@@ -407,74 +397,26 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
     mainUtter.rate = 0.9;
     utterances.push(mainUtter);
 
-    // 2) Speak correction note with language switching:
-    //    correction format (from server prompt):
-    //    "✏️ [original mistake] → [corrected form] — [explanation in nativeLang]"
+    // 2) Sarı grammar note TTS (minimum ve stabil):
+    // Artık tüm notu okumuyoruz; sadece açıklama kısmının (— sonrası) ilk cümlesini okuyalım.
     if (correction) {
       const cleaned = correction.replace(/\s+/g, " ").trim();
-      const parts = cleaned.split("—"); // em dash splits target part vs native explanation
-
-      const targetPartRaw = parts[0] ?? "";
+      const parts = cleaned.split("—");
       const explanationRaw = parts.slice(1).join("—").trim();
 
-      // Heuristic: pick two similar-gender voices (best-effort).
-      const targetSpeechLang = toSpeechLang(targetLang);
-      const nativeSpeechLang = toSpeechLang(nativeLang);
+      if (explanationRaw) {
+        const cleanedExplanation = cleanCorrectionExplanationForTTS(explanationRaw);
+        const firstSentenceMatch = cleanedExplanation.match(/[^.!?]+[.!?]?/);
+        const firstSentence = (firstSentenceMatch?.[0] ?? cleanedExplanation).trim();
 
-      const targetVoice = pickVoice(targetSpeechLang);
-      const preferredGender: "male" | "female" | null = (() => {
-        const name = `${targetVoice?.name ?? ""} ${targetVoice?.voiceURI ?? ""}`.toLowerCase();
-        if (name.includes("male")) return "male";
-        if (name.includes("female")) return "female";
-        return null;
-      })();
-
-      if (targetPartRaw) {
-        const targetUtter = new SpeechSynthesisUtterance(cleanCorrectionTargetPartForTTS(targetPartRaw));
-        targetUtter.lang = targetSpeechLang;
-        targetUtter.rate = 0.9;
-        const nativeVoice = pickVoice(nativeSpeechLang, preferredGender);
-        const targetPickedVoice = targetVoice ?? pickVoice(targetSpeechLang, preferredGender);
-        if (targetPickedVoice) targetUtter.voice = targetPickedVoice;
-        utterances.push(targetUtter);
-
-        if (explanationRaw) {
-          const cleanedExplanation = cleanCorrectionExplanationForTTS(explanationRaw);
-
-          // For better UX: pronounce ASCII (English/target) words inside native explanation
-          // with the target language voice instead of the native voice.
-          // Example: Turkish text containing "Coffee" should speak "Coffee" with English voice.
-          const asciiWordRegex = /[A-Za-z]+(?:'[A-Za-z]+)?/g;
-          const segments: { type: "native" | "target"; text: string }[] = [];
-
-          let lastIndex = 0;
-          let match: RegExpExecArray | null;
-
-          while ((match = asciiWordRegex.exec(cleanedExplanation)) !== null) {
-            const start = match.index;
-            const end = start + match[0].length;
-
-            const before = cleanedExplanation.slice(lastIndex, start);
-            if (before.trim()) segments.push({ type: "native", text: before });
-
-            segments.push({ type: "target", text: match[0] });
-            lastIndex = end;
-          }
-
-          const after = cleanedExplanation.slice(lastIndex);
-          if (after.trim()) segments.push({ type: "native", text: after });
-
-          for (const seg of segments) {
-            const normalized = seg.text.replace(/\s+/g, " ").trim();
-            if (!normalized) continue;
-
-            const segUtter = new SpeechSynthesisUtterance(normalized);
-            segUtter.lang = seg.type === "target" ? targetSpeechLang : nativeSpeechLang;
-            segUtter.rate = 0.9;
-            if (seg.type === "target" && targetPickedVoice) segUtter.voice = targetPickedVoice;
-            if (seg.type === "native" && nativeVoice) segUtter.voice = nativeVoice;
-            utterances.push(segUtter);
-          }
+        if (firstSentence) {
+          const nativeSpeechLang = toSpeechLang(nativeLang);
+          const nativeVoice = pickVoice(nativeSpeechLang);
+          const noteUtter = new SpeechSynthesisUtterance(firstSentence);
+          noteUtter.lang = nativeSpeechLang;
+          noteUtter.rate = 0.9;
+          if (nativeVoice) noteUtter.voice = nativeVoice;
+          utterances.push(noteUtter);
         }
       }
     }
