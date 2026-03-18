@@ -63,7 +63,6 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
   const locale = useLocale();
 
   const targetLang = (user as { targetLang?: string }).targetLang?.toLowerCase() ?? "en";
-  const nativeLang = (user as { nativeLang?: string }).nativeLang?.toLowerCase() ?? "en";
   const conversationsCacheKey = `${CONVERSATIONS_CACHE_KEY_PREFIX}:${user.id ?? user.email ?? "anonymous"}`;
   const targetLangName = tLangs(targetLang as Parameters<typeof tLangs>[0], { defaultValue: targetLang.toUpperCase() });
 
@@ -341,14 +340,6 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
     }
   };
 
-  const cleanCorrectionExplanationForTTS = (correctionText: string) => {
-    // Strip UI markers so the native voice reads only the explanation text.
-    return correctionText
-      .replace(/✏️/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
-  };
-
   const pickVoice = (langCode: string, preferredGender?: "male" | "female" | null) => {
     const voices = typeof window !== "undefined" ? window.speechSynthesis.getVoices?.() ?? [] : [];
     if (!voices || voices.length === 0) return undefined;
@@ -375,12 +366,7 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
     );
   };
 
-  const speakMessage = (
-    id: string,
-    text: string,
-    translation?: string,
-    correction?: string
-  ) => {
+  const speakMessage = (id: string, text: string) => {
     if (typeof window === "undefined" || !window.speechSynthesis) return;
     if (speakingId === id) {
       window.speechSynthesis.cancel();
@@ -397,29 +383,7 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
     mainUtter.rate = 0.9;
     utterances.push(mainUtter);
 
-    // 2) Sarı grammar note TTS (minimum ve stabil):
-    // Artık tüm notu okumuyoruz; sadece açıklama kısmının (— sonrası) ilk cümlesini okuyalım.
-    if (correction) {
-      const cleaned = correction.replace(/\s+/g, " ").trim();
-      const parts = cleaned.split("—");
-      const explanationRaw = parts.slice(1).join("—").trim();
-
-      if (explanationRaw) {
-        const cleanedExplanation = cleanCorrectionExplanationForTTS(explanationRaw);
-        const firstSentenceMatch = cleanedExplanation.match(/[^.!?]+[.!?]?/);
-        const firstSentence = (firstSentenceMatch?.[0] ?? cleanedExplanation).trim();
-
-        if (firstSentence) {
-          const nativeSpeechLang = toSpeechLang(nativeLang);
-          const nativeVoice = pickVoice(nativeSpeechLang);
-          const noteUtter = new SpeechSynthesisUtterance(firstSentence);
-          noteUtter.lang = nativeSpeechLang;
-          noteUtter.rate = 0.9;
-          if (nativeVoice) noteUtter.voice = nativeVoice;
-          utterances.push(noteUtter);
-        }
-      }
-    }
+    // Correction (sarı not) seslendirilmiyor. Kullanıcı yalnızca ana cevap kısmını duysun.
 
     // Best-effort voice selection for the main utterance (keeps main voice consistent).
     const mainSpeechLang = toSpeechLang(targetLang);
@@ -687,7 +651,7 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
                         {msg.role === "ai" && (
                           <div className="absolute -top-2 -right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button
-                              onClick={() => speakMessage(msg.id, msg.content, msg.translation, msg.correction)}
+                              onClick={() => speakMessage(msg.id, msg.content)}
                               className={`p-1.5 rounded-lg transition-all ${speakingId === msg.id ? "bg-blue-500 text-white" : "bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 text-gray-600 dark:text-gray-300"}`}
                               title={speakingId === msg.id ? "Stop" : "Listen"}
                             >
