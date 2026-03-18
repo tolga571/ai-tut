@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma db push && next build",
+    "build": "prisma db push --accept-data-loss && next build",
     "start": "next start",
     "lint": "next lint",
-    "db:push": "prisma db push",
+    "db:push": "prisma db push --accept-data-loss",
     "postinstall": "prisma generate"
   },
   "dependencies": {
