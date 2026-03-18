@@ -341,14 +341,48 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
     }
   };
 
-  const cleanCorrectionForTTS = (correctionText: string) => {
-    // Remove the pencil emoji so the TTS doesn't read "pencil/kalem".
+  const cleanCorrectionTargetPartForTTS = (correctionText: string) => {
+    // Keep arrow as readable text for the target language voice.
+    // Also remove pencil emoji so TTS doesn't read it.
     return correctionText
       .replace(/✏️/g, "")
-      .replace(/→/g, "")
-      .replace(/—/g, "-")
+      .replace(/→/g, "to")
       .replace(/\s+/g, " ")
       .trim();
+  };
+
+  const cleanCorrectionExplanationForTTS = (correctionText: string) => {
+    // Strip UI markers so the native voice reads only the explanation text.
+    return correctionText
+      .replace(/✏️/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  };
+
+  const pickVoice = (langCode: string, preferredGender?: "male" | "female" | null) => {
+    const voices = typeof window !== "undefined" ? window.speechSynthesis.getVoices?.() ?? [] : [];
+    if (!voices || voices.length === 0) return undefined;
+
+    const desiredLang = (langCode || "").toLowerCase();
+    const gender = preferredGender ?? null;
+
+    const matchesLang = (v: SpeechSynthesisVoice) => {
+      const vLang = (v.lang || "").toLowerCase();
+      return desiredLang ? vLang.startsWith(desiredLang) || vLang === desiredLang : true;
+    };
+
+    const matchesGender = (v: SpeechSynthesisVoice) => {
+      if (!gender) return true;
+      const name = `${v.name} ${v.voiceURI}`.toLowerCase();
+      return gender === "male" ? name.includes("male") : name.includes("female");
+    };
+
+    // First: exact match with gender, then match by language only.
+    return (
+      voices.find((v) => matchesLang(v) && matchesGender(v)) ??
+      voices.find((v) => matchesLang(v)) ??
+      voices[0]
+    );
   };
 
   const speakMessage = (
@@ -367,26 +401,57 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
 
     const utterances: SpeechSynthesisUtterance[] = [];
 
-    utterances.push(
-      new SpeechSynthesisUtterance(text)
-    );
-    utterances[utterances.length - 1].lang = toSpeechLang(targetLang);
-    utterances[utterances.length - 1].rate = 0.9;
+    // 1) Speak only the main content (target language). (Ignore the middle translation block.)
+    const mainUtter = new SpeechSynthesisUtterance(text);
+    mainUtter.lang = toSpeechLang(targetLang);
+    mainUtter.rate = 0.9;
+    utterances.push(mainUtter);
 
-    if (translation) {
-      utterances.push(new SpeechSynthesisUtterance(translation));
-      utterances[utterances.length - 1].lang = toSpeechLang(nativeLang);
-      utterances[utterances.length - 1].rate = 0.9;
-    }
-
+    // 2) Speak correction note with language switching:
+    //    correction format (from server prompt):
+    //    "✏️ [original mistake] → [corrected form] — [explanation in nativeLang]"
     if (correction) {
-      const cleaned = cleanCorrectionForTTS(correction);
-      if (cleaned) {
-        utterances.push(new SpeechSynthesisUtterance(cleaned));
-        utterances[utterances.length - 1].lang = toSpeechLang(nativeLang);
-        utterances[utterances.length - 1].rate = 0.9;
+      const cleaned = correction.replace(/\s+/g, " ").trim();
+      const parts = cleaned.split("—"); // em dash splits target part vs native explanation
+
+      const targetPartRaw = parts[0] ?? "";
+      const explanationRaw = parts.slice(1).join("—").trim();
+
+      // Heuristic: pick two similar-gender voices (best-effort).
+      const targetSpeechLang = toSpeechLang(targetLang);
+      const nativeSpeechLang = toSpeechLang(nativeLang);
+
+      const targetVoice = pickVoice(targetSpeechLang);
+      const preferredGender: "male" | "female" | null = (() => {
+        const name = `${targetVoice?.name ?? ""} ${targetVoice?.voiceURI ?? ""}`.toLowerCase();
+        if (name.includes("male")) return "male";
+        if (name.includes("female")) return "female";
+        return null;
+      })();
+
+      if (targetPartRaw) {
+        const targetUtter = new SpeechSynthesisUtterance(cleanCorrectionTargetPartForTTS(targetPartRaw));
+        targetUtter.lang = targetSpeechLang;
+        targetUtter.rate = 0.9;
+        const nativeVoice = pickVoice(nativeSpeechLang, preferredGender);
+        const targetPickedVoice = targetVoice ?? pickVoice(targetSpeechLang, preferredGender);
+        if (targetPickedVoice) targetUtter.voice = targetPickedVoice;
+        utterances.push(targetUtter);
+
+        if (explanationRaw) {
+          const nativeUtter = new SpeechSynthesisUtterance(cleanCorrectionExplanationForTTS(explanationRaw));
+          nativeUtter.lang = nativeSpeechLang;
+          nativeUtter.rate = 0.9;
+          if (nativeVoice) nativeUtter.voice = nativeVoice;
+          utterances.push(nativeUtter);
+        }
       }
     }
+
+    // Best-effort voice selection for the main utterance (keeps main voice consistent).
+    const mainSpeechLang = toSpeechLang(targetLang);
+    const mainVoice = pickVoice(mainSpeechLang);
+    if (mainVoice) mainUtter.voice = mainVoice;
 
     setSpeakingId(id);
     let idx = 0;
