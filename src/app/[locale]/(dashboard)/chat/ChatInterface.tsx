@@ -317,7 +317,7 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const speakMessage = (id: string, text: string) => {
+  const speakMessage = (id: string, text: string, translation?: string, correction?: string) => {
     if (typeof window === "undefined" || !window.speechSynthesis) return;
     if (speakingId === id) {
       window.speechSynthesis.cancel();
@@ -325,7 +325,12 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
       return;
     }
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
+
+    const parts = [text];
+    if (translation) parts.push(translation);
+    if (correction) parts.push(correction);
+
+    const utterance = new SpeechSynthesisUtterance(parts.join("\n\n"));
     utterance.lang = targetLang;
     utterance.rate = 0.9;
     utterance.onend = () => setSpeakingId(null);
@@ -578,7 +583,7 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
                         {msg.role === "ai" && (
                           <div className="absolute -top-2 -right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button
-                              onClick={() => speakMessage(msg.id, msg.content)}
+                              onClick={() => speakMessage(msg.id, msg.content, msg.translation, msg.correction)}
                               className={`p-1.5 rounded-lg transition-all ${speakingId === msg.id ? "bg-blue-500 text-white" : "bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 text-gray-600 dark:text-gray-300"}`}
                               title={speakingId === msg.id ? "Stop" : "Listen"}
                             >
