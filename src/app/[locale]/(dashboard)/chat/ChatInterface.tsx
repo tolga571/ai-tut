@@ -63,6 +63,7 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
   const locale = useLocale();
 
   const targetLang = (user as { targetLang?: string }).targetLang?.toLowerCase() ?? "en";
+  const nativeLang = (user as { nativeLang?: string }).nativeLang?.toLowerCase() ?? "en";
   const conversationsCacheKey = `${CONVERSATIONS_CACHE_KEY_PREFIX}:${user.id ?? user.email ?? "anonymous"}`;
   const targetLangName = tLangs(targetLang as Parameters<typeof tLangs>[0], { defaultValue: targetLang.toUpperCase() });
 
@@ -317,7 +318,45 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const speakMessage = (id: string, text: string, translation?: string, correction?: string) => {
+  const toSpeechLang = (code: string) => {
+    const c = (code || "").toLowerCase();
+    switch (c) {
+      case "en":
+        return "en-US";
+      case "tr":
+        return "tr-TR";
+      case "de":
+        return "de-DE";
+      case "fr":
+        return "fr-FR";
+      case "es":
+        return "es-ES";
+      case "ja":
+        return "ja-JP";
+      case "zh":
+      case "zh-cn":
+        return "zh-CN";
+      default:
+        return code;
+    }
+  };
+
+  const cleanCorrectionForTTS = (correctionText: string) => {
+    // Remove the pencil emoji so the TTS doesn't read "pencil/kalem".
+    return correctionText
+      .replace(/✏️/g, "")
+      .replace(/→/g, "")
+      .replace(/—/g, "-")
+      .replace(/\s+/g, " ")
+      .trim();
+  };
+
+  const speakMessage = (
+    id: string,
+    text: string,
+    translation?: string,
+    correction?: string
+  ) => {
     if (typeof window === "undefined" || !window.speechSynthesis) return;
     if (speakingId === id) {
       window.speechSynthesis.cancel();
@@ -326,17 +365,44 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
     }
     window.speechSynthesis.cancel();
 
-    const parts = [text];
-    if (translation) parts.push(translation);
-    if (correction) parts.push(correction);
+    const utterances: SpeechSynthesisUtterance[] = [];
 
-    const utterance = new SpeechSynthesisUtterance(parts.join("\n\n"));
-    utterance.lang = targetLang;
-    utterance.rate = 0.9;
-    utterance.onend = () => setSpeakingId(null);
-    utterance.onerror = () => setSpeakingId(null);
+    utterances.push(
+      new SpeechSynthesisUtterance(text)
+    );
+    utterances[utterances.length - 1].lang = toSpeechLang(targetLang);
+    utterances[utterances.length - 1].rate = 0.9;
+
+    if (translation) {
+      utterances.push(new SpeechSynthesisUtterance(translation));
+      utterances[utterances.length - 1].lang = toSpeechLang(nativeLang);
+      utterances[utterances.length - 1].rate = 0.9;
+    }
+
+    if (correction) {
+      const cleaned = cleanCorrectionForTTS(correction);
+      if (cleaned) {
+        utterances.push(new SpeechSynthesisUtterance(cleaned));
+        utterances[utterances.length - 1].lang = toSpeechLang(nativeLang);
+        utterances[utterances.length - 1].rate = 0.9;
+      }
+    }
+
     setSpeakingId(id);
-    window.speechSynthesis.speak(utterance);
+    let idx = 0;
+    const speakNext = () => {
+      if (idx >= utterances.length) {
+        setSpeakingId(null);
+        return;
+      }
+      const u = utterances[idx];
+      idx += 1;
+      u.onend = speakNext;
+      u.onerror = () => setSpeakingId(null);
+      window.speechSynthesis.speak(u);
+    };
+
+    speakNext();
   };
 
   const getConvTitle = (conv: Conversation): string => {
