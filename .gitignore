@@ -24,6 +24,17 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+clean_*.txt
+lint_*.txt
+prisma_err*.txt
+ts_*.txt
+testsprite_tests/tmp/
+
+# claude backups
+.claude_backup/
+
+# local test files
+deneme.md
 
 # local env files
 .env
