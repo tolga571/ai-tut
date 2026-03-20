@@ -23,7 +23,7 @@ export type SupportedLangCode = (typeof UI_LANG_CODES)[number];
 export const SUPPORTED_LANGUAGES = [
   { code: 'ar', nameEn: 'Arabic',           flag: '🇸🇦' },
   { code: 'de', nameEn: 'German',           flag: '🇩🇪' },
-  { code: 'en', nameEn: 'English',          flag: '🇬🇧' },
+  { code: 'en', nameEn: 'English',          flag: '🇺🇸' },
   { code: 'es', nameEn: 'Spanish',          flag: '🇪🇸' },
   { code: 'fr', nameEn: 'French',           flag: '🇫🇷' },
   { code: 'ja', nameEn: 'Japanese',         flag: '🇯🇵' },
@@ -73,7 +73,7 @@ export const LEARNING_LANGUAGES = [
 
 export const LANG_FLAG: Record<string, string> = {
   af: '🇿🇦', ar: '🇸🇦', bn: '🇧🇩', zh: '🇨🇳', nl: '🇳🇱',
-  en: '🇬🇧', fi: '🇫🇮', fr: '🇫🇷', de: '🇩🇪', el: '🇬🇷',
+  en: '🇺🇸', fi: '🇫🇮', fr: '🇫🇷', de: '🇩🇪', el: '🇬🇷',
   gu: '🇮🇳', hi: '🇮🇳', id: '🇮🇩', it: '🇮🇹', ja: '🇯🇵',
   ko: '🇰🇷', ms: '🇲🇾', mr: '🇮🇳', no: '🇳🇴', fa: '🇮🇷',
   pl: '🇵🇱', pt: '🇵🇹', pa: '🇮🇳', ro: '🇷🇴', ru: '🇷🇺',

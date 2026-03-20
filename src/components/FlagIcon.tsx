@@ -4,7 +4,8 @@ const LANG_TO_COUNTRY: Record<string, string> = {
   bn: "bd",
   de: "de",
   el: "gr",
-  en: "gb",
+  // "en" (UI/learning language) -> USA flag for English
+  en: "us",
   es: "es",
   fa: "ir",
   fi: "fi",
