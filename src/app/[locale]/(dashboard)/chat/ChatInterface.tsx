@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import toast from "react-hot-toast";
+import { splitTextForSpeechPauses, WARM_TTS } from "@/lib/speechTts";
 import { UserMenu } from "@/components/UserMenu";
 import { useTranslations, useLocale } from "next-intl";
 import { FlagIcon } from "@/components/FlagIcon";
@@ -375,20 +376,22 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
     }
     window.speechSynthesis.cancel();
 
-    const utterances: SpeechSynthesisUtterance[] = [];
-
-    // 1) Speak only the main content (target language). (Ignore the middle translation block.)
-    const mainUtter = new SpeechSynthesisUtterance(text);
-    mainUtter.lang = toSpeechLang(targetLang);
-    mainUtter.rate = 0.9;
-    utterances.push(mainUtter);
-
-    // Correction (sarı not) seslendirilmiyor. Kullanıcı yalnızca ana cevap kısmını duysun.
-
-    // Best-effort voice selection for the main utterance (keeps main voice consistent).
+    // 1) Speak only the main content (target language). Chunk by sentence for pauses (warmer TTS pacing).
+    const chunks = splitTextForSpeechPauses(text);
     const mainSpeechLang = toSpeechLang(targetLang);
     const mainVoice = pickVoice(mainSpeechLang);
-    if (mainVoice) mainUtter.voice = mainVoice;
+
+    const utterances: SpeechSynthesisUtterance[] = chunks.map((chunk) => {
+      const u = new SpeechSynthesisUtterance(chunk);
+      u.lang = mainSpeechLang;
+      u.rate = WARM_TTS.rate;
+      u.pitch = WARM_TTS.pitch;
+      u.volume = 1;
+      if (mainVoice) u.voice = mainVoice;
+      return u;
+    });
+
+    // Correction (sarı not) seslendirilmiyor. Kullanıcı yalnızca ana cevap kısmını duysun.
 
     setSpeakingId(id);
     let idx = 0;
@@ -399,7 +402,13 @@ export default function ChatInterface({ user }: { user: { id?: string; name?: st
       }
       const u = utterances[idx];
       idx += 1;
-      u.onend = speakNext;
+      u.onend = () => {
+        if (idx >= utterances.length) {
+          setSpeakingId(null);
+          return;
+        }
+        window.setTimeout(speakNext, WARM_TTS.interChunkMs);
+      };
       u.onerror = () => setSpeakingId(null);
       window.speechSynthesis.speak(u);
     };

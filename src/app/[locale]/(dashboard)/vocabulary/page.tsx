@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "@/i18n/navigation";
 import toast from "react-hot-toast";
+import { WARM_TTS } from "@/lib/speechTts";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { FlagIcon } from "@/components/FlagIcon";
 
@@ -84,6 +85,7 @@ export default function VocabularyPage() {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = lang;
     utterance.rate = 0.85;
+    utterance.pitch = WARM_TTS.pitch;
     utterance.onend = () => setSpeakingId(null);
     utterance.onerror = () => setSpeakingId(null);
     setSpeakingId(id);
