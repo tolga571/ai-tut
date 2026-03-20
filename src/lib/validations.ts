@@ -7,6 +7,15 @@ export const registerSchema = z.object({
   name:     z.string().min(2).max(100).trim(),
   email:    z.string().email().toLowerCase().trim(),
   password: z.string().min(8).max(128),
+  confirmPassword: z.string().min(8).max(128),
+}).superRefine((data, ctx) => {
+  if (data.password !== data.confirmPassword) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Passwords do not match",
+      path: ["confirmPassword"],
+    });
+  }
 });
 
 export const chatMessageSchema = z.object({

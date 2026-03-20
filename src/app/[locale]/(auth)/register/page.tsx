@@ -16,8 +16,9 @@ const PLAN_OPTIONS = [
 export default function RegisterPage() {
   const router = useRouter();
   const t = useTranslations("register");
+  const resetT = useTranslations("resetPassword");
   const { data: session } = useSession();
-  const [data, setData] = useState({ name: "", email: "", password: "" });
+  const [data, setData] = useState({ name: "", email: "", password: "", confirmPassword: "" });
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
@@ -36,6 +37,11 @@ export default function RegisterPage() {
 
   const handleDetailsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (data.password !== data.confirmPassword) {
+      toast.error(resetT("passwordMismatch"));
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -179,6 +185,17 @@ export default function RegisterPage() {
               className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 transition-all outline-none"
               value={data.password}
               onChange={(e) => setData({ ...data, password: e.target.value })}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{resetT("confirmPassword")}</label>
+            <input
+              type="password"
+              required
+              placeholder="••••••••"
+              className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 transition-all outline-none"
+              value={data.confirmPassword}
+              onChange={(e) => setData({ ...data, confirmPassword: e.target.value })}
             />
           </div>
           <button
