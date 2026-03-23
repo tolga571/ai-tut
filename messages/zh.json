@@ -138,7 +138,10 @@
       "paymentFailed": "无法打开付款页面。请重试。",
       "paymentStart": "无法启动付款。请重试。",
       "devActivate": "无法激活方案。",
-      "devGeneric": "发生错误。"
+      "devGeneric": "发生错误。",
+      "nameRequired": "姓名为必填项",
+      "emailInvalid": "请输入有效的电子邮件地址",
+      "passwordTooShort": "密码至少需要8个字符"
     }
   },
   "chat": {

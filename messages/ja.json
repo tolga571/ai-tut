@@ -138,7 +138,10 @@
       "paymentFailed": "支払いページを開けませんでした。もう一度お試しください。",
       "paymentStart": "支払いを開始できませんでした。もう一度お試しください。",
       "devActivate": "プランを有効化できませんでした。",
-      "devGeneric": "エラーが発生しました。"
+      "devGeneric": "エラーが発生しました。",
+      "nameRequired": "名前は必須です",
+      "emailInvalid": "有効なメールアドレスを入力してください",
+      "passwordTooShort": "パスワードは8文字以上必要です"
     }
   },
   "chat": {

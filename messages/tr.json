@@ -133,7 +133,10 @@
       "paymentFailed": "Ödeme sayfası açılamadı. Lütfen tekrar deneyin.",
       "paymentStart": "Ödeme başlatılamadı. Lütfen tekrar deneyin.",
       "devActivate": "Plan aktif edilemedi.",
-      "devGeneric": "Bir hata oluştu."
+      "devGeneric": "Bir hata oluştu.",
+      "nameRequired": "İsim zorunludur",
+      "emailInvalid": "Geçerli bir e-posta adresi girin",
+      "passwordTooShort": "Şifre en az 8 karakter olmalıdır"
     }
   },
   "chat": {

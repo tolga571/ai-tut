@@ -138,7 +138,10 @@
       "paymentFailed": "No se pudo abrir la página de pago. Por favor intenta de nuevo.",
       "paymentStart": "No se pudo iniciar el pago. Por favor intenta de nuevo.",
       "devActivate": "No se pudo activar el plan.",
-      "devGeneric": "Ocurrió un error."
+      "devGeneric": "Ocurrió un error.",
+      "nameRequired": "El nombre es obligatorio",
+      "emailInvalid": "Ingrese un correo electrónico válido",
+      "passwordTooShort": "La contraseña debe tener al menos 8 caracteres"
     }
   },
   "chat": {

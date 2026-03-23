@@ -138,7 +138,10 @@
       "paymentFailed": "Impossible d'ouvrir la page de paiement. Veuillez réessayer.",
       "paymentStart": "Impossible de démarrer le paiement. Veuillez réessayer.",
       "devActivate": "Impossible d'activer le plan.",
-      "devGeneric": "Une erreur s'est produite."
+      "devGeneric": "Une erreur s'est produite.",
+      "nameRequired": "Le nom est requis",
+      "emailInvalid": "Veuillez entrer une adresse email valide",
+      "passwordTooShort": "Le mot de passe doit comporter au moins 8 caractères"
     }
   },
   "chat": {
