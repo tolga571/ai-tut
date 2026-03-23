@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
+import crypto from "crypto";
 import { prisma } from "@/lib/prisma";
 import { resetPasswordSchema } from "@/lib/validations";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
@@ -25,8 +26,11 @@ export async function POST(request: Request) {
 
     const { token, password } = result.data;
 
+    // Hash the incoming raw token to compare against the stored hash
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
     const resetToken = await prisma.passwordResetToken.findUnique({
-      where: { token },
+      where: { token: hashedToken },
     });
 
     if (!resetToken) {

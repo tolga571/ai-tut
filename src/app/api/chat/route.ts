@@ -6,6 +6,12 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { prisma } from "@/lib/prisma";
 import { chatMessageSchema } from "@/lib/validations";
 import { checkRateLimit } from "@/lib/rateLimit";
+import {
+  buildMemoryBlock,
+  getTopicInstruction,
+  normalizeLearnedWords,
+} from "@/lib/chatHelpers";
+import type { UserMemory } from "@/lib/chatHelpers";
 
 const CEFR_GUIDE: Record<string, string> = {
   A1: "very simple words, 3-5 word sentences, ultra-basic vocabulary, present tense only",
@@ -16,30 +22,16 @@ const CEFR_GUIDE: Record<string, string> = {
   C2: "near-native mastery, any register, subtle nuance, complex structures",
 };
 
-function getTopicInstruction(topicId: string | undefined, targetLang: string): string {
-  switch (topicId) {
-    case "cafe":
-      return `Role-play a friendly barista in a café. Talk about coffee, pastries and light small talk in ${targetLang}.`;
-    case "travel-hotel":
-      return `Role-play a hotel receptionist. Help the guest with check-in, room preferences and local tips in ${targetLang}.`;
-    case "job-interview":
-      return `You are an interviewer in a job interview. Ask professional questions and give feedback in ${targetLang}.`;
-    case "friends":
-      return `You are a close friend chatting casually about daily life, plans and feelings in ${targetLang}.`;
-    case "small-talk":
-      return `Have light small talk about weather, hobbies and weekend plans in ${targetLang}.`;
-    default:
-      return "";
-  }
-}
 
 function buildSystemPrompt(
   targetLang: string,
   nativeLang: string,
   cefrLevel: string,
-  topicInstruction?: string
+  topicInstruction?: string,
+  memory?: UserMemory
 ): string {
   const cefrHint = CEFR_GUIDE[cefrLevel] ?? CEFR_GUIDE["A1"];
+  const memoryBlock = memory ? buildMemoryBlock(memory) : "";
   const topicBlock = topicInstruction
     ? `
 
@@ -50,8 +42,7 @@ CONVERSATION CONTEXT:
 
   return `You are an enthusiastic, encouraging language tutor helping a student learn ${targetLang}.
 Their native language is ${nativeLang} and their current proficiency is CEFR level ${cefrLevel} (${cefrHint}).
-
-${topicBlock}
+${topicBlock}${memoryBlock}
 
 PERSONALITY:
 - Be warm, friendly, and motivating — like a patient native-speaker friend
@@ -73,7 +64,10 @@ You MUST return ONLY a valid JSON object. No markdown, no extra text:
 {
   "content": "<your reply entirely in ${targetLang}>",
   "translation": "<exact ${nativeLang} translation of content>",
-  "correction": "<if the student made a grammar/spelling mistake: write ONLY the correction here in this format: ✏️ [original mistake] → [corrected form] — [short grammar rule explanation in ${nativeLang}]. Leave EMPTY STRING if no mistake.>"
+  "correction": "<if the student made a grammar/spelling mistake: write ONLY the correction here in this format: ✏️ [original mistake] → [corrected form] — [short grammar rule explanation in ${nativeLang}]. Leave EMPTY STRING if no mistake.>",
+  "words": [
+    { "word": "<key ${targetLang} vocabulary word from your reply>", "definition": "<brief definition in ${nativeLang}>" }
+  ]
 }
 
 CONTENT RULES:
@@ -86,7 +80,19 @@ CORRECTION RULES:
 - Only correct clear grammar or spelling mistakes, not stylistic choices
 - Bold the error with ✏️ marker in the correction field
 - Explain the rule briefly and encouragingly in ${nativeLang}
-- If no mistake, set "correction" to "" (empty string)`;
+- If no mistake, set "correction" to "" (empty string)
+
+WORDS RULES:
+- Extract 2-4 useful vocabulary words directly from your "content" reply that are worth learning
+- Choose words appropriate for CEFR ${cefrLevel} — not too simple, not too advanced
+- Each word should be a single word or short phrase (not full sentences)
+- Definition must be concise (3-8 words) in ${nativeLang}
+- If the reply is very short or conversational, 1-2 words is fine
+- Always return "words" as an array (can be empty [] if truly nothing notable)
+
+CEFR PROGRESSION:
+- If the student consistently writes grammatically correct sentences well above CEFR ${cefrLevel}, you may gently note at the end of your correction field (or as a warm aside inside "content") that they might be ready to advance. Only do this if it's genuinely evident — don't force it.
+- Do NOT simplify language below what CEFR ${cefrLevel} allows. If the student asks advanced questions, engage with them at that level while still keeping your default output at CEFR ${cefrLevel}.`;
 }
 
 export async function POST(req: Request) {
@@ -142,13 +148,46 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "API key missing" }, { status: 500 });
     }
 
-    const history = currentConvId
-      ? await prisma.message.findMany({
-          where: { conversationId: currentConvId },
-          orderBy: { createdAt: "asc" },
-          take: 20,
-        })
-      : [];
+    // Fetch user memory context in parallel with conversation history
+    const [history, profileRows, recentVocab, recentMistakeMessages] = await Promise.all([
+      currentConvId
+        ? prisma.message.findMany({
+            where: { conversationId: currentConvId },
+            orderBy: { createdAt: "asc" },
+            take: 20,
+          })
+        : Promise.resolve([]),
+      // $queryRaw bypasses stale Prisma client types for learningGoal/interestArea
+      prisma.$queryRaw<Array<{ learningGoal: string | null; interestArea: string | null }>>`
+        SELECT "learningGoal", "interestArea" FROM "User" WHERE id = ${userId} LIMIT 1
+      `,
+      prisma.vocabularyWord.findMany({
+        where: { userId, language: targetLang },
+        orderBy: { createdAt: "desc" },
+        take: 20,
+        select: { word: true },
+      }),
+      prisma.message.findMany({
+        where: {
+          conversation: { userId },
+          role: "ai",
+          NOT: [{ correction: "" }, { correction: null }],
+        },
+        orderBy: { createdAt: "desc" },
+        take: 8,
+        select: { correction: true },
+      }),
+    ]);
+
+    const userProfile = profileRows[0] ?? null;
+    const userMemory: UserMemory = {
+      learningGoal: userProfile?.learningGoal,
+      interestArea: userProfile?.interestArea,
+      knownWords: recentVocab.map((v) => v.word),
+      recentMistakes: recentMistakeMessages
+        .map((m) => m.correction?.replace(/^✏️\s*/, "").trim())
+        .filter((c): c is string => Boolean(c)),
+    };
 
     const chatHistory = history.map((msg) => ({
       role: msg.role === "user" ? "user" : "model",
@@ -178,7 +217,8 @@ export async function POST(req: Request) {
             targetLang,
             nativeLang,
             cefrLevel,
-            topicInstruction
+            topicInstruction,
+            userMemory
           ),
           generationConfig: { responseMimeType: "application/json" },
         });
@@ -196,17 +236,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "AI response unavailable, please try again" }, { status: 502 });
     }
 
-    let parsedResult: { content: string; translation: string; correction?: string };
+    let parsedResult: { content?: unknown; translation?: unknown; correction?: unknown; words?: unknown };
     try {
       parsedResult = JSON.parse(aiResponseText);
     } catch {
-      parsedResult = { content: aiResponseText, translation: "", correction: "" };
+      parsedResult = { content: aiResponseText, translation: "", correction: "", words: [] };
     }
 
     const normalizedResult = {
       content: typeof parsedResult.content === "string" ? parsedResult.content : aiResponseText,
       translation: typeof parsedResult.translation === "string" ? parsedResult.translation : "",
       correction: typeof parsedResult.correction === "string" ? parsedResult.correction : "",
+      words: normalizeLearnedWords(parsedResult.words),
     };
 
     let persistedConvId = currentConvId;
@@ -262,15 +303,14 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({
-      message: persisted.savedAiMsg,
+      message: { ...persisted.savedAiMsg, words: normalizedResult.words },
       conversationId: persisted.conversationId,
       xp: persisted.updatedUser.xp,
       xpAwarded: 10,
     });
   } catch (error) {
     console.error("[CHAT_POST]", error);
-    const message = error instanceof Error ? error.message : "Internal Error";
-    return NextResponse.json({ error: message }, { status: 500 });
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
@@ -313,7 +353,6 @@ export async function GET(req: Request) {
     });
   } catch (error) {
     console.error("[CHAT_GET]", error);
-    const message = error instanceof Error ? error.message : "Internal Error";
-    return NextResponse.json({ error: message }, { status: 500 });
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

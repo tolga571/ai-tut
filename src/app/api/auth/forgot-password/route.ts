@@ -41,16 +41,17 @@ export async function POST(request: Request) {
     // Delete any existing tokens for this email
     await prisma.passwordResetToken.deleteMany({ where: { email } });
 
-    // Generate a secure token
-    const token = crypto.randomBytes(32).toString("hex");
+    // Generate a secure random token — send raw to user, store only SHA-256 hash
+    const rawToken = crypto.randomBytes(32).toString("hex");
+    const hashedToken = crypto.createHash("sha256").update(rawToken).digest("hex");
     const expires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
     await prisma.passwordResetToken.create({
-      data: { email, token, expires },
+      data: { email, token: hashedToken, expires },
     });
 
     try {
-      await sendPasswordResetEmail(email, token);
+      await sendPasswordResetEmail(email, rawToken);
     } catch (err) {
       console.error("FORGOT_PASSWORD_EMAIL_ERROR", err);
       // Don't expose email failures to the client
