@@ -19,6 +19,7 @@ export default function RegisterPage() {
   const resetT = useTranslations("resetPassword");
   const { data: session } = useSession();
   const [data, setData] = useState({ name: "", email: "", password: "", confirmPassword: "" });
+  const [errors, setErrors] = useState({ name: "", email: "", password: "", confirmPassword: "" });
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
@@ -37,10 +38,28 @@ export default function RegisterPage() {
 
   const handleDetailsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (data.password !== data.confirmPassword) {
-      toast.error(resetT("passwordMismatch"));
-      return;
+    const newErrors = { name: "", email: "", password: "", confirmPassword: "" };
+    let hasError = false;
+
+    if (!data.name.trim()) {
+      newErrors.name = t("errors.nameRequired") || "Name is required";
+      hasError = true;
     }
+    if (!data.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+      newErrors.email = t("errors.emailInvalid") || "Please enter a valid email address";
+      hasError = true;
+    }
+    if (data.password.length < 8) {
+      newErrors.password = t("errors.passwordTooShort") || "Password must be at least 8 characters";
+      hasError = true;
+    }
+    if (data.password !== data.confirmPassword) {
+      newErrors.confirmPassword = resetT("passwordMismatch") || "Passwords do not match";
+      hasError = true;
+    }
+
+    setErrors(newErrors);
+    if (hasError) return;
 
     setLoading(true);
 
@@ -158,45 +177,45 @@ export default function RegisterPage() {
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t("name")}</label>
             <input
               type="text"
-              required
               placeholder={t("namePlaceholder")}
-              className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 transition-all outline-none"
+              className={`w-full px-4 py-3 bg-white dark:bg-gray-800 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 transition-all outline-none ${errors.name ? "border-red-500 dark:border-red-500" : "border-gray-300 dark:border-gray-700"}`}
               value={data.name}
-              onChange={(e) => setData({ ...data, name: e.target.value })}
+              onChange={(e) => { setData({ ...data, name: e.target.value }); setErrors((prev) => ({ ...prev, name: "" })); }}
             />
+            {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t("email")}</label>
             <input
               type="email"
-              required
               placeholder={t("emailPlaceholder")}
-              className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 transition-all outline-none"
+              className={`w-full px-4 py-3 bg-white dark:bg-gray-800 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 transition-all outline-none ${errors.email ? "border-red-500 dark:border-red-500" : "border-gray-300 dark:border-gray-700"}`}
               value={data.email}
-              onChange={(e) => setData({ ...data, email: e.target.value })}
+              onChange={(e) => { setData({ ...data, email: e.target.value }); setErrors((prev) => ({ ...prev, email: "" })); }}
             />
+            {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t("password")}</label>
             <input
               type="password"
-              required
               placeholder="••••••••"
-              className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 transition-all outline-none"
+              className={`w-full px-4 py-3 bg-white dark:bg-gray-800 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 transition-all outline-none ${errors.password ? "border-red-500 dark:border-red-500" : "border-gray-300 dark:border-gray-700"}`}
               value={data.password}
-              onChange={(e) => setData({ ...data, password: e.target.value })}
+              onChange={(e) => { setData({ ...data, password: e.target.value }); setErrors((prev) => ({ ...prev, password: "" })); }}
             />
+            {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{resetT("confirmPassword")}</label>
             <input
               type="password"
-              required
               placeholder="••••••••"
-              className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 transition-all outline-none"
+              className={`w-full px-4 py-3 bg-white dark:bg-gray-800 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 transition-all outline-none ${errors.confirmPassword ? "border-red-500 dark:border-red-500" : "border-gray-300 dark:border-gray-700"}`}
               value={data.confirmPassword}
-              onChange={(e) => setData({ ...data, confirmPassword: e.target.value })}
+              onChange={(e) => { setData({ ...data, confirmPassword: e.target.value }); setErrors((prev) => ({ ...prev, confirmPassword: "" })); }}
             />
+            {errors.confirmPassword && <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>}
           </div>
           <button
             type="submit"

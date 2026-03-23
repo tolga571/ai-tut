@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -48,7 +48,8 @@ const CEFR_COLORS: Record<string, string> = {
 };
 
 export default function DashboardPage() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const t = useTranslations("dashboard");
   const tNav = useTranslations("nav");
   const tLangs = useTranslations("languages");
@@ -70,6 +71,12 @@ export default function DashboardPage() {
   const cefrLevel = user?.cefrLevel ?? "A1";
   const cefrColor = CEFR_COLORS[cefrLevel] ?? CEFR_COLORS.A1;
   const dailyTip = DAILY_TIPS[new Date().getDay() % DAILY_TIPS.length];
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.replace("/login");
+    }
+  }, [status, router]);
 
   useEffect(() => {
     fetch("/api/user/dashboard")
@@ -96,6 +103,14 @@ export default function DashboardPage() {
     if (days < 7) return t("time.daysAgo", { count: days });
     return new Date(dateStr).toLocaleDateString();
   };
+
+  if (status === "loading" || status === "unauthenticated") {
+    return (
+      <div className="min-h-screen bg-white dark:bg-gray-950 flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white transition-colors">

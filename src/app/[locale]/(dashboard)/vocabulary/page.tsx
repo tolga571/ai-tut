@@ -33,7 +33,7 @@ export default function VocabularyPage() {
   useEffect(() => {
     fetch("/api/vocabulary")
       .then((r) => r.json())
-      .then(setWords)
+      .then((data) => setWords(Array.isArray(data) ? data : []))
       .catch(() => toast.error("Failed to load vocabulary"))
       .finally(() => setLoading(false));
   }, []);
