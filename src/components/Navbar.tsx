@@ -64,13 +64,15 @@ export function Navbar() {
           {/* Desktop right side */}
           <div className="hidden md:flex items-center gap-3">
             {/* Locale switcher */}
-            <div className="flex items-center gap-2">
-              <FlagIcon code={locale} className="w-5 h-4" />
+            <div className="relative flex items-center">
+              <span className="absolute left-3 pointer-events-none z-10 flex items-center">
+                <FlagIcon code={locale} className="w-5 h-4" />
+              </span>
               <select
                 value={locale}
                 onChange={handleLocaleChange}
                 aria-label="Switch UI language"
-                className="h-9 px-3 pr-8 rounded-full border border-gray-300 dark:border-white/10 bg-gray-100 dark:bg-gray-900 text-xs font-semibold text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors cursor-pointer focus:outline-none appearance-none"
+                className="h-9 pl-10 pr-8 rounded-full border border-gray-300 dark:border-white/10 bg-gray-100 dark:bg-gray-900 text-xs font-semibold text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors cursor-pointer focus:outline-none appearance-none"
                 style={{
                   backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
                   backgroundRepeat: "no-repeat",
@@ -183,12 +185,14 @@ export function Navbar() {
       {/* Mobile menu */}
       {mobileOpen && (
         <div className="md:hidden border-t border-gray-200 dark:border-white/5 glass-nav px-4 py-4 space-y-3">
-          <div className="flex items-center gap-2">
-            <FlagIcon code={locale} className="w-5 h-4 flex-shrink-0" />
+          <div className="relative flex items-center">
+            <span className="absolute left-3 pointer-events-none z-10 flex items-center">
+              <FlagIcon code={locale} className="w-5 h-4 flex-shrink-0" />
+            </span>
             <select
               value={locale}
               onChange={handleLocaleChange}
-              className="w-full h-10 px-3 pr-10 rounded-xl border border-gray-300 dark:border-white/10 bg-gray-100 dark:bg-gray-900 text-sm text-gray-800 dark:text-gray-200 focus:outline-none appearance-none"
+              className="w-full h-10 pl-10 pr-10 rounded-xl border border-gray-300 dark:border-white/10 bg-gray-100 dark:bg-gray-900 text-sm text-gray-800 dark:text-gray-200 focus:outline-none appearance-none"
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
                 backgroundRepeat: "no-repeat",
