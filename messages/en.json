@@ -245,53 +245,55 @@
   },
   "pricing": {
     "title": "Simple, transparent pricing",
-    "subtitle": "Unlock fluent conversations in your target language with AI-powered feedback.",
-    "monthly": "Monthly billing",
-    "annual": "Annual billing",
+    "subtitle": "One plan, all features. Pick the billing period that suits you.",
+    "monthly": "Monthly",
+    "quarterly": "3 Months",
+    "annual": "Annual",
     "choosePlan": "Choose Your Plan",
-    "planSubtitle": "Select the plan that fits your learning journey",
+    "planSubtitle": "Unlock fluent conversations powered by AI",
     "selected": "Selected",
-    "selectPlan": "Select Plan",
-    "guarantee": "All plans include 14-day money back guarantee. Cancel anytime.",
-    "recommended": "Recommended",
+    "selectPlan": "Get Started",
+    "guarantee": "14-day money-back guarantee. Cancel anytime.",
+    "recommended": "Best Value",
     "errors": {
       "loginRequired": "Please log in first to subscribe",
-      "notConfigured": "Billing system is not configured yet. (Missing Paddle Token)"
+      "notConfigured": "Billing system is not configured yet. Please contact support."
     },
     "plans": {
-      "standardMonthly": {
-        "name": "Standard Monthly",
+      "monthly": {
+        "name": "Monthly",
         "features": [
-          "Basic Language Practice",
-          "100 AI Messages/day",
-          "All Languages"
+          "Unlimited AI conversations",
+          "All 30+ languages",
+          "CEFR-level adaptive tutor",
+          "Vocabulary tracker",
+          "Progress dashboard",
+          "Grammar correction",
+          "Cancel anytime"
         ]
       },
-      "standardYearly": {
-        "name": "Standard Yearly",
+      "quarterly": {
+        "name": "3 Months",
         "features": [
-          "Basic Language Practice",
-          "100 AI Messages/day",
-          "All Languages",
-          "Save 10%"
+          "Unlimited AI conversations",
+          "All 30+ languages",
+          "CEFR-level adaptive tutor",
+          "Vocabulary tracker",
+          "Progress dashboard",
+          "Grammar correction",
+          "Cancel anytime"
         ]
       },
-      "proMonthly": {
-        "name": "Pro Monthly",
+      "yearly": {
+        "name": "Annual",
         "features": [
-          "Advanced Practice",
-          "Unlimited Messages",
-          "Personalized Tutors",
-          "Priority Support"
-        ]
-      },
-      "proYearly": {
-        "name": "Pro Yearly",
-        "features": [
-          "Advanced Practice",
-          "Unlimited Messages",
-          "Personalized Tutors",
-          "Save 20%"
+          "Unlimited AI conversations",
+          "All 30+ languages",
+          "CEFR-level adaptive tutor",
+          "Vocabulary tracker",
+          "Progress dashboard",
+          "Grammar correction",
+          "Cancel anytime"
         ]
       }
     }
