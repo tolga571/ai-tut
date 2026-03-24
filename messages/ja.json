@@ -94,7 +94,8 @@
     "email": "メールアドレス",
     "emailPlaceholder": "you@example.com",
     "password": "パスワード",
-    "submit": "続ける — プランを選択",
+    "submit": "料金ページへ進む",
+    "afterSignup": "アカウントを作成しました。課金期間を選んでチャットを解除してください。",
     "hasAccount": "すでにアカウントをお持ちですか？",
     "signIn": "ログイン",
     "activating": "支払いを確認中...",
@@ -102,34 +103,6 @@
     "paymentSuccess": "プランが有効化されました！ようこそ。",
     "activationTimeout": "支払いは確認されましたが、有効化が遅れています。ログインしてください。",
     "devSkip": "[開発] 支払いをスキップ — プランを有効化",
-    "planStep": {
-      "title": "プランを選択",
-      "subtitle": "学習目標に合ったプランを選んでください。",
-      "note": "プランを選択後、チャット体験に直接進みます。",
-      "cta": "チャットへ",
-      "selected": "選択済み",
-      "select": "選択",
-      "plans": {
-        "base": {
-          "name": "ベーシックプラン",
-          "priceValue": "$5",
-          "priceSuffix": "/ 月",
-          "description": "AIチューターの旅を基本から始めましょう。"
-        },
-        "middle": {
-          "name": "ミドルプラン",
-          "priceValue": "$15",
-          "priceSuffix": "/ 月",
-          "description": "高度な修正と長いセッションでレベルアップ。"
-        },
-        "ultra": {
-          "name": "ウルトラプラン",
-          "priceValue": "$40",
-          "priceSuffix": "/ 月",
-          "description": "すべてを解放：プロのフィードバック、スピード、プレミアムツール。"
-        }
-      }
-    },
     "errors": {
       "register": "登録に失敗しました",
       "generic": "予期しないエラーが発生しました。",
@@ -245,53 +218,79 @@
   },
   "pricing": {
     "title": "シンプルで透明な料金",
-    "subtitle": "AIによるフィードバックで目標言語の流暢な会話を実現。",
-    "monthly": "月払い",
-    "annual": "年払い",
+    "subtitle": "1つのプラン、すべての機能。課金期間をお選びください。",
+    "monthly": "月額",
+    "quarterly": "3か月",
+    "annual": "年額",
     "choosePlan": "プランを選択",
     "planSubtitle": "学習の旅に合ったプランを選んでください",
     "selected": "選択済み",
     "selectPlan": "プランを選択",
-    "guarantee": "全プランに14日間の返金保証付き。いつでもキャンセル可能。",
-    "recommended": "おすすめ",
+    "opening": "開いています…",
+    "subscribe": "購読する",
+    "checkoutSuccess": "お支払いを受け付けました。セッションを更新しました。",
+    "inactiveHint": "支払い直後の場合は、セッションを更新してチャットを解除してください。",
+    "refreshSession": "セッションを更新",
+    "guarantee": "14日間の返金保証。いつでもキャンセル可能。",
+    "recommended": "最もお得",
+    "billing": {
+      "monthly": {
+        "price": "$15",
+        "period": "/月",
+        "perMonth": "$15 / 月"
+      },
+      "quarterly": {
+        "price": "$45",
+        "period": "/3か月",
+        "perMonth": "$15 / 月"
+      },
+      "yearly": {
+        "price": "$180",
+        "period": "/年",
+        "perMonth": "$15 / 月"
+      }
+    },
     "errors": {
       "loginRequired": "サブスクリプションにはまずログインしてください",
-      "notConfigured": "課金システムはまだ設定されていません。"
+      "notConfigured": "課金システムはまだ設定されていません。",
+      "priceNotConfigured": "価格IDが設定されていません。サポートにお問い合わせください。",
+      "checkoutOpenFailed": "決済を開けませんでした。もう一度お試しください。"
     },
     "plans": {
-      "standardMonthly": {
-        "name": "スタンダード月払い",
+      "monthly": {
+        "name": "月額",
         "features": [
-          "基本的な語学練習",
-          "AIメッセージ100件/日",
-          "全言語対応"
+          "無制限のAI会話",
+          "30以上の言語",
+          "CEFRに合わせたチューター",
+          "語彙トラッキング",
+          "進捗ダッシュボード",
+          "文法の訂正",
+          "いつでもキャンセル可能"
         ]
       },
-      "standardYearly": {
-        "name": "スタンダード年払い",
+      "quarterly": {
+        "name": "3か月",
         "features": [
-          "基本的な語学練習",
-          "AIメッセージ100件/日",
-          "全言語対応",
-          "10%お得"
+          "無制限のAI会話",
+          "30以上の言語",
+          "CEFRに合わせたチューター",
+          "語彙トラッキング",
+          "進捗ダッシュボード",
+          "文法の訂正",
+          "いつでもキャンセル可能"
         ]
       },
-      "proMonthly": {
-        "name": "プロ月払い",
+      "yearly": {
+        "name": "年額",
         "features": [
-          "高度な練習",
-          "無制限メッセージ",
-          "個人チューター",
-          "優先サポート"
-        ]
-      },
-      "proYearly": {
-        "name": "プロ年払い",
-        "features": [
-          "高度な練習",
-          "無制限メッセージ",
-          "個人チューター",
-          "20%お得"
+          "無制限のAI会話",
+          "30以上の言語",
+          "CEFRに合わせたチューター",
+          "語彙トラッキング",
+          "進捗ダッシュボード",
+          "文法の訂正",
+          "いつでもキャンセル可能"
         ]
       }
     }

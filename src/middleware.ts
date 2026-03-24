@@ -61,6 +61,14 @@ export default async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL(`/${locale}/onboarding`, req.url));
     }
 
+    // Chat requires an active Paddle subscription (planStatus on JWT from session)
+    const isChat =
+      pathWithoutLocale === "/chat" || pathWithoutLocale.startsWith("/chat/");
+    const planStatus = (token as { planStatus?: string }).planStatus;
+    if (isChat && planStatus !== "active") {
+      return NextResponse.redirect(new URL(`/${locale}/pricing`, req.url));
+    }
+
     if (isAdmin && token.role !== "admin") {
       return NextResponse.redirect(new URL(`/${locale}/dashboard`, req.url));
     }

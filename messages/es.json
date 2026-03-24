@@ -94,7 +94,8 @@
     "email": "Correo electrónico",
     "emailPlaceholder": "tu@ejemplo.com",
     "password": "Contraseña",
-    "submit": "Continuar — Elegir plan",
+    "submit": "Continuar a precios",
+    "afterSignup": "Cuenta creada. Elige un periodo de facturación para desbloquear el chat.",
     "hasAccount": "¿Ya tienes una cuenta?",
     "signIn": "Iniciar sesión",
     "activating": "Verificando pago...",
@@ -102,34 +103,6 @@
     "paymentSuccess": "¡Plan activado! Bienvenido.",
     "activationTimeout": "Pago confirmado pero activación retrasada. Por favor inicia sesión.",
     "devSkip": "[DEV] Omitir pago — Activar plan",
-    "planStep": {
-      "title": "Elige tu plan",
-      "subtitle": "Selecciona el plan que se adapte a tus objetivos de aprendizaje.",
-      "note": "Irás directo a la experiencia de chat después de elegir un plan.",
-      "cta": "Ir al chat",
-      "selected": "Seleccionado",
-      "select": "Seleccionar",
-      "plans": {
-        "base": {
-          "name": "Plan Básico",
-          "priceValue": "$5",
-          "priceSuffix": "/ mes",
-          "description": "Inicia tu viaje con el tutor de IA con lo esencial."
-        },
-        "middle": {
-          "name": "Plan Intermedio",
-          "priceValue": "$15",
-          "priceSuffix": "/ mes",
-          "description": "Avanza con correcciones avanzadas y sesiones más largas."
-        },
-        "ultra": {
-          "name": "Plan Ultra",
-          "priceValue": "$40",
-          "priceSuffix": "/ mes",
-          "description": "Desbloquea todo: feedback profesional, velocidad y herramientas premium."
-        }
-      }
-    },
     "errors": {
       "register": "Error en el registro",
       "generic": "Ocurrió un error inesperado.",
@@ -245,53 +218,79 @@
   },
   "pricing": {
     "title": "Precios simples y transparentes",
-    "subtitle": "Desbloquea conversaciones fluidas en tu idioma objetivo con retroalimentación impulsada por IA.",
-    "monthly": "Facturación mensual",
-    "annual": "Facturación anual",
+    "subtitle": "Un plan, todas las funciones. Elige el periodo de facturación.",
+    "monthly": "Mensual",
+    "quarterly": "3 meses",
+    "annual": "Anual",
     "choosePlan": "Elige tu plan",
     "planSubtitle": "Selecciona el plan que se adapte a tu viaje de aprendizaje",
     "selected": "Seleccionado",
     "selectPlan": "Seleccionar plan",
-    "guarantee": "Todos los planes incluyen garantía de devolución de dinero de 14 días. Cancela cuando quieras.",
-    "recommended": "Recomendado",
+    "opening": "Abriendo…",
+    "subscribe": "Suscribirse",
+    "checkoutSuccess": "Pago recibido. Sesión actualizada.",
+    "inactiveHint": "Si acabas de pagar, actualiza la sesión para desbloquear el chat.",
+    "refreshSession": "Actualizar sesión",
+    "guarantee": "Garantía de devolución de 14 días. Cancela cuando quieras.",
+    "recommended": "Mejor valor",
+    "billing": {
+      "monthly": {
+        "price": "$15",
+        "period": "/mes",
+        "perMonth": "$15 / mes"
+      },
+      "quarterly": {
+        "price": "$45",
+        "period": "/3 meses",
+        "perMonth": "$15 / mes"
+      },
+      "yearly": {
+        "price": "$180",
+        "period": "/año",
+        "perMonth": "$15 / mes"
+      }
+    },
     "errors": {
       "loginRequired": "Por favor inicia sesión primero para suscribirte",
-      "notConfigured": "El sistema de facturación aún no está configurado."
+      "notConfigured": "El sistema de facturación aún no está configurado.",
+      "priceNotConfigured": "Falta el ID de precio. Contacta soporte.",
+      "checkoutOpenFailed": "No se pudo abrir el pago. Inténtalo de nuevo."
     },
     "plans": {
-      "standardMonthly": {
-        "name": "Estándar Mensual",
+      "monthly": {
+        "name": "Mensual",
         "features": [
-          "Práctica básica de idioma",
-          "100 mensajes IA/día",
-          "Todos los idiomas"
+          "Conversaciones IA ilimitadas",
+          "Más de 30 idiomas",
+          "Tutor adaptado al MCER",
+          "Seguimiento de vocabulario",
+          "Panel de progreso",
+          "Corrección gramatical",
+          "Cancela cuando quieras"
         ]
       },
-      "standardYearly": {
-        "name": "Estándar Anual",
+      "quarterly": {
+        "name": "3 meses",
         "features": [
-          "Práctica básica de idioma",
-          "100 mensajes IA/día",
-          "Todos los idiomas",
-          "Ahorra 10%"
+          "Conversaciones IA ilimitadas",
+          "Más de 30 idiomas",
+          "Tutor adaptado al MCER",
+          "Seguimiento de vocabulario",
+          "Panel de progreso",
+          "Corrección gramatical",
+          "Cancela cuando quieras"
         ]
       },
-      "proMonthly": {
-        "name": "Pro Mensual",
+      "yearly": {
+        "name": "Anual",
         "features": [
-          "Práctica avanzada",
-          "Mensajes ilimitados",
-          "Tutores personalizados",
-          "Soporte prioritario"
-        ]
-      },
-      "proYearly": {
-        "name": "Pro Anual",
-        "features": [
-          "Práctica avanzada",
-          "Mensajes ilimitados",
-          "Tutores personalizados",
-          "Ahorra 20%"
+          "Conversaciones IA ilimitadas",
+          "Más de 30 idiomas",
+          "Tutor adaptado al MCER",
+          "Seguimiento de vocabulario",
+          "Panel de progreso",
+          "Corrección gramatical",
+          "Cancela cuando quieras"
         ]
       }
     }

@@ -89,7 +89,8 @@
     "email": "E-posta",
     "emailPlaceholder": "sen@ornek.com",
     "password": "Şifre",
-    "submit": "Devam Et — Plan Seç",
+    "submit": "Fiyatlandırmaya devam et",
+    "afterSignup": "Hesap oluşturuldu. Sohbeti açmak için bir ödeme dönemi seçin.",
     "hasAccount": "Zaten hesabın var mı?",
     "signIn": "Giriş Yap",
     "activating": "Ödeme doğrulanıyor…",
@@ -97,34 +98,6 @@
     "paymentSuccess": "Plan aktif edildi! Hoş geldiniz.",
     "activationTimeout": "Ödeme doğrulandı ancak aktivasyon gecikti. Lütfen giriş yapın.",
     "devSkip": "[DEV] Ödemeyi Atla — Planı Aktif Et",
-    "planStep": {
-      "title": "Planını Seç",
-      "subtitle": "Öğrenme hedefine en uygun planı seç. Ödemeyi yakında ekleyeceğiz.",
-      "note": "Plan seçtikten sonra direkt sohbet deneyimine geçeceksin.",
-      "cta": "Chat'e Git",
-      "selected": "Seçildi",
-      "select": "Seç",
-      "plans": {
-        "base": {
-          "name": "Temel Plan",
-          "priceValue": "$5",
-          "priceSuffix": "/ ay",
-          "description": "AI öğretmen yolculuğuna temel özelliklerle başla."
-        },
-        "middle": {
-          "name": "Orta Plan",
-          "priceValue": "$15",
-          "priceSuffix": "/ ay",
-          "description": "Gelişmiş düzeltmeler ve daha uzun oturumlarla seviye atla."
-        },
-        "ultra": {
-          "name": "Ultra Plan",
-          "priceValue": "$40",
-          "priceSuffix": "/ ay",
-          "description": "Her şeyin kilidini aç: profesyonel geri bildirim, hız ve premium araçlar."
-        }
-      }
-    },
     "errors": {
       "register": "Kayıt başarısız",
       "generic": "Beklenmedik bir hata oluştu.",
@@ -240,53 +213,79 @@
   },
   "pricing": {
     "title": "Basit, şeffaf fiyatlandırma",
-    "subtitle": "Yapay zeka destekli geri bildirimlerle hedef dilinizde akıcı konuşmaların kilidini açın.",
-    "monthly": "Aylık ödeme",
-    "annual": "Yıllık ödeme",
+    "subtitle": "Tek plan, tüm özellikler. Size uygun faturalandırma dönemini seçin.",
+    "monthly": "Aylık",
+    "quarterly": "3 ay",
+    "annual": "Yıllık",
     "choosePlan": "Planını Seç",
     "planSubtitle": "Öğrenme yolculuğuna uyan planı seç",
     "selected": "Seçildi",
     "selectPlan": "Plan Seç",
-    "guarantee": "Tüm planlar 14 günlük para iade garantisi içerir. İstediğiniz zaman iptal edin.",
-    "recommended": "Önerilen",
+    "opening": "Açılıyor…",
+    "subscribe": "Abone ol",
+    "checkoutSuccess": "Ödeme alındı. Oturumunuz güncellendi.",
+    "inactiveHint": "Az önce ödeme yaptıysanız, sohbeti açmak için oturumu yenileyin.",
+    "refreshSession": "Oturumu yenile",
+    "guarantee": "14 günlük para iade garantisi. İstediğiniz zaman iptal.",
+    "recommended": "En avantajlı",
+    "billing": {
+      "monthly": {
+        "price": "$15",
+        "period": "/ay",
+        "perMonth": "$15 / ay"
+      },
+      "quarterly": {
+        "price": "$45",
+        "period": "/3 ay",
+        "perMonth": "$15 / ay"
+      },
+      "yearly": {
+        "price": "$180",
+        "period": "/yıl",
+        "perMonth": "$15 / ay"
+      }
+    },
     "errors": {
       "loginRequired": "Abone olmak için önce giriş yapın",
-      "notConfigured": "Ödeme sistemi henüz yapılandırılmadı. (Paddle Token eksik)"
+      "notConfigured": "Ödeme sistemi yapılandırılmadı. Destek ile iletişime geçin.",
+      "priceNotConfigured": "Fiyat kimliği eksik. Destek ile iletişime geçin.",
+      "checkoutOpenFailed": "Ödeme penceresi açılamadı. Tekrar deneyin."
     },
     "plans": {
-      "standardMonthly": {
-        "name": "Standart Aylık",
+      "monthly": {
+        "name": "Aylık",
         "features": [
-          "Temel Dil Pratiği",
-          "Günde 100 AI Mesajı",
-          "Tüm Diller"
+          "Sınırsız AI sohbet",
+          "30+ dil",
+          "CEFR uyumlu öğretmen",
+          "Kelime takibi",
+          "İlerleme paneli",
+          "Dilbilgisi düzeltmesi",
+          "İstediğin zaman iptal"
         ]
       },
-      "standardYearly": {
-        "name": "Standart Yıllık",
+      "quarterly": {
+        "name": "3 ay",
         "features": [
-          "Temel Dil Pratiği",
-          "Günde 100 AI Mesajı",
-          "Tüm Diller",
-          "%10 Tasarruf"
+          "Sınırsız AI sohbet",
+          "30+ dil",
+          "CEFR uyumlu öğretmen",
+          "Kelime takibi",
+          "İlerleme paneli",
+          "Dilbilgisi düzeltmesi",
+          "İstediğin zaman iptal"
         ]
       },
-      "proMonthly": {
-        "name": "Pro Aylık",
+      "yearly": {
+        "name": "Yıllık",
         "features": [
-          "Gelişmiş Pratik",
-          "Sınırsız Mesaj",
-          "Kişiselleştirilmiş Öğretmenler",
-          "Öncelikli Destek"
-        ]
-      },
-      "proYearly": {
-        "name": "Pro Yıllık",
-        "features": [
-          "Gelişmiş Pratik",
-          "Sınırsız Mesaj",
-          "Kişiselleştirilmiş Öğretmenler",
-          "%20 Tasarruf"
+          "Sınırsız AI sohbet",
+          "30+ dil",
+          "CEFR uyumlu öğretmen",
+          "Kelime takibi",
+          "İlerleme paneli",
+          "Dilbilgisi düzeltmesi",
+          "İstediğin zaman iptal"
         ]
       }
     }

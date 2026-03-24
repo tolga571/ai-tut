@@ -94,7 +94,8 @@
     "email": "Email",
     "emailPlaceholder": "you@example.com",
     "password": "Password",
-    "submit": "Continue — Choose Plan",
+    "submit": "Continue to pricing",
+    "afterSignup": "Account created. Choose a billing period to unlock chat.",
     "hasAccount": "Already have an account?",
     "signIn": "Sign In",
     "activating": "Verifying payment...",
@@ -102,34 +103,6 @@
     "paymentSuccess": "Plan activated! Welcome.",
     "activationTimeout": "Payment confirmed but activation delayed. Please sign in.",
     "devSkip": "[DEV] Skip Payment — Activate Plan",
-    "planStep": {
-      "title": "Choose Your Plan",
-      "subtitle": "Select the plan that matches your learning goals. We'll enable payments soon.",
-      "note": "You'll head straight to the chat experience after choosing a plan.",
-      "cta": "Go to Chat",
-      "selected": "Selected",
-      "select": "Select",
-      "plans": {
-        "base": {
-          "name": "Base Plan",
-          "priceValue": "$5",
-          "priceSuffix": "/ month",
-          "description": "Kickstart your AI tutor journey with the essentials."
-        },
-        "middle": {
-          "name": "Middle Plan",
-          "priceValue": "$15",
-          "priceSuffix": "/ month",
-          "description": "Level up with advanced corrections and longer sessions."
-        },
-        "ultra": {
-          "name": "Ultra Plan",
-          "priceValue": "$40",
-          "priceSuffix": "/ month",
-          "description": "Unlock everything: pro feedback, speed, and upcoming premium tools."
-        }
-      }
-    },
     "errors": {
       "register": "Registration failed",
       "generic": "An unexpected error occurred.",
@@ -253,11 +226,35 @@
     "planSubtitle": "Unlock fluent conversations powered by AI",
     "selected": "Selected",
     "selectPlan": "Get Started",
+    "opening": "Opening…",
+    "subscribe": "Subscribe",
+    "checkoutSuccess": "Payment received. Your session is updated.",
+    "inactiveHint": "If you just paid, refresh your session to unlock chat.",
+    "refreshSession": "Refresh session",
     "guarantee": "14-day money-back guarantee. Cancel anytime.",
     "recommended": "Best Value",
+    "billing": {
+      "monthly": {
+        "price": "$15",
+        "period": "/month",
+        "perMonth": "$15 / mo"
+      },
+      "quarterly": {
+        "price": "$45",
+        "period": "/3 months",
+        "perMonth": "$15 / mo"
+      },
+      "yearly": {
+        "price": "$180",
+        "period": "/year",
+        "perMonth": "$15 / mo"
+      }
+    },
     "errors": {
       "loginRequired": "Please log in first to subscribe",
-      "notConfigured": "Billing system is not configured yet. Please contact support."
+      "notConfigured": "Billing system is not configured yet. Please contact support.",
+      "priceNotConfigured": "Price ID missing. Please contact support.",
+      "checkoutOpenFailed": "Could not open checkout. Try again."
     },
     "plans": {
       "monthly": {

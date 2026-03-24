@@ -94,7 +94,8 @@
     "email": "E-Mail",
     "emailPlaceholder": "du@beispiel.de",
     "password": "Passwort",
-    "submit": "Weiter — Plan wählen",
+    "submit": "Weiter zur Preisübersicht",
+    "afterSignup": "Konto erstellt. Wähle eine Abrechnungsperiode, um den Chat freizuschalten.",
     "hasAccount": "Hast du bereits ein Konto?",
     "signIn": "Anmelden",
     "activating": "Zahlung wird überprüft...",
@@ -102,34 +103,6 @@
     "paymentSuccess": "Plan aktiviert! Willkommen.",
     "activationTimeout": "Zahlung bestätigt, Aktivierung verzögert. Bitte anmelden.",
     "devSkip": "[DEV] Zahlung überspringen — Plan aktivieren",
-    "planStep": {
-      "title": "Wähle deinen Plan",
-      "subtitle": "Wähle den Plan, der zu deinen Lernzielen passt.",
-      "note": "Du wirst nach der Planauswahl direkt zum Chat weitergeleitet.",
-      "cta": "Zum Chat",
-      "selected": "Ausgewählt",
-      "select": "Auswählen",
-      "plans": {
-        "base": {
-          "name": "Basisplan",
-          "priceValue": "5 $",
-          "priceSuffix": "/ Monat",
-          "description": "Starte deine KI-Tutor-Reise mit den Grundlagen."
-        },
-        "middle": {
-          "name": "Mittelplan",
-          "priceValue": "15 $",
-          "priceSuffix": "/ Monat",
-          "description": "Verbessere dich mit erweiterten Korrekturen und längeren Sitzungen."
-        },
-        "ultra": {
-          "name": "Ultraplan",
-          "priceValue": "40 $",
-          "priceSuffix": "/ Monat",
-          "description": "Schalte alles frei: Profi-Feedback, Geschwindigkeit und Premium-Tools."
-        }
-      }
-    },
     "errors": {
       "register": "Registrierung fehlgeschlagen",
       "generic": "Ein unerwarteter Fehler ist aufgetreten.",
@@ -245,53 +218,79 @@
   },
   "pricing": {
     "title": "Einfache, transparente Preise",
-    "subtitle": "Erlebe fließende Gespräche in deiner Zielsprache mit KI-gestütztem Feedback.",
-    "monthly": "Monatliche Abrechnung",
-    "annual": "Jährliche Abrechnung",
+    "subtitle": "Ein Plan, alle Funktionen. Wähle die Abrechnungsperiode.",
+    "monthly": "Monatlich",
+    "quarterly": "3 Monate",
+    "annual": "Jährlich",
     "choosePlan": "Plan wählen",
     "planSubtitle": "Wähle den Plan, der zu deiner Lernreise passt",
     "selected": "Ausgewählt",
     "selectPlan": "Plan auswählen",
-    "guarantee": "Alle Pläne beinhalten eine 14-tägige Geld-zurück-Garantie. Jederzeit kündbar.",
-    "recommended": "Empfohlen",
+    "opening": "Wird geöffnet…",
+    "subscribe": "Abonnieren",
+    "checkoutSuccess": "Zahlung erhalten. Sitzung aktualisiert.",
+    "inactiveHint": "Wenn du gerade bezahlt hast, aktualisiere die Sitzung, um den Chat freizuschalten.",
+    "refreshSession": "Sitzung aktualisieren",
+    "guarantee": "14-tägige Geld-zurück-Garantie. Jederzeit kündbar.",
+    "recommended": "Bester Wert",
+    "billing": {
+      "monthly": {
+        "price": "$15",
+        "period": "/Monat",
+        "perMonth": "$15 / Monat"
+      },
+      "quarterly": {
+        "price": "$45",
+        "period": "/3 Monate",
+        "perMonth": "$15 / Monat"
+      },
+      "yearly": {
+        "price": "$180",
+        "period": "/Jahr",
+        "perMonth": "$15 / Monat"
+      }
+    },
     "errors": {
       "loginRequired": "Bitte erst anmelden, um zu abonnieren",
-      "notConfigured": "Abrechnungssystem noch nicht konfiguriert."
+      "notConfigured": "Abrechnungssystem noch nicht konfiguriert.",
+      "priceNotConfigured": "Preis-ID fehlt. Bitte Support kontaktieren.",
+      "checkoutOpenFailed": "Checkout konnte nicht geöffnet werden. Bitte erneut versuchen."
     },
     "plans": {
-      "standardMonthly": {
-        "name": "Standard Monatlich",
+      "monthly": {
+        "name": "Monatlich",
         "features": [
-          "Grundlegendes Sprachtraining",
-          "100 KI-Nachrichten/Tag",
-          "Alle Sprachen"
+          "Unbegrenzte KI-Gespräche",
+          "Über 30 Sprachen",
+          "CEFR-adaptiver Tutor",
+          "Vokabel-Tracker",
+          "Fortschritts-Dashboard",
+          "Grammatikkorrektur",
+          "Jederzeit kündbar"
         ]
       },
-      "standardYearly": {
-        "name": "Standard Jährlich",
+      "quarterly": {
+        "name": "3 Monate",
         "features": [
-          "Grundlegendes Sprachtraining",
-          "100 KI-Nachrichten/Tag",
-          "Alle Sprachen",
-          "10 % sparen"
+          "Unbegrenzte KI-Gespräche",
+          "Über 30 Sprachen",
+          "CEFR-adaptiver Tutor",
+          "Vokabel-Tracker",
+          "Fortschritts-Dashboard",
+          "Grammatikkorrektur",
+          "Jederzeit kündbar"
         ]
       },
-      "proMonthly": {
-        "name": "Pro Monatlich",
+      "yearly": {
+        "name": "Jährlich",
         "features": [
-          "Fortgeschrittenes Training",
-          "Unbegrenzte Nachrichten",
-          "Persönliche Tutoren",
-          "Prioritätssupport"
-        ]
-      },
-      "proYearly": {
-        "name": "Pro Jährlich",
-        "features": [
-          "Fortgeschrittenes Training",
-          "Unbegrenzte Nachrichten",
-          "Persönliche Tutoren",
-          "20 % sparen"
+          "Unbegrenzte KI-Gespräche",
+          "Über 30 Sprachen",
+          "CEFR-adaptiver Tutor",
+          "Vokabel-Tracker",
+          "Fortschritts-Dashboard",
+          "Grammatikkorrektur",
+          "Jederzeit kündbar"
         ]
       }
     }

@@ -94,7 +94,8 @@
     "email": "电子邮件",
     "emailPlaceholder": "you@example.com",
     "password": "密码",
-    "submit": "继续 — 选择方案",
+    "submit": "继续前往定价",
+    "afterSignup": "账号已创建。选择计费周期以解锁聊天。",
     "hasAccount": "已有账号？",
     "signIn": "登录",
     "activating": "正在验证付款...",
@@ -102,34 +103,6 @@
     "paymentSuccess": "方案已激活！欢迎。",
     "activationTimeout": "付款已确认但激活延迟。请登录。",
     "devSkip": "[开发] 跳过付款 — 激活方案",
-    "planStep": {
-      "title": "选择您的方案",
-      "subtitle": "选择符合您学习目标的方案。",
-      "note": "选择方案后，您将直接进入聊天体验。",
-      "cta": "前往聊天",
-      "selected": "已选择",
-      "select": "选择",
-      "plans": {
-        "base": {
-          "name": "基础方案",
-          "priceValue": "$5",
-          "priceSuffix": "/ 月",
-          "description": "以基础功能开始您的AI导师之旅。"
-        },
-        "middle": {
-          "name": "中级方案",
-          "priceValue": "$15",
-          "priceSuffix": "/ 月",
-          "description": "通过高级纠错和更长课程提升水平。"
-        },
-        "ultra": {
-          "name": "超级方案",
-          "priceValue": "$40",
-          "priceSuffix": "/ 月",
-          "description": "解锁一切：专业反馈、速度和即将推出的高级工具。"
-        }
-      }
-    },
     "errors": {
       "register": "注册失败",
       "generic": "发生意外错误。",
@@ -245,53 +218,79 @@
   },
   "pricing": {
     "title": "简单透明的定价",
-    "subtitle": "通过AI反馈解锁您目标语言的流畅对话。",
-    "monthly": "按月计费",
-    "annual": "按年计费",
+    "subtitle": "一个方案，全部功能。请选择计费周期。",
+    "monthly": "月付",
+    "quarterly": "3个月",
+    "annual": "年付",
     "choosePlan": "选择您的方案",
     "planSubtitle": "选择适合您学习旅程的方案",
     "selected": "已选择",
     "selectPlan": "选择方案",
-    "guarantee": "所有方案均包含14天退款保证。随时可取消。",
-    "recommended": "推荐",
+    "opening": "正在打开…",
+    "subscribe": "订阅",
+    "checkoutSuccess": "付款已收到。会话已更新。",
+    "inactiveHint": "若刚完成付款，请刷新会话以解锁聊天。",
+    "refreshSession": "刷新会话",
+    "guarantee": "14天退款保证。随时可取消。",
+    "recommended": "最划算",
+    "billing": {
+      "monthly": {
+        "price": "$15",
+        "period": "/月",
+        "perMonth": "$15 / 月"
+      },
+      "quarterly": {
+        "price": "$45",
+        "period": "/3个月",
+        "perMonth": "$15 / 月"
+      },
+      "yearly": {
+        "price": "$180",
+        "period": "/年",
+        "perMonth": "$15 / 月"
+      }
+    },
     "errors": {
       "loginRequired": "请先登录以订阅",
-      "notConfigured": "计费系统尚未配置。"
+      "notConfigured": "计费系统尚未配置。",
+      "priceNotConfigured": "缺少价格 ID。请联系支持。",
+      "checkoutOpenFailed": "无法打开结账。请重试。"
     },
     "plans": {
-      "standardMonthly": {
-        "name": "标准月付",
+      "monthly": {
+        "name": "月付",
         "features": [
-          "基础语言练习",
-          "每日100条AI消息",
-          "所有语言"
+          "无限 AI 对话",
+          "30+ 种语言",
+          "按 CEFR 调整的导师",
+          "词汇追踪",
+          "进度面板",
+          "语法纠正",
+          "随时取消"
         ]
       },
-      "standardYearly": {
-        "name": "标准年付",
+      "quarterly": {
+        "name": "3个月",
         "features": [
-          "基础语言练习",
-          "每日100条AI消息",
-          "所有语言",
-          "节省10%"
+          "无限 AI 对话",
+          "30+ 种语言",
+          "按 CEFR 调整的导师",
+          "词汇追踪",
+          "进度面板",
+          "语法纠正",
+          "随时取消"
         ]
       },
-      "proMonthly": {
-        "name": "专业月付",
+      "yearly": {
+        "name": "年付",
         "features": [
-          "高级练习",
-          "无限消息",
-          "个性化导师",
-          "优先支持"
-        ]
-      },
-      "proYearly": {
-        "name": "专业年付",
-        "features": [
-          "高级练习",
-          "无限消息",
-          "个性化导师",
-          "节省20%"
+          "无限 AI 对话",
+          "30+ 种语言",
+          "按 CEFR 调整的导师",
+          "词汇追踪",
+          "进度面板",
+          "语法纠正",
+          "随时取消"
         ]
       }
     }

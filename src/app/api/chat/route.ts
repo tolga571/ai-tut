@@ -106,6 +106,15 @@ export async function POST(req: Request) {
     if (!userId) {
       return NextResponse.json({ error: "Invalid session" }, { status: 401 });
     }
+
+    const planStatus = (session.user as { planStatus?: string }).planStatus;
+    if (planStatus !== "active") {
+      return NextResponse.json(
+        { error: "Subscription required" },
+        { status: 403 }
+      );
+    }
+
     if (!checkRateLimit(`chat:${userId}`, 30, 60 * 1000)) {
       return NextResponse.json(
         { error: "Too many messages, please slow down" },
@@ -322,6 +331,14 @@ export async function GET(req: Request) {
     }
 
     const userId = (session.user as { id?: string }).id ?? "";
+    const planStatus = (session.user as { planStatus?: string }).planStatus;
+    if (planStatus !== "active") {
+      return NextResponse.json(
+        { error: "Subscription required" },
+        { status: 403 }
+      );
+    }
+
     const { searchParams } = new URL(req.url);
     const conversationId = searchParams.get("id");
     const limitParam = Number(searchParams.get("limit") ?? "100");
