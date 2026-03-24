@@ -254,7 +254,8 @@
       "loginRequired": "يرجى تسجيل الدخول أولاً للاشتراك",
       "notConfigured": "نظام الفوترة غير مهيأ بعد.",
       "priceNotConfigured": "معرّف السعر مفقود. تواصل مع الدعم.",
-      "checkoutOpenFailed": "تعذر فتح الدفع. حاول مجدداً."
+      "checkoutOpenFailed": "تعذر فتح الدفع. حاول مجدداً.",
+      "checkoutConfigFailed": "تعذر تحميل إعدادات الفوترة. حدّث الصفحة أو حاول لاحقاً."
     },
     "plans": {
       "monthly": {

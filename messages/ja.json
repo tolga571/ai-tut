@@ -254,7 +254,8 @@
       "loginRequired": "サブスクリプションにはまずログインしてください",
       "notConfigured": "課金システムはまだ設定されていません。",
       "priceNotConfigured": "価格IDが設定されていません。サポートにお問い合わせください。",
-      "checkoutOpenFailed": "決済を開けませんでした。もう一度お試しください。"
+      "checkoutOpenFailed": "決済を開けませんでした。もう一度お試しください。",
+      "checkoutConfigFailed": "課金設定を読み込めませんでした。ページを更新するか、しばらくしてからお試しください。"
     },
     "plans": {
       "monthly": {

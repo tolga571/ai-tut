@@ -254,7 +254,8 @@
       "loginRequired": "Veuillez d'abord vous connecter pour vous abonner",
       "notConfigured": "Le système de facturation n'est pas encore configuré.",
       "priceNotConfigured": "Identifiant de prix manquant. Contactez le support.",
-      "checkoutOpenFailed": "Impossible d'ouvrir le paiement. Réessayez."
+      "checkoutOpenFailed": "Impossible d'ouvrir le paiement. Réessayez.",
+      "checkoutConfigFailed": "Impossible de charger la configuration de facturation. Actualisez la page ou réessayez plus tard."
     },
     "plans": {
       "monthly": {

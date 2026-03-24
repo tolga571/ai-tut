@@ -11,11 +11,17 @@ import { useRouter } from "@/i18n/navigation";
 const PLAN_ORDER = ["monthly", "quarterly", "yearly"] as const;
 type PlanId = (typeof PLAN_ORDER)[number];
 
-const PRICE_IDS: Record<PlanId, string> = {
-  monthly: process.env.NEXT_PUBLIC_PADDLE_PRICE_MONTHLY || "",
-  quarterly: process.env.NEXT_PUBLIC_PADDLE_PRICE_QUARTERLY || "",
-  yearly: process.env.NEXT_PUBLIC_PADDLE_PRICE_YEARLY || "",
+type CheckoutConfig = {
+  prices: Record<PlanId, string>;
+  clientToken: string;
+  environment: "sandbox" | "production";
 };
+
+const emptyPrices = (): Record<PlanId, string> => ({
+  monthly: "",
+  quarterly: "",
+  yearly: "",
+});
 
 export default function PricingPage() {
   const { data: session, update } = useSession();
@@ -26,6 +32,8 @@ export default function PricingPage() {
   const [paddle, setPaddle] = useState<Paddle | undefined>();
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [paddleReady, setPaddleReady] = useState(false);
+  const [priceIds, setPriceIds] = useState<Record<PlanId, string>>(emptyPrices);
+  const [checkoutConfigError, setCheckoutConfigError] = useState(false);
   const checkoutHandled = useRef(false);
 
   const refreshAfterCheckout = useCallback(async () => {
@@ -43,18 +51,48 @@ export default function PricingPage() {
   }, [searchParams, refreshAfterCheckout]);
 
   useEffect(() => {
-    const token = process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN;
-    if (!token) return;
+    let cancelled = false;
 
-    const env =
-      process.env.NEXT_PUBLIC_PADDLE_ENV === "production" ? "production" : "sandbox";
+    async function loadCheckoutConfig() {
+      try {
+        const res = await fetch("/api/paddle/checkout-config");
+        if (!res.ok) throw new Error("checkout-config failed");
+        const data = (await res.json()) as CheckoutConfig;
+        if (cancelled) return;
 
-    initializePaddle({ environment: env, token }).then((instance) => {
-      if (instance) {
-        setPaddle(instance);
-        setPaddleReady(true);
+        setPriceIds({
+          monthly: data.prices.monthly ?? "",
+          quarterly: data.prices.quarterly ?? "",
+          yearly: data.prices.yearly ?? "",
+        });
+        setCheckoutConfigError(false);
+
+        if (!data.clientToken) {
+          setPaddleReady(false);
+          return;
+        }
+
+        const instance = await initializePaddle({
+          environment: data.environment,
+          token: data.clientToken,
+        });
+        if (cancelled) return;
+        if (instance) {
+          setPaddle(instance);
+          setPaddleReady(true);
+        }
+      } catch {
+        if (!cancelled) {
+          setCheckoutConfigError(true);
+          setPaddleReady(false);
+        }
       }
-    });
+    }
+
+    void loadCheckoutConfig();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const handleSubscribe = async (planId: PlanId) => {
@@ -68,7 +106,7 @@ export default function PricingPage() {
       return;
     }
 
-    const priceId = PRICE_IDS[planId];
+    const priceId = priceIds[planId]?.trim();
     if (!priceId) {
       toast.error(t("errors.priceNotConfigured"));
       return;
@@ -105,6 +143,12 @@ export default function PricingPage() {
             {t("subtitle")}
           </p>
         </div>
+
+        {checkoutConfigError && (
+          <p className="text-center text-sm text-red-600 dark:text-red-400 mb-6 max-w-lg mx-auto">
+            {t("errors.checkoutConfigFailed")}
+          </p>
+        )}
 
         {(session?.user as { planStatus?: string } | undefined)?.planStatus === "inactive" && (
           <p className="text-center text-sm text-amber-700 dark:text-amber-300 mb-8 max-w-lg mx-auto">
@@ -181,7 +225,7 @@ export default function PricingPage() {
                 <button
                   type="button"
                   onClick={() => handleSubscribe(planId)}
-                  disabled={loadingPlan === planId}
+                  disabled={loadingPlan === planId || checkoutConfigError || !paddleReady}
                   className={`w-full py-3 rounded-xl text-sm font-semibold transition-all active:scale-[0.98] disabled:opacity-60
                   ${
                     recommended

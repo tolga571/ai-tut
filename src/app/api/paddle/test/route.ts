@@ -25,9 +25,10 @@ export async function GET(req: Request) {
     }, { status: 500 });
   }
 
-  const isSandbox = apiKey.includes("sdbx");
+  const isSandbox =
+    apiKey.startsWith("pdl_sdbx") || apiKey.includes("sdbx");
   const baseUrl = isSandbox
-    ? "https://api.sandbox.paddle.com"
+    ? "https://sandbox-api.paddle.com"
     : "https://api.paddle.com";
 
   try {

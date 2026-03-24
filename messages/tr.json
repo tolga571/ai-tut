@@ -249,7 +249,8 @@
       "loginRequired": "Abone olmak için önce giriş yapın",
       "notConfigured": "Ödeme sistemi yapılandırılmadı. Destek ile iletişime geçin.",
       "priceNotConfigured": "Fiyat kimliği eksik. Destek ile iletişime geçin.",
-      "checkoutOpenFailed": "Ödeme penceresi açılamadı. Tekrar deneyin."
+      "checkoutOpenFailed": "Ödeme penceresi açılamadı. Tekrar deneyin.",
+      "checkoutConfigFailed": "Ödeme ayarları yüklenemedi. Sayfayı yenileyin veya sonra tekrar deneyin."
     },
     "plans": {
       "monthly": {

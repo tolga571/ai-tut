@@ -254,7 +254,8 @@
       "loginRequired": "Bitte erst anmelden, um zu abonnieren",
       "notConfigured": "Abrechnungssystem noch nicht konfiguriert.",
       "priceNotConfigured": "Preis-ID fehlt. Bitte Support kontaktieren.",
-      "checkoutOpenFailed": "Checkout konnte nicht geöffnet werden. Bitte erneut versuchen."
+      "checkoutOpenFailed": "Checkout konnte nicht geöffnet werden. Bitte erneut versuchen.",
+      "checkoutConfigFailed": "Abrechnungskonfiguration konnte nicht geladen werden. Seite neu laden oder später erneut versuchen."
     },
     "plans": {
       "monthly": {

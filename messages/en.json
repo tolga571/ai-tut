@@ -254,7 +254,8 @@
       "loginRequired": "Please log in first to subscribe",
       "notConfigured": "Billing system is not configured yet. Please contact support.",
       "priceNotConfigured": "Price ID missing. Please contact support.",
-      "checkoutOpenFailed": "Could not open checkout. Try again."
+      "checkoutOpenFailed": "Could not open checkout. Try again.",
+      "checkoutConfigFailed": "Could not load billing configuration. Refresh the page or try again later."
     },
     "plans": {
       "monthly": {

@@ -254,7 +254,8 @@
       "loginRequired": "Por favor inicia sesión primero para suscribirte",
       "notConfigured": "El sistema de facturación aún no está configurado.",
       "priceNotConfigured": "Falta el ID de precio. Contacta soporte.",
-      "checkoutOpenFailed": "No se pudo abrir el pago. Inténtalo de nuevo."
+      "checkoutOpenFailed": "No se pudo abrir el pago. Inténtalo de nuevo.",
+      "checkoutConfigFailed": "No se pudo cargar la configuración de facturación. Actualiza la página o inténtalo más tarde."
     },
     "plans": {
       "monthly": {

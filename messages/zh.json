@@ -254,7 +254,8 @@
       "loginRequired": "请先登录以订阅",
       "notConfigured": "计费系统尚未配置。",
       "priceNotConfigured": "缺少价格 ID。请联系支持。",
-      "checkoutOpenFailed": "无法打开结账。请重试。"
+      "checkoutOpenFailed": "无法打开结账。请重试。",
+      "checkoutConfigFailed": "无法加载计费配置。请刷新页面或稍后再试。"
     },
     "plans": {
       "monthly": {
