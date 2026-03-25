@@ -7,6 +7,11 @@ export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+  const planStatus = (session.user as { planStatus?: string }).planStatus;
+  if (planStatus !== "active") {
+    return NextResponse.json({ error: "Subscription required" }, { status: 403 });
+  }
+
   const user = await prisma.user.findUnique({ where: { email: session.user.email } });
   if (!user) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
@@ -21,6 +26,11 @@ export async function GET() {
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const planStatus = (session.user as { planStatus?: string }).planStatus;
+  if (planStatus !== "active") {
+    return NextResponse.json({ error: "Subscription required" }, { status: 403 });
+  }
 
   const user = await prisma.user.findUnique({ where: { email: session.user.email } });
   if (!user) return NextResponse.json({ error: "Not found" }, { status: 404 });

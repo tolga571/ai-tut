@@ -16,6 +16,8 @@ export default function LoginPage() {
   const [testCredsLoading, setTestCredsLoading] = useState(false);
 
   useEffect(() => {
+    if (process.env.NODE_ENV !== "development") return;
+
     setTestCredsLoading(true);
     fetch("/api/auth/dev-test-credentials")
       .then((res) => (res.ok ? res.json() : null))
@@ -43,6 +45,7 @@ export default function LoginPage() {
       toast.error(res.error);
     } else {
       toast.success(t("success"));
+      // Middleware plan + onboarding kontrolü yapacak, /dashboard doğru hedef
       router.push("/dashboard");
     }
     setLoading(false);

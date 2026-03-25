@@ -15,7 +15,12 @@ export async function GET() {
     targetLang?: string;
     nativeLang?: string;
     cefrLevel?: string;
+    planStatus?: string;
   };
+
+  if (user.planStatus !== "active") {
+    return NextResponse.json({ error: "Subscription required" }, { status: 403 });
+  }
 
   const userId = user.id ?? "anon";
   const targetLang = user.targetLang ?? "en";

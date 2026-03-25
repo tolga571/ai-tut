@@ -9,6 +9,7 @@ const PROTECTED_PATHS = [
   "/chat",
   "/profile",
   "/onboarding",
+  "/pricing",
   "/documents",
   "/vocabulary",
   "/progress",
@@ -61,11 +62,18 @@ export default async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL(`/${locale}/onboarding`, req.url));
     }
 
-    // Chat requires an active Paddle subscription (planStatus on JWT from session)
-    const isChat =
-      pathWithoutLocale === "/chat" || pathWithoutLocale.startsWith("/chat/");
+    // Onboarding tamamlanmış ama aktif planı olmayan kullanıcıyı /pricing'e yönlendir.
+    // /pricing ve /onboarding bu kontrolden muaf tutulur (sonsuz döngü önleme).
     const planStatus = (token as { planStatus?: string }).planStatus;
-    if (isChat && planStatus !== "active") {
+    const isPricing = pathWithoutLocale === "/pricing" || pathWithoutLocale.startsWith("/pricing/");
+    const isOnboarding = pathWithoutLocale === "/onboarding";
+    if (
+      isProtected &&
+      !isPricing &&
+      !isOnboarding &&
+      token.onboardingCompleted !== false &&
+      planStatus !== "active"
+    ) {
       return NextResponse.redirect(new URL(`/${locale}/pricing`, req.url));
     }
 

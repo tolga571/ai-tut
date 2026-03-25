@@ -10,6 +10,11 @@ export async function GET() {
   const userId = (session.user as { id?: string }).id;
   if (!userId) return NextResponse.json({ error: "User not found" }, { status: 400 });
 
+  const planStatus = (session.user as { planStatus?: string }).planStatus;
+  if (planStatus !== "active") {
+    return NextResponse.json({ error: "Subscription required" }, { status: 403 });
+  }
+
   const now = new Date();
   const sevenDaysAgo = new Date(now);
   sevenDaysAgo.setDate(now.getDate() - 6);

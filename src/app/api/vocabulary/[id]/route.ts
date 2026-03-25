@@ -7,6 +7,11 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+  const planStatus = (session.user as { planStatus?: string }).planStatus;
+  if (planStatus !== "active") {
+    return NextResponse.json({ error: "Subscription required" }, { status: 403 });
+  }
+
   const user = await prisma.user.findUnique({ where: { email: session.user.email } });
   if (!user) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
@@ -23,6 +28,11 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const planStatus = (session.user as { planStatus?: string }).planStatus;
+  if (planStatus !== "active") {
+    return NextResponse.json({ error: "Subscription required" }, { status: 403 });
+  }
 
   const user = await prisma.user.findUnique({ where: { email: session.user.email } });
   if (!user) return NextResponse.json({ error: "Not found" }, { status: 404 });

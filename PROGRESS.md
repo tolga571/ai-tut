@@ -56,6 +56,20 @@ Kritik Değişkenler:
 - Auth: NextAuth JWT stratejisi, `User` modelinde `onboardingCompleted` alanı, middleware bu alana göre `/onboarding` yönlendirmesi yapıyor.
 - Chat modeli: `/api/chat` Gemini 2.x flash modellerini sırasıyla deniyor, response JSON formatında bekleniyor.
 
+- **Plan gating — tam erişim kontrolü (2026-03-25):**
+  - Middleware: onboarding sonrası plan yoksa tüm korumalı sayfalar /pricing'e yönlendirir
+  - /pricing PROTECTED_PATHS'e eklendi (giriş zorunlu)
+  - chat/page.tsx, /api/conversations, /api/conversations/[id]: server-side plan guard
+  - /api/user/dashboard, /api/user/progress: plan guard eklendi
+  - /api/vocabulary GET+POST, /api/vocabulary/[id] DELETE+PATCH: plan guard eklendi
+  - /api/word-of-day: plan guard eklendi (Gemini maliyet koruması)
+  - JWT jwt() callback: her token yenilemesinde DB'den planStatus taze okunuyor
+  - Ödeme sonrası update({ planStatus: "active" }) + /dashboard yönlendirmesi
+  - Aktif planlı kullanıcı /pricing'e gelirse /chat'e yönlendiriliyor
+  - Onboarding tamamlanınca /pricing'e yönlendirme (dashboard yerine)
+  - DashboardAppBar: plan yoksa "Go to Chat" /pricing'e işaret eder
+  - dashboard/page.tsx: tüm chat linkleri plan durumuna göre yönetilir
+  - dev/activate-plan: DEV_SECRET zorunlu hale getirildi
+
 Sıradaki Adım:
-- Paddle entegrasyonu sonrası: abonelik durumuna göre UI kısıtlamaları / premium içerik erişim kontrolü.
 - (Opsiyonel) Faz 6: Dashboard/Progress tarafında XP ve quiz performansını görselleştiren daha zengin bir ilerleme ekranı tasarlamak (streak/quiz detayları + bildirim derinleştirme).

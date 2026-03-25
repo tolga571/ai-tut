@@ -34,11 +34,11 @@ export default function OnboardingPage() {
     { id: "business", label: "Business" },
   ];
 
-  // If onboarding is already completed, skip this step.
+  // Onboarding tamamlanmışsa pricing'e yönlendir (plan yoksa middleware yakalar, varsa chat'e geçer)
   useEffect(() => {
     const user = session?.user as { onboardingCompleted?: boolean } | undefined;
     if (user?.onboardingCompleted) {
-      router.replace("/dashboard");
+      router.replace("/pricing");
     }
   }, [router, session]);
 
@@ -59,9 +59,10 @@ export default function OnboardingPage() {
 
       if (!res.ok) throw new Error("Failed to save preferences");
 
-      await update();
+      await update({ onboardingCompleted: true });
       toast.success(t("success"));
-      router.push("/dashboard");
+      // Onboarding bitti → plan seçimine yönlendir
+      router.push("/pricing");
     } catch {
       toast.error(t("errors.generic"));
     } finally {

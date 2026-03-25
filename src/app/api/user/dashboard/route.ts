@@ -32,6 +32,11 @@ export async function GET() {
     return NextResponse.json({ error: "User not found" }, { status: 400 });
   }
 
+  const planStatus = (session.user as { planStatus?: string }).planStatus;
+  if (planStatus !== "active") {
+    return NextResponse.json({ error: "Subscription required" }, { status: 403 });
+  }
+
   try {
     const [conversations, messageCount, recentConversations, userData] = await Promise.all([
       prisma.conversation.findMany({
