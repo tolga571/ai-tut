@@ -96,6 +96,7 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     async jwt({ token, user, trigger, session }) {
+      // İlk giriş: kullanıcı bilgilerini token'a yaz
       if (user) {
         token.id = user.id;
         token.planStatus = user.planStatus;
@@ -105,10 +106,34 @@ export const authOptions: NextAuthOptions = {
         token.role = user.role;
         token.onboardingCompleted = user.onboardingCompleted;
       }
-      // If we want to support dynamic updates (after payment)
-      if (trigger === "update" && session?.planStatus) {
-        token.planStatus = session.planStatus;
+
+      // Manuel session.update() çağrısında (örn. ödeme sonrası) tüm alanları güncelle
+      if (trigger === "update" && session) {
+        if (session.planStatus !== undefined) token.planStatus = session.planStatus;
+        if (session.onboardingCompleted !== undefined) token.onboardingCompleted = session.onboardingCompleted;
+        if (session.nativeLang !== undefined) token.nativeLang = session.nativeLang;
+        if (session.targetLang !== undefined) token.targetLang = session.targetLang;
+        if (session.cefrLevel !== undefined) token.cefrLevel = session.cefrLevel;
       }
+
+      // Her token yenilemesinde DB'den planStatus ve onboardingCompleted'ı taze oku.
+      // Bu sayede ödeme/iptal sonrası middleware anında doğru değeri görür.
+      if (token.id && !user) {
+        try {
+          const fresh = await prisma.user.findUnique({
+            where: { id: token.id as string },
+            select: { planStatus: true, onboardingCompleted: true },
+          });
+          if (fresh) {
+            token.planStatus = fresh.planStatus;
+            token.onboardingCompleted = fresh.onboardingCompleted;
+          }
+        } catch (err) {
+          // DB geçici olarak erişilemezse token'daki mevcut değerleri koru
+          console.error("[AUTH_JWT_REFRESH]", err);
+        }
+      }
+
       return token;
     }
   },

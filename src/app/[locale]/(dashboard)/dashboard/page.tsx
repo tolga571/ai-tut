@@ -63,7 +63,11 @@ export default function DashboardPage() {
     targetLang?: string;
     nativeLang?: string;
     cefrLevel?: string;
+    planStatus?: string;
   } | undefined;
+  // C2: Plan yoksa tüm chat linkleri /pricing'e yönlendirilir
+  const hasActivePlan = user?.planStatus === "active";
+  const chatHref = hasActivePlan ? "/chat" : "/pricing";
   const targetLang = user?.targetLang?.toLowerCase() ?? "en";
   const targetLangName = tLangs(targetLang as Parameters<typeof tLangs>[0], {
     defaultValue: targetLang.toUpperCase(),
@@ -284,7 +288,7 @@ export default function DashboardPage() {
                   </p>
                   <div className="mt-3 flex gap-2 flex-wrap">
                     <Link
-                      href="/chat"
+                      href={chatHref}
                       className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-sm font-medium transition-all"
                     >
                       Practice now
@@ -301,13 +305,13 @@ export default function DashboardPage() {
             </div>
           )}
           <Link
-            href="/chat"
+            href={chatHref}
             className="flex items-center justify-center gap-3 w-full py-5 px-6 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-lg shadow-xl shadow-blue-600/25 transition-all hover:shadow-blue-600/40 hover:scale-[1.02] active:scale-[0.98]"
           >
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
             </svg>
-            {t("startChat")}
+            {hasActivePlan ? t("startChat") : "Plan Seç → Chata Erişim"}
           </Link>
         </div>
 
@@ -318,7 +322,7 @@ export default function DashboardPage() {
             <div className="px-6 py-4 border-b border-gray-200 dark:border-white/10 flex items-center justify-between">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t("recentConversations")}</h2>
               <Link
-                href="/chat"
+                href={chatHref}
                 className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
               >
                 {t("viewAll")}
@@ -336,7 +340,7 @@ export default function DashboardPage() {
                   {data.recentConversations.map((conv) => (
                     <Link
                       key={conv.id}
-                      href={`/chat?conv=${conv.id}`}
+                      href={hasActivePlan ? `/chat?conv=${conv.id}` : "/pricing"}
                       className="flex items-center justify-between p-4 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 transition-colors group"
                     >
                       <p className="text-gray-700 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-white truncate flex-1 mr-3">
@@ -361,10 +365,10 @@ export default function DashboardPage() {
                 <div className="py-12 text-center">
                   <p className="text-gray-600 dark:text-gray-500 mb-4">{t("noConversations")}</p>
                   <Link
-                    href="/chat"
+                    href={chatHref}
                     className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 rounded-xl text-sm font-medium transition-colors"
                   >
-                    {t("startFirst")}
+                    {hasActivePlan ? t("startFirst") : "Plan Al"}
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>

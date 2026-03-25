@@ -17,7 +17,8 @@ export function DashboardAppBar() {
     );
   }
 
-  const user = session?.user as { name?: string | null; email?: string | null; role?: string } | undefined;
+  const user = session?.user as { name?: string | null; email?: string | null; role?: string; planStatus?: string } | undefined;
+  const hasActivePlan = user?.planStatus === "active";
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-gray-200 dark:border-white/5 bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl transition-colors">
@@ -38,12 +39,22 @@ export function DashboardAppBar() {
 
           {/* Center: Chat + Profile links (visible on larger screens) */}
           <div className="hidden md:flex items-center gap-1">
-            <Link
-              href="/chat"
-              className="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white transition-colors"
-            >
-              {t("goToChat")}
-            </Link>
+            {/* C1: Plan yoksa /pricing'e yönlendir, plan varsa /chat'e git */}
+            {hasActivePlan ? (
+              <Link
+                href="/chat"
+                className="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white transition-colors"
+              >
+                {t("goToChat")}
+              </Link>
+            ) : (
+              <Link
+                href="/pricing"
+                className="px-4 py-2 rounded-lg text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors"
+              >
+                {t("goToChat")}
+              </Link>
+            )}
             <Link
               href="/profile"
               className="px-4 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white transition-colors"

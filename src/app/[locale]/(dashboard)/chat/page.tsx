@@ -20,6 +20,12 @@ export default async function ChatPage({
     redirect({ href: "/login", locale });
   }
 
+  // Defense-in-depth: middleware'e ek olarak server tarafında da plan kontrolü (B1)
+  const planStatus = (session!.user as { planStatus?: string }).planStatus;
+  if (planStatus !== "active") {
+    redirect({ href: "/pricing", locale });
+  }
+
   return (
     <div className="h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white flex flex-col transition-colors">
       <main className="flex-1 overflow-hidden relative">

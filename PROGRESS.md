@@ -33,6 +33,9 @@ Tamamlananlar:
 - Onboarding güçlendirme:
   - Hedef (learningGoal) ve ilgi alanı (interestArea) seçimleri
   - `/api/user/languages` üzerinden DB’ye kaydedilmesi
+- **Paddle ödeme entegrasyonu:**
+  - Paddle checkout akışı ve webhook yönetimi eklendi
+  - Ödeme başarıyla test edildi ve çalışıyor (2026-03-25)
 
 Mevcut Durum:
 - Kod: `src/app/[locale]/(dashboard)/chat/ChatInterface.tsx` içinde topic seçimi yeni konuşma başlatıyor ve `getConvTitle` topic etiketini kullanıyor.
@@ -54,4 +57,5 @@ Kritik Değişkenler:
 - Chat modeli: `/api/chat` Gemini 2.x flash modellerini sırasıyla deniyor, response JSON formatında bekleniyor.
 
 Sıradaki Adım:
-- (Belirlenecek) Faz 6: Dashboard/Progress tarafında XP ve quiz performansını görselleştiren daha zengin bir ilerleme ekranı tasarlamak (streak/quiz detayları + bildirim derinleştirme).
+- Paddle entegrasyonu sonrası: abonelik durumuna göre UI kısıtlamaları / premium içerik erişim kontrolü.
+- (Opsiyonel) Faz 6: Dashboard/Progress tarafında XP ve quiz performansını görselleştiren daha zengin bir ilerleme ekranı tasarlamak (streak/quiz detayları + bildirim derinleştirme).

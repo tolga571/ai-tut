@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { initializePaddle, type Paddle } from "@paddle/paddle-js";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
@@ -28,20 +28,36 @@ export default function PricingPage() {
   const t = useTranslations("pricing");
   const locale = useLocale();
   const router = useRouter();
+
+  // C3: Aktif planlı kullanıcı pricing sayfasına girerse chat'e yönlendir
+  const sessionPlanStatus = (session?.user as { planStatus?: string } | undefined)?.planStatus;
+  useEffect(() => {
+    if (sessionPlanStatus === "active") {
+      router.replace("/chat");
+    }
+  }, [sessionPlanStatus, router]);
   const searchParams = useSearchParams();
   const [paddle, setPaddle] = useState<Paddle | undefined>();
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [paddleReady, setPaddleReady] = useState(false);
   const [priceIds, setPriceIds] = useState<Record<PlanId, string>>(emptyPrices);
   const [checkoutConfigError, setCheckoutConfigError] = useState(false);
+  const [configLoaded, setConfigLoaded] = useState(false);
   const checkoutHandled = useRef(false);
+
+  const hasAllPriceIds = useMemo(
+    () => PLAN_ORDER.every((id) => Boolean(priceIds[id]?.trim())),
+    [priceIds]
+  );
 
   const refreshAfterCheckout = useCallback(async () => {
     if (checkoutHandled.current) return;
     checkoutHandled.current = true;
-    await update();
+    // planStatus'u açıkça geçirerek JWT token'ının anında güncellenmesini sağla (A2)
+    await update({ planStatus: "active" });
     toast.success(t("checkoutSuccess"));
-    router.replace("/pricing");
+    // Ödeme başarılı → kullanıcıyı dashboard'a gönder, pricing'de tutma (A3)
+    router.replace("/dashboard");
   }, [update, router, t]);
 
   useEffect(() => {
@@ -67,8 +83,21 @@ export default function PricingPage() {
         });
         setCheckoutConfigError(false);
 
+        const hasPrices = PLAN_ORDER.every((id) =>
+          String(data.prices?.[id] ?? "").trim() !== ""
+        );
+
         if (!data.clientToken) {
+          setPaddle(undefined);
           setPaddleReady(false);
+          setConfigLoaded(true);
+          return;
+        }
+
+        if (!hasPrices) {
+          setPaddle(undefined);
+          setPaddleReady(false);
+          setConfigLoaded(true);
           return;
         }
 
@@ -80,11 +109,16 @@ export default function PricingPage() {
         if (instance) {
           setPaddle(instance);
           setPaddleReady(true);
+        } else {
+          setPaddle(undefined);
+          setPaddleReady(false);
         }
+        setConfigLoaded(true);
       } catch {
         if (!cancelled) {
           setCheckoutConfigError(true);
           setPaddleReady(false);
+          setConfigLoaded(false);
         }
       }
     }
@@ -112,6 +146,17 @@ export default function PricingPage() {
       return;
     }
 
+    const email = session.user.email?.trim();
+    const userId = session.user.id?.trim();
+    if (!email) {
+      toast.error(t("errors.loginRequired"));
+      return;
+    }
+    if (!userId) {
+      toast.error(t("errors.sessionUserMissing"));
+      return;
+    }
+
     setLoadingPlan(planId);
     try {
       const origin = typeof window !== "undefined" ? window.location.origin : "";
@@ -119,9 +164,10 @@ export default function PricingPage() {
 
       paddle.Checkout.open({
         items: [{ priceId, quantity: 1 }],
-        customer: { email: session.user.email! },
-        customData: { userId: (session.user as { id?: string }).id },
+        customer: { email },
+        customData: { userId },
         settings: {
+          displayMode: "overlay",
           successUrl,
         },
       });
@@ -147,6 +193,18 @@ export default function PricingPage() {
         {checkoutConfigError && (
           <p className="text-center text-sm text-red-600 dark:text-red-400 mb-6 max-w-lg mx-auto">
             {t("errors.checkoutConfigFailed")}
+          </p>
+        )}
+
+        {configLoaded && !checkoutConfigError && !hasAllPriceIds && (
+          <p className="text-center text-sm text-amber-700 dark:text-amber-300 mb-6 max-w-lg mx-auto">
+            {t("errors.priceNotConfigured")}
+          </p>
+        )}
+
+        {configLoaded && !checkoutConfigError && hasAllPriceIds && !paddleReady && (
+          <p className="text-center text-sm text-amber-700 dark:text-amber-300 mb-6 max-w-lg mx-auto">
+            {t("errors.notConfigured")}
           </p>
         )}
 
@@ -225,7 +283,12 @@ export default function PricingPage() {
                 <button
                   type="button"
                   onClick={() => handleSubscribe(planId)}
-                  disabled={loadingPlan === planId || checkoutConfigError || !paddleReady}
+                  disabled={
+                    loadingPlan === planId ||
+                    checkoutConfigError ||
+                    !paddleReady ||
+                    !hasAllPriceIds
+                  }
                   className={`w-full py-3 rounded-xl text-sm font-semibold transition-all active:scale-[0.98] disabled:opacity-60
                   ${
                     recommended

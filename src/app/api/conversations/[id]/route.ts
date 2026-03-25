@@ -14,6 +14,13 @@ export async function DELETE(
     }
 
     const userId = session.user.id;
+
+    // Plan kontrolü: abonelik olmadan konuşma işlemine izin yok (B3)
+    const planStatus = (session.user as { planStatus?: string }).planStatus;
+    if (planStatus !== "active") {
+      return new NextResponse("Subscription required", { status: 403 });
+    }
+
     const { id } = params;
 
     const conv = await prisma.conversation.findFirst({
