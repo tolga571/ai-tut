@@ -251,6 +251,7 @@
       }
     },
     "errors": {
+      "sessionUserMissing": "Données utilisateur manquantes dans la session. Déconnectez-vous, reconnectez-vous et réessayez.",
       "loginRequired": "Veuillez d'abord vous connecter pour vous abonner",
       "notConfigured": "Le système de facturation n'est pas encore configuré.",
       "priceNotConfigured": "Identifiant de prix manquant. Contactez le support.",

@@ -251,6 +251,7 @@
       }
     },
     "errors": {
+      "sessionUserMissing": "セッションにユーザー情報がありません。一度ログアウトしてから再度ログインしてください。",
       "loginRequired": "サブスクリプションにはまずログインしてください",
       "notConfigured": "課金システムはまだ設定されていません。",
       "priceNotConfigured": "価格IDが設定されていません。サポートにお問い合わせください。",

@@ -251,6 +251,7 @@
       }
     },
     "errors": {
+      "sessionUserMissing": "In Ihrer Sitzung fehlen Nutzerdaten. Abmelden, erneut anmelden und erneut versuchen.",
       "loginRequired": "Bitte erst anmelden, um zu abonnieren",
       "notConfigured": "Abrechnungssystem noch nicht konfiguriert.",
       "priceNotConfigured": "Preis-ID fehlt. Bitte Support kontaktieren.",

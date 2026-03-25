@@ -66,7 +66,12 @@ export async function POST(req: Request) {
     const payload = JSON.parse(rawBody);
     const eventType: string = payload.event_type;
     const { custom_data, customer_id } = payload.data ?? {};
-    const userId: string | undefined = custom_data?.userId;
+    const userId: string | undefined =
+      typeof custom_data?.userId === "string"
+        ? custom_data.userId
+        : typeof custom_data?.user_id === "string"
+          ? custom_data.user_id
+          : undefined;
 
     if (!userId) {
       // Return 200 so Paddle doesn't retry — no userId to act on

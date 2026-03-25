@@ -251,6 +251,7 @@
       }
     },
     "errors": {
+      "sessionUserMissing": "Faltan datos de usuario en la sesión. Cierra sesión, vuelve a entrar e inténtalo de nuevo.",
       "loginRequired": "Por favor inicia sesión primero para suscribirte",
       "notConfigured": "El sistema de facturación aún no está configurado.",
       "priceNotConfigured": "Falta el ID de precio. Contacta soporte.",

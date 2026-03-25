@@ -18,6 +18,12 @@ export async function GET() {
     process.env.PADDLE_PRICE_YEARLY?.trim() ||
     "";
 
+  if (!monthly || !quarterly || !yearly) {
+    console.warn(
+      "[paddle/checkout-config] Missing one or more price env vars. Set NEXT_PUBLIC_PADDLE_PRICE_MONTHLY|QUARTERLY|YEARLY or PADDLE_PRICE_* on the server."
+    );
+  }
+
   const clientToken =
     process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN?.trim() ||
     process.env.PADDLE_CLIENT_TOKEN?.trim() ||

@@ -251,6 +251,7 @@
       }
     },
     "errors": {
+      "sessionUserMissing": "会话缺少用户信息。请退出后重新登录再试。",
       "loginRequired": "请先登录以订阅",
       "notConfigured": "计费系统尚未配置。",
       "priceNotConfigured": "缺少价格 ID。请联系支持。",

@@ -246,6 +246,7 @@
       }
     },
     "errors": {
+      "sessionUserMissing": "Oturumda kullanıcı bilgisi yok. Çıkış yapıp tekrar giriş yapın ve yeniden deneyin.",
       "loginRequired": "Abone olmak için önce giriş yapın",
       "notConfigured": "Ödeme sistemi yapılandırılmadı. Destek ile iletişime geçin.",
       "priceNotConfigured": "Fiyat kimliği eksik. Destek ile iletişime geçin.",

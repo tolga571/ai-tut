@@ -251,6 +251,7 @@
       }
     },
     "errors": {
+      "sessionUserMissing": "Your session is missing user data. Sign out and sign in again, then retry.",
       "loginRequired": "Please log in first to subscribe",
       "notConfigured": "Billing system is not configured yet. Please contact support.",
       "priceNotConfigured": "Price ID missing. Please contact support.",
