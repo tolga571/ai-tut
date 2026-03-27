@@ -11,7 +11,10 @@
     "pages": "الصفحات",
     "documents": "المستندات",
     "adminPanel": "لوحة الإدارة",
-    "explore": "استكشاف"
+    "explore": "استكشاف",
+    "chat": "AI Chat",
+    "vocabulary": "المفردات",
+    "progress": "التقدم"
   },
   "home": {
     "badge": "مدعوم بـ gemini-2.5-flash",

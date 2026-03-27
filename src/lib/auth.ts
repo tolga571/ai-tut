@@ -71,6 +71,7 @@ export const authOptions: NextAuthOptions = {
               cefrLevel: true,
               role: true,
               onboardingCompleted: true,
+              xp: true,
             }
           });
           if (dbUser) {
@@ -81,6 +82,7 @@ export const authOptions: NextAuthOptions = {
             session.user.cefrLevel = dbUser.cefrLevel;
             session.user.role = dbUser.role;
             session.user.onboardingCompleted = dbUser.onboardingCompleted;
+            session.user.xp = dbUser.xp;
           }
         } catch (error) {
           console.error("[AUTH_SESSION_DB]", error);
@@ -91,6 +93,7 @@ export const authOptions: NextAuthOptions = {
           session.user.cefrLevel = token.cefrLevel;
           session.user.role = token.role;
           session.user.onboardingCompleted = token.onboardingCompleted;
+          session.user.xp = token.xp;
         }
       }
       return session;
@@ -105,6 +108,7 @@ export const authOptions: NextAuthOptions = {
         token.cefrLevel = user.cefrLevel;
         token.role = user.role;
         token.onboardingCompleted = user.onboardingCompleted;
+        token.xp = user.xp ?? 0;
       }
 
       // Manuel session.update() çağrısında (örn. ödeme sonrası) tüm alanları güncelle
@@ -124,11 +128,12 @@ export const authOptions: NextAuthOptions = {
         try {
           const fresh = await prisma.user.findUnique({
             where: { id: token.id as string },
-            select: { planStatus: true, onboardingCompleted: true },
+            select: { planStatus: true, onboardingCompleted: true, xp: true },
           });
           if (fresh) {
             token.planStatus = fresh.planStatus;
             token.onboardingCompleted = fresh.onboardingCompleted;
+            token.xp = fresh.xp;
           }
         } catch (err) {
           // DB geçici olarak erişilemezse token'daki mevcut değerleri koru

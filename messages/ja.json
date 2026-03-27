@@ -11,7 +11,10 @@
     "pages": "ページ",
     "documents": "ドキュメント",
     "adminPanel": "管理パネル",
-    "explore": "探索"
+    "explore": "探索",
+    "chat": "AIチャット",
+    "vocabulary": "語彙",
+    "progress": "進捗"
   },
   "home": {
     "badge": "gemini-2.5-flash 搭載",

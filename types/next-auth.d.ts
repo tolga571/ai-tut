@@ -11,6 +11,7 @@ declare module "next-auth" {
       targetLang: string;
       cefrLevel: string;
       onboardingCompleted?: boolean;
+      xp?: number;
     } & DefaultSession["user"];
   }
 
@@ -22,6 +23,7 @@ declare module "next-auth" {
     targetLang: string;
     cefrLevel: string;
     onboardingCompleted?: boolean;
+    xp?: number;
   }
 }
 
@@ -34,5 +36,6 @@ declare module "next-auth/jwt" {
     targetLang: string;
     cefrLevel: string;
     onboardingCompleted?: boolean;
+    xp?: number;
   }
 }

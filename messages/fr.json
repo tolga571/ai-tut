@@ -11,7 +11,10 @@
     "pages": "Pages",
     "documents": "Documents",
     "adminPanel": "Panneau Admin",
-    "explore": "Explorer"
+    "explore": "Explorer",
+    "chat": "AI Chat",
+    "vocabulary": "Vocabulaire",
+    "progress": "Progrès"
   },
   "home": {
     "badge": "Propulsé par gemini-2.5-flash",

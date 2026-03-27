@@ -11,7 +11,10 @@
     "pages": "页面",
     "documents": "文档",
     "adminPanel": "管理面板",
-    "explore": "探索"
+    "explore": "探索",
+    "chat": "AI聊天",
+    "vocabulary": "词汇",
+    "progress": "进度"
   },
   "home": {
     "badge": "由 gemini-2.5-flash 驱动",

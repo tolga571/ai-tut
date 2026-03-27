@@ -6,7 +6,10 @@
     "register": "Başla",
     "goToChat": "Chate Git",
     "light": "Açık",
-    "dark": "Koyu"
+    "dark": "Koyu",
+    "chat": "AI Chat",
+    "vocabulary": "Kelime Hazinesi",
+    "progress": "İlerleme"
   },
   "home": {
     "badge": "gemini-2.5-flash ile güçlendirildi",
