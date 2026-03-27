@@ -24,6 +24,15 @@
  *   no-plan-tests  → access-control.spec.ts + api-security.spec.ts, plansız oturum ile
  */
 import { defineConfig, devices } from '@playwright/test';
+import * as path from 'path';
+import * as fs from 'fs';
+import * as dotenv from 'dotenv';
+
+// .env.test varsa yükle (yoksa mevcut env değişkenlerini kullan)
+const envTestPath = path.resolve(process.cwd(), '.env.test');
+if (fs.existsSync(envTestPath)) {
+  dotenv.config({ path: envTestPath });
+}
 
 const BASE_URL = process.env.BASE_URL ?? 'http://localhost:3000';
 
