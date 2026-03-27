@@ -32,10 +32,10 @@ async function fillRegisterForm(
   await page.goto('/en/register');
 
   if (opts.name !== undefined) {
-    await page.getByLabel(/full name|name/i).fill(opts.name);
+    await page.getByPlaceholder(/your name/i).fill(opts.name);
   }
   if (opts.email !== undefined) {
-    await page.getByLabel(/email/i).fill(opts.email);
+    await page.getByPlaceholder(/you@example\.com/i).fill(opts.email);
   }
   if (opts.password !== undefined) {
     // Şifre alanı — "confirm" içermeyen label
@@ -97,8 +97,8 @@ test.describe('R1 — Başarılı Kayıt', () => {
     const email = uniqueEmail();
 
     await page.goto('/en/register');
-    await page.getByLabel(/full name|name/i).fill('Spinner Test');
-    await page.getByLabel(/email/i).fill(email);
+    await page.getByPlaceholder(/your name/i).fill('Spinner Test');
+    await page.getByPlaceholder(/you@example\.com/i).fill(email);
     await page.locator('input[type="password"]').first().fill('SecurePass123!');
     await page.locator('input[type="password"]').nth(1).fill('SecurePass123!');
 
@@ -309,8 +309,8 @@ test.describe('R4 — DB Doğrulaması (Kayıt → Login → Başarı)', () => {
 
     // ── Adım 2: Login sayfasından giriş yap ──────────────────────────────
     await page.goto('/en/login');
-    await page.getByLabel(/email/i).fill(email);
-    await page.getByLabel(/password/i).fill(password);
+    await page.getByPlaceholder(/you@example\.com/i).fill(email);
+    await page.getByPlaceholder(/••••••••/i).fill(password);
     await page.getByRole('button', { name: /sign in|log in|giriş/i }).click();
 
     // ── Adım 3: Başarılı giriş → DB'de var demek ─────────────────────────
@@ -325,8 +325,8 @@ test.describe('R4 — DB Doğrulaması (Kayıt → Login → Başarı)', () => {
     const nonExistentEmail = `nonexistent-${Date.now()}@example.com`;
 
     await page.goto('/en/login');
-    await page.getByLabel(/email/i).fill(nonExistentEmail);
-    await page.getByLabel(/password/i).fill('AnyPass123!');
+    await page.getByPlaceholder(/you@example\.com/i).fill(nonExistentEmail);
+    await page.getByPlaceholder(/••••••••/i).fill('AnyPass123!');
     await page.getByRole('button', { name: /sign in|log in|giriş/i }).click();
 
     // Hata mesajı görünmeli

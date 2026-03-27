@@ -53,10 +53,43 @@ export default function PricingPage() {
   const refreshAfterCheckout = useCallback(async () => {
     if (checkoutHandled.current) return;
     checkoutHandled.current = true;
-    // planStatus'u açıkça geçirerek JWT token'ının anında güncellenmesini sağla (A2)
-    await update({ planStatus: "active" });
-    toast.success(t("checkoutSuccess"));
-    // Ödeme başarılı → kullanıcıyı dashboard'a gönder, pricing'de tutma (A3)
+
+    // Paddle webhook DB'yi güncelleyene kadar bekle (genellikle 1-5sn).
+    // /api/user/plan-status her seferinde DB'ye gider — JWT cache'ini atlar.
+    const toastId = toast.loading("Ödeme doğrulanıyor…");
+
+    let activated = false;
+    for (let attempt = 0; attempt < 8; attempt++) {
+      // İlk kontrol 1.5sn sonra, sonrakiler 2sn aralıklarla
+      await new Promise((r) => setTimeout(r, attempt === 0 ? 1500 : 2000));
+      try {
+        const res = await fetch("/api/user/plan-status");
+        if (res.ok) {
+          const data = await res.json() as { planStatus?: string };
+          if (data.planStatus === "active") {
+            activated = true;
+            break;
+          }
+        }
+      } catch {
+        // Ağ hatası — bir sonraki denemede tekrar dene
+      }
+    }
+
+    toast.dismiss(toastId);
+
+    if (activated) {
+      // DB onaylandı → JWT'yi DB'den taze çek (optimistic değil, gerçek)
+      await update();
+      toast.success(t("checkoutSuccess"));
+    } else {
+      // Webhook gecikmiş olabilir — fallback optimistic update
+      // Kullanıcı dashboard'a gittiğinde JWT yenilenir ve DB'den okur
+      await update({ planStatus: "active" });
+      toast.success(t("checkoutSuccess"));
+      console.warn("[PRICING] Webhook did not confirm within 15s, using optimistic update");
+    }
+
     router.replace("/dashboard");
   }, [update, router, t]);
 

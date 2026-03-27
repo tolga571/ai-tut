@@ -42,6 +42,23 @@ function verifyPaddleSignature(
   }
 }
 
+/**
+ * GET /api/paddle/webhook
+ * Basit sağlık kontrolü — Paddle dashboard'ın webhook URL'sini
+ * doğrulayabilmesi ve Railway'de endpoint'in erişilebilir olduğunu
+ * teyit etmek için kullanılır.
+ */
+export async function GET() {
+  const hasSecret = Boolean(process.env.PADDLE_WEBHOOK_SECRET);
+  return new NextResponse(
+    JSON.stringify({ ok: true, webhookConfigured: hasSecret }),
+    {
+      status: 200,
+      headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
+    }
+  );
+}
+
 export async function POST(req: Request) {
   try {
     const webhookSecret = process.env.PADDLE_WEBHOOK_SECRET;

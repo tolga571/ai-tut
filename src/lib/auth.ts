@@ -118,7 +118,9 @@ export const authOptions: NextAuthOptions = {
 
       // Her token yenilemesinde DB'den planStatus ve onboardingCompleted'ı taze oku.
       // Bu sayede ödeme/iptal sonrası middleware anında doğru değeri görür.
-      if (token.id && !user) {
+      // trigger === "update" sırasında DB refresh ATLANIR — yoksa optimistic update
+      // hemen ezilir ve kullanıcı pricing döngüsüne girer.
+      if (token.id && !user && trigger !== "update") {
         try {
           const fresh = await prisma.user.findUnique({
             where: { id: token.id as string },

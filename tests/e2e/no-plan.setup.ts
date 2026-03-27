@@ -11,7 +11,7 @@ import { test as setup, expect, request } from '@playwright/test';
 import * as path from 'path';
 import * as fs from 'fs';
 
-export const NO_PLAN_AUTH_FILE = path.join(import.meta.dirname, '.auth', 'no-plan-user.json');
+export const NO_PLAN_AUTH_FILE = path.join(process.cwd(), '.auth', 'no-plan-user.json');
 
 // Benzersiz email — paralel çalıştırmada da çakışmaz
 const uniqueEmail = `e2e-noplan-${Date.now()}@test.com`;
@@ -22,10 +22,10 @@ setup('no-plan kullanıcısını kayıt et ve oturum aç', async ({ page }) => {
 
   // ── 1. Kayıt ──────────────────────────────────────────────────────────────
   await page.goto('/en/register');
-  await page.getByLabel(/full name|name/i).fill('NoPlan E2E User');
-  await page.getByLabel(/email/i).fill(uniqueEmail);
-  await page.getByLabel(/^password$/i).fill(password);
-  await page.getByLabel(/confirm password/i).fill(password);
+  await page.getByPlaceholder(/your name/i).fill('NoPlan E2E User');
+  await page.getByPlaceholder(/you@example\.com/i).fill(uniqueEmail);
+  await page.locator('input[type="password"]').first().fill(password);
+  await page.locator('input[type="password"]').nth(1).fill(password);
   await page.getByRole('button', { name: /continue|register|sign up/i }).click();
 
   // ── 2. Onboarding varsa doldur / atla ─────────────────────────────────────

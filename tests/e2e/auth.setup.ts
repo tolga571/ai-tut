@@ -15,7 +15,7 @@ import { test as setup, expect } from '@playwright/test';
 import * as path from 'path';
 import * as fs from 'fs';
 
-const AUTH_FILE = path.join(import.meta.dirname, '.auth', 'user.json');
+const AUTH_FILE = path.join(process.cwd(), '.auth', 'user.json');
 
 setup('authenticate (plan sahibi kullanıcı)', async ({ page }) => {
   fs.mkdirSync(path.dirname(AUTH_FILE), { recursive: true });
@@ -25,8 +25,9 @@ setup('authenticate (plan sahibi kullanıcı)', async ({ page }) => {
 
   await page.goto('/en/login');
 
-  await page.getByLabel(/email/i).fill(email);
-  await page.getByLabel(/password/i).fill(password);
+  // Login form labels are not associated with inputs on prod; prefer placeholders.
+  await page.getByPlaceholder(/you@example\.com/i).fill(email);
+  await page.getByPlaceholder(/••••••••/i).fill(password);
   await page.getByRole('button', { name: /sign in|log in|giriş/i }).click();
 
   // Aktif planlı kullanıcı → dashboard veya chat'e gider
