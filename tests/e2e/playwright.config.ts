@@ -84,6 +84,7 @@ export default defineConfig({
       dependencies: ['setup'],
       testMatch: [
         'auth.spec.ts',
+        'register.spec.ts',       // R1-R4: kayıt akışı, DB doğrulama, validasyon
         'dashboard.spec.ts',
         'vocabulary.spec.ts',
         'api-security.spec.ts',   // S1 (kimliksiz) + S3/S4 (planlı kullanıcı gerekir)
