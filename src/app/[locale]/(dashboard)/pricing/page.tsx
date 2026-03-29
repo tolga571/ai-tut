@@ -79,19 +79,22 @@ export default function PricingPage() {
     toast.dismiss(toastId);
 
     if (activated) {
-      // DB onaylandı → JWT'yi DB'den taze çek (optimistic değil, gerçek)
-      await update();
+      // DB onaylandı → JWT cookie'ye planStatus: "active" yaz
+      // update() argümansız çağrılırsa JWT callback token'ı güncellemez,
+      // middleware cookie'deki eski "inactive" değeri görür ve pricing'e redirect eder.
+      await update({ planStatus: "active" });
       toast.success(t("checkoutSuccess"));
     } else {
       // Webhook gecikmiş olabilir — fallback optimistic update
-      // Kullanıcı dashboard'a gittiğinde JWT yenilenir ve DB'den okur
       await update({ planStatus: "active" });
       toast.success(t("checkoutSuccess"));
       console.warn("[PRICING] Webhook did not confirm within 15s, using optimistic update");
     }
 
-    router.replace("/dashboard");
-  }, [update, router, t]);
+    // router.replace yerine hard navigation — update() Set-Cookie'nin
+    // middleware tarafından okunmasını garantilemek için tam sayfa yüklemesi yapılır.
+    window.location.href = `/${locale}/dashboard`;
+  }, [update, router, locale, t]);
 
   useEffect(() => {
     if (searchParams.get("checkout") === "success") {
