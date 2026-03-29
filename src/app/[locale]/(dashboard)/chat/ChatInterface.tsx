@@ -882,7 +882,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
               <p className="text-[12px] text-gray-400 dark:text-gray-500 italic mb-1">{wordOfDay.pronunciation} · {wordOfDay.partOfSpeech}</p>
               <p className="text-[13px] text-gray-700 dark:text-gray-300 mb-2">{wordOfDay.translation}</p>
               <div className="bg-gray-100 dark:bg-white/5 rounded-xl p-2.5 border-l-[3px] border-indigo-500">
-                <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed italic">"{wordOfDay.example}"</p>
+                <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed italic">&ldquo;{wordOfDay.example}&rdquo;</p>
                 <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1">{wordOfDay.exampleTranslation}</p>
               </div>
               {wordOfDay.tip && (
