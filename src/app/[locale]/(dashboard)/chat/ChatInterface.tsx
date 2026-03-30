@@ -8,6 +8,7 @@ import { splitTextForSpeechPauses, WARM_TTS } from "@/lib/speechTts";
 import { UserMenu } from "@/components/UserMenu";
 import { useTranslations, useLocale } from "next-intl";
 import { FlagIcon } from "@/components/FlagIcon";
+import { useTheme } from "next-themes";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -100,6 +101,8 @@ export default function ChatInterface({ user }: { user: UserProp }) {
   const tNav     = useTranslations("nav");
   const tLangs   = useTranslations("languages");
   const locale   = useLocale();
+  const { theme, setTheme } = useTheme();
+  const isDark   = theme !== "light";
 
   const targetLang      = user.targetLang?.toLowerCase() ?? "en";
   const cefrLevel       = user.cefrLevel ?? "A1";
@@ -127,9 +130,10 @@ export default function ChatInterface({ user }: { user: UserProp }) {
   const [selectedTopic,  setSelectedTopic]  = useState<string | null>(null);
   const [wordOfDay,      setWordOfDay]      = useState<WordOfDay | null>(null);
   const [wodLoading,     setWodLoading]     = useState(true);
+  const [activeTab,      setActiveTab]      = useState<"chat" | "grammar" | "vocab">("chat");
 
   const endRef        = useRef<HTMLDivElement>(null);
-  const inputRef      = useRef<HTMLInputElement>(null);
+  const inputRef      = useRef<HTMLTextAreaElement>(null);
   const comingSoonRef = useRef<HTMLDivElement>(null);
   const searchParams  = useSearchParams();
   const convFromUrl   = searchParams?.get("conv");
@@ -577,16 +581,23 @@ export default function ChatInterface({ user }: { user: UserProp }) {
       {/* ══════════════════════════════════════════════
           MAIN CHAT AREA
       ══════════════════════════════════════════════ */}
-      <main className="flex-1 flex flex-col overflow-hidden min-w-0">
+      <main className="flex-1 flex flex-col overflow-hidden min-w-0" style={{ background: isDark ? "#0f1117" : "#f8f9fb" }}>
 
         {/* Header */}
-        <header className="flex items-center gap-3 px-5 h-[60px] border-b border-gray-200 dark:border-white/8 bg-white dark:bg-[#16181f] flex-shrink-0">
+        <header
+          className="flex items-center gap-3 px-5 h-[60px] flex-shrink-0"
+          style={{
+            borderBottom: `1px solid ${isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)"}`,
+            background: isDark ? "#16181f" : "#ffffff",
+          }}
+        >
           {/* Mobile hamburger */}
           <button
             onClick={() => setSidebarOpen((v) => !v)}
-            className="xl:hidden p-2 rounded-xl bg-gray-100 dark:bg-white/8 hover:bg-gray-200 dark:hover:bg-white/12 transition-all text-gray-600 dark:text-gray-400"
+            className="xl:hidden p-2 rounded-xl transition-all"
+            style={{ background: isDark ? "rgba(255,255,255,0.06)" : "#f1f1f4" }}
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke={isDark ? "#9ca3af" : "#4b5563"}>
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
@@ -594,16 +605,64 @@ export default function ChatInterface({ user }: { user: UserProp }) {
           {/* Lang pill */}
           <div className="flex items-center gap-2">
             <FlagIcon code={targetLang} className="w-5 h-4" />
-            <span className="text-[14px] font-bold">{targetLangName}</span>
+            <span className="text-[14px] font-bold" style={{ color: isDark ? "#f1f5f9" : "#111827" }}>{targetLangName}</span>
           </div>
-          <span className="text-[11px] font-bold bg-indigo-500/10 text-indigo-500 dark:text-indigo-400 px-2 py-1 rounded-md">
+          <span
+            className="text-[11px] font-bold px-2 py-1 rounded-md"
+            style={{ background: "rgba(99,102,241,0.12)", color: isDark ? "#818cf8" : "#4f46e5" }}
+          >
             {cefrLevel}
           </span>
-          <span className="w-1 h-1 rounded-full bg-gray-400 dark:bg-gray-600" />
-          <span className="text-[13px] text-gray-400 dark:text-gray-500 hidden sm:block">AI Tutor</span>
+          <span className="w-1 h-1 rounded-full" style={{ background: isDark ? "#4b5563" : "#d1d5db" }} />
+          <span className="text-[13px] hidden sm:block" style={{ color: isDark ? "#6b7280" : "#9ca3af" }}>AI Tutor</span>
 
           {/* Spacer */}
           <div className="flex-1" />
+
+          {/* Tabs */}
+          <div
+            className="hidden md:flex items-center gap-1 p-1 rounded-xl"
+            style={{ background: isDark ? "rgba(255,255,255,0.05)" : "#f3f4f6" }}
+          >
+            {([
+              { id: "chat",    label: "💬 Sohbet" },
+              { id: "grammar", label: "📖 Gramer" },
+              { id: "vocab",   label: "🔤 Vocab"  },
+            ] as const).map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveTab(tab.id)}
+                className="px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all"
+                style={
+                  activeTab === tab.id
+                    ? { background: isDark ? "#252830" : "#ffffff", color: isDark ? "#f1f5f9" : "#111827", boxShadow: "0 1px 3px rgba(0,0,0,0.15)" }
+                    : { color: isDark ? "#6b7280" : "#9ca3af" }
+                }
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Theme toggle */}
+          <button
+            type="button"
+            onClick={() => setTheme(isDark ? "light" : "dark")}
+            className="w-8 h-8 flex items-center justify-center rounded-lg transition-all"
+            style={{ background: isDark ? "rgba(255,255,255,0.06)" : "#f1f1f4" }}
+            title={isDark ? "Aydınlık mod" : "Karanlık mod"}
+          >
+            {isDark ? (
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="#f9d71c" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+              </svg>
+            ) : (
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="#6366f1" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+              </svg>
+            )}
+          </button>
 
           {/* Right controls */}
           <UserMenu user={user} role={user.role} />
@@ -656,11 +715,15 @@ export default function ChatInterface({ user }: { user: UserProp }) {
                       </span>
 
                       {/* Bubble */}
-                      <div className={`px-4 py-3 rounded-2xl text-[14px] leading-relaxed shadow-sm ${
-                        isUser
-                          ? "bg-indigo-600 text-white rounded-tr-sm"
-                          : "bg-gray-50 dark:bg-gray-800/80 border border-gray-200 dark:border-white/8 text-gray-800 dark:text-gray-100 rounded-tl-sm"
-                      }`}>
+                      <div
+                        className="px-4 py-3 text-[14px] leading-relaxed shadow-sm"
+                        style={{
+                          borderRadius: isUser ? "16px 4px 16px 16px" : "4px 16px 16px 16px",
+                          background: isUser ? "#6366f1" : (isDark ? "#1e2028" : "#ffffff"),
+                          color: isUser ? "#ffffff" : (isDark ? "#e2e8f0" : "#1f2937"),
+                          border: isUser ? "none" : `1px solid ${isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)"}`,
+                        }}
+                      >
                         <p className="whitespace-pre-wrap break-words">{msg.content}</p>
                       </div>
 
@@ -673,7 +736,10 @@ export default function ChatInterface({ user }: { user: UserProp }) {
 
                       {/* Correction card */}
                       {correction && (
-                        <div className="flex items-start gap-2.5 px-3 py-2.5 bg-red-500/6 dark:bg-red-500/8 border border-red-500/20 rounded-xl text-[12.5px] self-start max-w-full">
+                        <div
+                          className="flex items-start gap-2.5 px-3 py-2.5 rounded-xl text-[12.5px] self-start max-w-full"
+                          style={{ background: "rgba(248,113,113,0.07)", border: "1px solid rgba(248,113,113,0.2)" }}
+                        >
                           <span className="text-sm flex-shrink-0 mt-px">✏️</span>
                           <div className="min-w-0">
                             <p className="font-semibold text-red-500 dark:text-red-400 text-[11px] uppercase tracking-wider mb-1">Gramer Düzeltmesi</p>
@@ -699,7 +765,8 @@ export default function ChatInterface({ user }: { user: UserProp }) {
                               key={w.word}
                               onClick={() => saveWordToVocab(w.word, w.definition)}
                               title="Kelime bankasına ekle"
-                              className="flex items-center gap-1.5 text-[12px] font-semibold px-2.5 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-500 dark:text-indigo-400 hover:bg-indigo-500/20 transition-all"
+                              className="flex items-center gap-1.5 text-[12px] font-semibold px-2.5 py-1 rounded-full transition-all"
+                              style={{ background: "rgba(99,102,241,0.15)", border: "1px solid rgba(99,102,241,0.2)", color: isDark ? "#818cf8" : "#4f46e5" }}
                             >
                               {w.word}
                               <span className="font-normal text-gray-400 dark:text-gray-500 text-[11px]">· {w.definition}</span>
@@ -748,7 +815,14 @@ export default function ChatInterface({ user }: { user: UserProp }) {
               {loading && (
                 <div className="flex gap-3">
                   <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex-shrink-0 flex items-center justify-center text-sm">🤖</div>
-                  <div className="px-4 py-3.5 rounded-2xl rounded-tl-sm bg-gray-50 dark:bg-gray-800/80 border border-gray-200 dark:border-white/8">
+                  <div
+                    className="px-4 py-3.5"
+                    style={{
+                      borderRadius: "4px 16px 16px 16px",
+                      background: isDark ? "#1e2028" : "#ffffff",
+                      border: `1px solid ${isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)"}`,
+                    }}
+                  >
                     <div className="flex gap-1.5 items-center">
                       {[0, 200, 400].map((delay) => (
                         <div
@@ -767,9 +841,21 @@ export default function ChatInterface({ user }: { user: UserProp }) {
         </div>
 
         {/* ── Input area ── */}
-        <div className="border-t border-gray-200 dark:border-white/8 bg-white dark:bg-[#16181f] px-5 py-4 flex-shrink-0">
+        <div
+          className="px-5 py-4 flex-shrink-0"
+          style={{
+            borderTop: `1px solid ${isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)"}`,
+            background: isDark ? "#16181f" : "#ffffff",
+          }}
+        >
           <form onSubmit={sendMessage}>
-            <div className="flex items-center gap-2.5 bg-gray-50 dark:bg-gray-900/80 border border-gray-200 dark:border-white/10 rounded-2xl px-3 py-2.5 focus-within:border-indigo-400/60 transition-all shadow-sm">
+            <div
+              className="flex items-end gap-2.5 rounded-2xl px-3 py-2.5 transition-all shadow-sm"
+              style={{
+                background: isDark ? "#252830" : "#f3f4f6",
+                border: `1px solid ${isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.08)"}`,
+              }}
+            >
               {/* Attach / coming-soon */}
               <div className="relative" ref={comingSoonRef}>
                 <button
@@ -787,13 +873,29 @@ export default function ChatInterface({ user }: { user: UserProp }) {
                 )}
               </div>
 
-              <input
+              <textarea
                 ref={inputRef}
-                type="text"
+                rows={1}
                 value={input}
-                onChange={(e) => setInput(e.target.value.slice(0, MAX_CHARS))}
+                onChange={(e) => {
+                  setInput(e.target.value.slice(0, MAX_CHARS));
+                  // Auto-resize
+                  e.target.style.height = "auto";
+                  e.target.style.height = `${Math.min(e.target.scrollHeight, 140)}px`;
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    void sendMessage(e as unknown as React.FormEvent);
+                  }
+                }}
                 placeholder={t("inputPlaceholder", { lang: targetLangName })}
-                className="flex-1 bg-transparent border-none text-gray-900 dark:text-white focus:ring-0 placeholder-gray-400 dark:placeholder-gray-500 text-[14px] outline-none h-10"
+                className="flex-1 bg-transparent border-none focus:ring-0 text-[14px] outline-none resize-none leading-relaxed py-1"
+                style={{
+                  color: isDark ? "#f1f5f9" : "#111827",
+                  minHeight: "40px",
+                  maxHeight: "140px",
+                }}
                 autoComplete="off"
                 disabled={loading}
               />
@@ -807,7 +909,8 @@ export default function ChatInterface({ user }: { user: UserProp }) {
               {/* Mic */}
               <button
                 type="button"
-                className="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-white/8 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-all"
+                className="w-8 h-8 flex items-center justify-center rounded-lg transition-all flex-shrink-0"
+                style={{ background: isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)", color: isDark ? "#6b7280" : "#9ca3af" }}
               >
                 🎙️
               </button>
@@ -816,7 +919,8 @@ export default function ChatInterface({ user }: { user: UserProp }) {
               <button
                 type="submit"
                 disabled={!input.trim() || loading}
-                className="w-9 h-9 flex items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 text-white hover:opacity-90 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex-shrink-0"
+                className="w-9 h-9 flex items-center justify-center rounded-xl text-white hover:opacity-90 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex-shrink-0"
+                style={{ background: "linear-gradient(135deg,#6366f1,#a855f7)" }}
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
@@ -849,7 +953,13 @@ export default function ChatInterface({ user }: { user: UserProp }) {
       {/* ══════════════════════════════════════════════
           RIGHT PANEL
       ══════════════════════════════════════════════ */}
-      <aside className="hidden xl:flex w-[280px] min-w-[280px] flex-col border-l border-gray-200 dark:border-white/8 bg-white dark:bg-[#16181f] overflow-y-auto p-4 gap-4">
+      <aside
+        className="hidden xl:flex w-[280px] min-w-[280px] flex-col overflow-y-auto p-4 gap-4"
+        style={{
+          borderLeft: `1px solid ${isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)"}`,
+          background: isDark ? "#16181f" : "#ffffff",
+        }}
+      >
 
         {/* Word of Day */}
         <div className="rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-white/8 p-4">
