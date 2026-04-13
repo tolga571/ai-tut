@@ -94,7 +94,6 @@ export default function ChatInterface({ user }: { user: UserProp }) {
   const [searchQuery,    setSearchQuery]    = useState("");
   const [copiedId,       setCopiedId]       = useState<string | null>(null);
   const [speakingId,     setSpeakingId]     = useState<string | null>(null);
-  const [progressPct,    setProgressPct]    = useState(0);
   const [showComingSoon, setShowComingSoon] = useState(false);
   const [selectedTopic,  setSelectedTopic]  = useState<string | null>(null);
   const [wordOfDay,      setWordOfDay]      = useState<WordOfDay | null>(null);
@@ -138,13 +137,6 @@ export default function ChatInterface({ user }: { user: UserProp }) {
     check();
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
-  }, []);
-
-  useEffect(() => {
-    fetch("/api/user/progress", { cache: "no-store" })
-      .then((r) => r.ok ? r.json() : null)
-      .then((d: { xp?: number } | null) => { if (d && typeof d.xp === "number") setProgressPct(d.xp % 100); })
-      .catch(() => {});
   }, []);
 
   useEffect(() => {
