@@ -393,7 +393,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
       <aside className={`
         ${isMobile ? "fixed top-0 left-0 bottom-0 z-40 transition-transform duration-300 " + (sidebarOpen ? "translate-x-0" : "-translate-x-full") : "relative"}
         w-[260px] min-w-[260px] flex flex-col
-        border-r border-gray-200 dark:border-white/5
+        border-r border-gray-200 dark:border-gray-800
         bg-white dark:bg-[#16181f]
       `}>
 
@@ -432,7 +432,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={t("searchPlaceholder")}
-              className="w-full pl-8 pr-3 py-2 bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/5 rounded-lg text-xs text-gray-700 dark:text-gray-300 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-indigo-400/50 transition-all"
+              className="w-full pl-8 pr-3 py-2 bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-gray-800 rounded-lg text-xs text-gray-700 dark:text-gray-300 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-indigo-400/50 dark:focus:border-indigo-500/50 transition-all"
             />
           </div>
         </div>
@@ -501,7 +501,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
         </div>
 
         {/* Nav links */}
-        <nav className="px-2 pt-2 border-t border-gray-200 dark:border-white/5">
+        <nav className="px-2 pt-2 border-t border-gray-200 dark:border-gray-800">
           {[
             { href: "/dashboard", icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6", label: "Dashboard" },
             { href: "/vocabulary", icon: "M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253", label: "Kelime Bankası" },
@@ -521,7 +521,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
         </nav>
 
         {/* User row */}
-        <div className="mx-2 mb-3 mt-1 p-2.5 rounded-xl flex items-center gap-2.5 border border-gray-200 dark:border-white/5 hover:bg-gray-50 dark:hover:bg-white/5 cursor-pointer transition-all">
+        <div className="mx-2 mb-3 mt-1 p-2.5 rounded-xl flex items-center gap-2.5 border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-white/5 cursor-pointer transition-all">
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white text-[13px] font-bold flex-shrink-0">
             {(user.name?.charAt(0) ?? "U").toUpperCase()}
           </div>
@@ -542,7 +542,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
 
         {/* Header */}
         <header
-          className="flex items-center gap-3 px-5 h-[60px] flex-shrink-0 border-b border-gray-200 dark:border-white/5"
+          className="flex items-center gap-3 px-5 h-[60px] flex-shrink-0 border-b border-gray-200 dark:border-gray-800"
           style={{ background: isDark ? "#16181f" : "#ffffff" }}
         >
           {/* Mobile hamburger */}
@@ -626,7 +626,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
         {activeTab === "grammar" && (
           <div className="xl:hidden flex-1 overflow-y-auto px-5 py-6">
             <div className="max-w-xl mx-auto space-y-4">
-              <div className="rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-white/5 p-5">
+              <div className="rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 p-5">
                 <p className="text-[9px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Gramer Odağı</p>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white text-lg flex-shrink-0">⏱️</div>
@@ -650,7 +650,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
                   ))}
                 </div>
               </div>
-              <div className="rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-white/5 p-5">
+              <div className="rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 p-5">
                 <p className="text-[9px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3">Senaryolar</p>
                 <div className="space-y-2">
                   {CHAT_TOPICS.map((topic) => (
@@ -707,7 +707,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
                   <button
                     key={s}
                     onClick={() => { setInput(s); inputRef.current?.focus(); }}
-                    className="text-xs px-3 py-2 rounded-xl border border-gray-200 dark:border-white/5 bg-gray-50 dark:bg-white/5 text-gray-600 dark:text-gray-300 hover:border-indigo-400/50 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 transition-all"
+                    className="text-xs px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-white/5 text-gray-600 dark:text-gray-300 hover:border-indigo-400/50 dark:hover:border-indigo-500/40 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 transition-all"
                   >
                     {s}
                   </button>
@@ -740,7 +740,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
                       {/* Bubble */}
                       <div
                         className={`px-4 py-3 text-[14px] leading-relaxed shadow-sm ${
-                          isUser ? "" : "border border-gray-200 dark:border-white/5"
+                          isUser ? "" : "border border-gray-200 dark:border-gray-800"
                         }`}
                         style={{
                           borderRadius: isUser ? "16px 4px 16px 16px" : "4px 16px 16px 16px",
@@ -841,7 +841,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
                 <div className="flex gap-3">
                   <div className="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex-shrink-0 flex items-center justify-center text-sm">🤖</div>
                   <div
-                    className="px-4 py-3.5 border border-gray-200 dark:border-white/5"
+                    className="px-4 py-3.5 border border-gray-200 dark:border-gray-800"
                     style={{
                       borderRadius: "4px 16px 16px 16px",
                       background: isDark ? "#1e2028" : "#ffffff",
@@ -866,12 +866,12 @@ export default function ChatInterface({ user }: { user: UserProp }) {
 
         {/* ── Input area ── */}
         <div
-          className={`px-5 py-4 flex-shrink-0 border-t border-gray-200 dark:border-white/5 ${activeTab !== "chat" ? "hidden xl:block" : ""}`}
+          className={`px-5 py-4 flex-shrink-0 border-t border-gray-200 dark:border-gray-800 ${activeTab !== "chat" ? "hidden xl:block" : ""}`}
           style={{ background: isDark ? "#16181f" : "#ffffff" }}
         >
           <form onSubmit={sendMessage}>
             <div
-              className="flex items-end gap-2.5 rounded-2xl px-3 py-2.5 transition-all shadow-sm border border-gray-200 dark:border-white/5"
+              className="flex items-end gap-2.5 rounded-2xl px-3 py-2.5 transition-all shadow-sm border border-gray-200 dark:border-gray-800 focus-within:border-indigo-400/50 dark:focus-within:border-indigo-500/50"
               style={{ background: isDark ? "#252830" : "#f3f4f6" }}
             >
               {/* Attach / coming-soon */}
@@ -884,7 +884,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
                 </button>
                 {showComingSoon && (
-                  <div className="absolute bottom-12 left-0 z-50 w-64 rounded-2xl border border-gray-200 dark:border-white/5 bg-white dark:bg-gray-900 shadow-xl p-4">
+                  <div className="absolute bottom-12 left-0 z-50 w-64 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-xl p-4">
                     <div className="flex items-center gap-2 mb-2"><span>✨</span><p className="text-sm font-semibold">Coming Soon</p></div>
                     <p className="text-xs text-gray-400 leading-relaxed">Dosya paylaşımı, sesli mesaj ve daha fazlası yolda! 🚀</p>
                   </div>
@@ -974,12 +974,12 @@ export default function ChatInterface({ user }: { user: UserProp }) {
           RIGHT PANEL
       ══════════════════════════════════════════════ */}
       <aside
-        className="hidden xl:flex w-[280px] min-w-[280px] flex-col overflow-y-auto p-4 gap-4 border-l border-gray-200 dark:border-white/5"
+        className="hidden xl:flex w-[280px] min-w-[280px] flex-col overflow-y-auto p-4 gap-4 border-l border-gray-200 dark:border-gray-800"
         style={{ background: isDark ? "#16181f" : "#ffffff" }}
       >
 
         {/* Word of Day */}
-        <div className="rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-white/5 p-4">
+        <div className="rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 p-4">
           <p className="text-[9px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3">Günün Kelimesi</p>
           {wodLoading ? (
             <div className="space-y-2">
@@ -1037,7 +1037,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
         </div>
 
         {/* Grammar Focus */}
-        <div className="rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-white/5 p-4">
+        <div className="rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 p-4">
           <p className="text-[9px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3">Gramer Odağı</p>
           <div className="flex items-center gap-2 mb-3">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white text-[13px] flex-shrink-0">
@@ -1065,7 +1065,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
         </div>
 
         {/* Today's Goal */}
-        <div className="rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-white/5 p-4">
+        <div className="rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 p-4">
           <p className="text-[9px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3">Günlük Hedef</p>
           <div className="flex items-center justify-between mb-2">
             <span className="text-[13px] font-semibold text-gray-900 dark:text-white">{DAILY_GOAL} mesaj hedefi</span>
@@ -1085,18 +1085,18 @@ export default function ChatInterface({ user }: { user: UserProp }) {
 
         {/* XP + Seviye */}
         <div className="grid grid-cols-2 gap-2">
-          <div className="rounded-xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-white/5 p-3 text-center">
+          <div className="rounded-xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 p-3 text-center">
             <p className="text-[18px] font-black text-yellow-500">⚡{userXp}</p>
             <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5">Toplam XP</p>
           </div>
-          <div className="rounded-xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-white/5 p-3 text-center">
+          <div className="rounded-xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 p-3 text-center">
             <p className="text-[18px] font-black text-orange-400">🔥{Math.floor(userXp / 100) + 1}</p>
             <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5">Seviye</p>
           </div>
         </div>
 
         {/* Scenarios */}
-        <div className="rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-white/5 p-4">
+        <div className="rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 p-4">
           <p className="text-[9px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3">Senaryolar</p>
           <div className="space-y-1.5">
             {CHAT_TOPICS.map((topic) => (
@@ -1106,7 +1106,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
                 className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-left transition-all border ${
                   selectedTopic === topic.id
                     ? "bg-indigo-500/10 border-indigo-500/30 text-indigo-500 dark:text-indigo-400"
-                    : "bg-transparent border-transparent hover:bg-gray-100 dark:hover:bg-white/5 hover:border-gray-200 dark:hover:border-white/5 text-gray-700 dark:text-gray-300"
+                    : "bg-transparent border-transparent hover:bg-gray-100 dark:hover:bg-white/5 hover:border-gray-200 dark:hover:border-gray-700 text-gray-700 dark:text-gray-300"
                 }`}
               >
                 <span className="text-base flex-shrink-0">{topic.icon}</span>
