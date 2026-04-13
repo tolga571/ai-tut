@@ -137,6 +137,18 @@
     "hideHistory": "Hide history",
     "showHistory": "Show history",
     "correctionLabel": "Grammar note",
+    "conversationsLabel": "Conversations",
+    "youLabel": "You",
+    "aiLabel": "AI Tutor · Online",
+    "correctionTitle": "Grammar Correction",
+    "wordRetry": "Try again",
+    "topicLabels": {
+      "cafe": "Café order",
+      "travel-hotel": "Hotel reception",
+      "job-interview": "Job interview",
+      "friends": "Casual chat",
+      "small-talk": "Small talk"
+    },
     "searchPlaceholder": "Search conversations...",
     "suggestionsLabel": "Try asking",
     "suggestion1": "How do I introduce myself?",

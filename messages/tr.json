@@ -132,12 +132,24 @@
     "hideHistory": "Geçmişi gizle",
     "showHistory": "Geçmişi göster",
     "correctionLabel": "Dilbilgisi notu",
-    "searchPlaceholder": "Search conversations...",
-    "suggestionsLabel": "Try asking",
-    "suggestion1": "How do I introduce myself?",
-    "suggestion2": "Help me order food at a restaurant",
-    "suggestion3": "Correct my grammar as I practice",
-    "suggestion4": "Lets have a casual conversation"
+    "conversationsLabel": "Konuşmalar",
+    "youLabel": "Sen",
+    "aiLabel": "AI Tutor · Çevrimiçi",
+    "correctionTitle": "Gramer Düzeltmesi",
+    "wordRetry": "Tekrar dene",
+    "topicLabels": {
+      "cafe": "Kafede sipariş",
+      "travel-hotel": "Otel resepsiyonu",
+      "job-interview": "İş görüşmesi",
+      "friends": "Günlük sohbet",
+      "small-talk": "Small talk"
+    },
+    "searchPlaceholder": "Konuşma ara...",
+    "suggestionsLabel": "Şunu dene",
+    "suggestion1": "Kendimi nasıl tanıtırım?",
+    "suggestion2": "Restoranda yemek sipariş etmeme yardım et",
+    "suggestion3": "Pratik yaparken dilbilgimi düzelt",
+    "suggestion4": "Günlük bir sohbet yapalım"
   },
   "profile": {
     "backToChat": "Sohbete Dön",

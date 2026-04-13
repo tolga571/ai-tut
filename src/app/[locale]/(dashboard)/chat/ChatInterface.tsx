@@ -63,6 +63,57 @@ type UserProp = {
   xp?: number;
 };
 
+type StructuredAiPayload = {
+  content?: unknown;
+  translation?: unknown;
+  correction?: unknown;
+  words?: unknown;
+};
+
+function parseStructuredAiPayload(value: string): StructuredAiPayload | null {
+  const cleaned = value
+    .trim()
+    .replace(/^```(?:json)?\s*/i, "")
+    .replace(/\s*```$/i, "");
+
+  if (!cleaned.startsWith("{")) return null;
+
+  try {
+    const parsed = JSON.parse(cleaned) as StructuredAiPayload;
+    return parsed && typeof parsed === "object" ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function normalizeWords(value: unknown): VocabWord[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((item) => {
+      if (!item || typeof item !== "object") return null;
+      const word = (item as { word?: unknown }).word;
+      const definition = (item as { definition?: unknown }).definition;
+      if (typeof word !== "string" || typeof definition !== "string") return null;
+      return { word, definition };
+    })
+    .filter((item): item is VocabWord => Boolean(item));
+}
+
+function normalizeMessage(message: Message): Message {
+  if (typeof message.content !== "string") return message;
+
+  const payload = parseStructuredAiPayload(message.content);
+  if (!payload || typeof payload.content !== "string") return message;
+
+  return {
+    ...message,
+    content: payload.content,
+    translation: message.translation || (typeof payload.translation === "string" ? payload.translation : undefined),
+    correction: message.correction || (typeof payload.correction === "string" ? payload.correction : undefined),
+    words: message.words?.length ? message.words : normalizeWords(payload.words),
+  };
+}
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function ChatInterface({ user }: { user: UserProp }) {
@@ -109,6 +160,12 @@ export default function ChatInterface({ user }: { user: UserProp }) {
   // Daily messages count (user messages in loaded messages)
   const dailyMsgCount = messages.filter((m) => m.role === "user").length;
   const goalPct       = Math.min(Math.round((dailyMsgCount / DAILY_GOAL) * 100), 100);
+  const youLabel      = locale === "tr" ? "Sen" : "You";
+  const aiLabel       = locale === "tr" ? "AI Tutor · Çevrimiçi" : "AI Tutor · Online";
+  const correctionTitle = locale === "tr" ? "Gramer Düzeltmesi" : "Grammar Correction";
+  const saveWordLabel = locale === "tr" ? "Kelimeye ekle" : "Save word";
+  const listenLabel   = locale === "tr" ? "Dinle" : "Listen";
+  const stopLabel     = locale === "tr" ? "Durdur" : "Stop";
 
   // ── Effects ───────────────────────────────────────────────────────────────
 
@@ -191,7 +248,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
       if (res.ok) {
         const data = await res.json();
         setActiveConvId(data.id || null);
-        setMessages(data.messages || []);
+        setMessages((data.messages || []).map((message: Message) => normalizeMessage(message)));
       }
     } catch { toast.error(t("loadError")); }
   }, [t]);
@@ -292,7 +349,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
           prev.map((c) => c.id === newConvId ? { ...c, updatedAt: new Date().toISOString() } : c)
         );
       }
-      setMessages((prev) => [...prev, data.message]);
+      setMessages((prev) => [...prev, normalizeMessage(data.message as Message)]);
       if (typeof data.xp === "number") setUserXp(data.xp);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : t("sendError"));
@@ -709,7 +766,12 @@ export default function ChatInterface({ user }: { user: UserProp }) {
           ) : (
             <div className="max-w-3xl mx-auto space-y-5">
               {messages.map((msg) => {
-                const correction = msg.correction ? parseCorrection(msg.correction) : null;
+                const corrections = msg.correction
+                  ? msg.correction
+                    .split(/\n+/)
+                    .map((item) => parseCorrection(item))
+                    .filter((item): item is NonNullable<ReturnType<typeof parseCorrection>> => Boolean(item))
+                  : [];
                 const isUser     = msg.role === "user";
 
                 return (
@@ -726,7 +788,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
                     {/* Message body */}
                     <div className={`flex flex-col gap-2 max-w-[75%] ${isUser ? "items-end" : "items-start"}`}>
                       <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 px-1">
-                        {isUser ? t("youLabel") : t("aiLabel")}
+                        {isUser ? youLabel : aiLabel}
                       </span>
 
                       {/* Bubble */}
@@ -752,14 +814,15 @@ export default function ChatInterface({ user }: { user: UserProp }) {
                       )}
 
                       {/* Correction card */}
-                      {correction && (
+                      {corrections.map((correction) => (
                         <div
+                          key={`${msg.id}-${correction.original}-${correction.corrected}`}
                           className="flex items-start gap-2.5 px-3 py-2.5 rounded-xl text-[12.5px] self-start max-w-full"
                           style={{ background: "rgba(248,113,113,0.07)", border: "1px solid rgba(248,113,113,0.2)" }}
                         >
                           <span className="text-sm flex-shrink-0 mt-px">✏️</span>
                           <div className="min-w-0">
-                            <p className="font-semibold text-red-500 dark:text-red-400 text-[11px] uppercase tracking-wider mb-1">{t("correctionTitle")}</p>
+                            <p className="font-semibold text-red-500 dark:text-red-400 text-[11px] uppercase tracking-wider mb-1">{correctionTitle}</p>
                             <div className="flex items-center gap-2 flex-wrap">
                               <span className="line-through text-gray-400 dark:text-gray-500">{correction.original}</span>
                               <span className="text-gray-400">→</span>
@@ -772,7 +835,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
                             )}
                           </div>
                         </div>
-                      )}
+                      ))}
 
                       {/* Vocab pills */}
                       {msg.words && msg.words.length > 0 && (
@@ -781,10 +844,11 @@ export default function ChatInterface({ user }: { user: UserProp }) {
                             <button
                               key={w.word}
                               onClick={() => saveWordToVocab(w.word, w.definition)}
-                              title="Kelime bankasına ekle"
-                              className="flex items-center gap-1.5 text-[12px] font-semibold px-2.5 py-1 rounded-full transition-all"
-                              style={{ background: "rgba(99,102,241,0.15)", border: "1px solid rgba(99,102,241,0.2)", color: isDark ? "#818cf8" : "#4f46e5" }}
+                              title={saveWordLabel}
+                              className="flex items-center gap-1.5 text-[12px] font-semibold px-2.5 py-1 rounded-full transition-all hover:scale-[1.02]"
+                              style={{ background: "rgba(99,102,241,0.15)", border: "1px solid rgba(99,102,241,0.28)", color: isDark ? "#c4b5fd" : "#4f46e5" }}
                             >
+                              <span className="text-[13px] leading-none">＋</span>
                               {w.word}
                               <span className="font-normal text-gray-400 dark:text-gray-500 text-[11px]">· {w.definition}</span>
                             </button>
@@ -794,11 +858,11 @@ export default function ChatInterface({ user }: { user: UserProp }) {
 
                       {/* AI message actions */}
                       {!isUser && (
-                        <div className="flex items-center gap-1.5 opacity-0 hover:opacity-100 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center gap-1.5 opacity-100 transition-opacity">
                           <button
                             onClick={() => speakMessage(msg.id, msg.content)}
-                            title={speakingId === msg.id ? "Durdur" : "Dinle"}
-                            className={`p-1.5 rounded-lg transition-all text-[12px] ${
+                            title={speakingId === msg.id ? stopLabel : listenLabel}
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all text-[12px] font-semibold ${
                               speakingId === msg.id
                                 ? "bg-indigo-500 text-white"
                                 : "bg-gray-100 dark:bg-white/8 hover:bg-gray-200 dark:hover:bg-white/15 text-gray-500 dark:text-gray-400"
@@ -809,6 +873,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
                             ) : (
                               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M11 5L6 9H2v6h4l5 4V5z" /></svg>
                             )}
+                            <span>{speakingId === msg.id ? stopLabel : listenLabel}</span>
                           </button>
                           <button
                             onClick={() => copyMessage(msg.id, msg.content)}
