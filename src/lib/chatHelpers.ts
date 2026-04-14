@@ -44,7 +44,7 @@ export function buildMemoryBlock(memory: UserMemory): string {
   if (memory.recentMistakes && memory.recentMistakes.length > 0) {
     const list = memory.recentMistakes.map((c) => `  • ${c}`).join("\n");
     lines.push(
-      `- Recent grammar/spelling patterns this student has struggled with:\n${list}\n  → If the student repeats a similar mistake, warmly acknowledge it: "We've worked on this before —" and give extra encouragement alongside the correction.`
+      `- Recent grammar/spelling patterns this student has struggled with:\n${list}\n  → Use these only as background. Do not repeat any previous correction verbatim. In the correction field, correct only mistakes that appear in the student's newest message.`
     );
   }
 

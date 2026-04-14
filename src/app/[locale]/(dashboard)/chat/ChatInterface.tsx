@@ -33,6 +33,14 @@ type WordOfDay = {
 
 type VocabWord = { word: string; definition: string };
 
+type LearningNote = {
+  id: string;
+  title?: string | null;
+  content: string;
+  source?: string | null;
+  createdAt: string;
+};
+
 type Message = {
   id: string;
   role: "user" | "ai";
@@ -148,6 +156,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
   const [showComingSoon, setShowComingSoon] = useState(false);
   const [selectedTopic,  setSelectedTopic]  = useState<string | null>(null);
   const [wordOfDay,      setWordOfDay]      = useState<WordOfDay | null>(null);
+  const [notes,          setNotes]          = useState<LearningNote[]>([]);
   const [wodLoading,     setWodLoading]     = useState(true);
   const [activeTab,      setActiveTab]      = useState<"chat" | "grammar" | "vocab">("chat");
 
@@ -164,6 +173,11 @@ export default function ChatInterface({ user }: { user: UserProp }) {
   const aiLabel       = locale === "tr" ? "AI Tutor · Çevrimiçi" : "AI Tutor · Online";
   const correctionTitle = locale === "tr" ? "Gramer Düzeltmesi" : "Grammar Correction";
   const saveWordLabel = locale === "tr" ? "Kelimeye ekle" : "Save word";
+  const saveNoteLabel = locale === "tr" ? "Not kaydet" : "Save note";
+  const savedNoteLabel = locale === "tr" ? "Not kaydedildi" : "Note saved";
+  const saveNoteErrorLabel = locale === "tr" ? "Not kaydedilemedi" : "Could not save note";
+  const notesTitle = locale === "tr" ? "Kaydedilen Notlar" : "Saved Notes";
+  const noNotesLabel = locale === "tr" ? "Henüz not yok." : "No notes yet.";
   const listenLabel   = locale === "tr" ? "Dinle" : "Listen";
   const stopLabel     = locale === "tr" ? "Durdur" : "Stop";
 
@@ -203,6 +217,13 @@ export default function ChatInterface({ user }: { user: UserProp }) {
       .then((d: WordOfDay | null) => { if (d?.word) setWordOfDay(d); })
       .catch(() => {})
       .finally(() => setWodLoading(false));
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/notes", { cache: "no-store" })
+      .then((r) => r.ok ? r.json() : [])
+      .then((data: LearningNote[]) => { if (Array.isArray(data)) setNotes(data); })
+      .catch(() => {});
   }, []);
 
   // ── Cache helpers ─────────────────────────────────────────────────────────
@@ -413,6 +434,32 @@ export default function ChatInterface({ user }: { user: UserProp }) {
       if (!res.ok) throw new Error();
       toast.success(`"${word}" kelime bankasına eklendi`);
     } catch { toast.error("Kelime kaydedilemedi"); }
+  };
+
+  const saveMessageAsNote = async (msg: Message) => {
+    const sections = [
+      msg.content,
+      msg.translation ? `Translation: ${msg.translation}` : "",
+      msg.correction ? `Correction: ${msg.correction}` : "",
+    ].filter(Boolean);
+
+    try {
+      const res = await fetch("/api/notes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: msg.content.slice(0, 80),
+          content: sections.join("\n\n"),
+          source: "chat",
+        }),
+      });
+      if (!res.ok) throw new Error();
+      const note = await res.json() as LearningNote;
+      setNotes((prev) => [note, ...prev].slice(0, 20));
+      toast.success(savedNoteLabel);
+    } catch {
+      toast.error(saveNoteErrorLabel);
+    }
   };
 
   const filteredConversations = conversations.filter((c) =>
@@ -886,6 +933,14 @@ export default function ChatInterface({ user }: { user: UserProp }) {
                               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
                             )}
                           </button>
+                          <button
+                            onClick={() => saveMessageAsNote(msg)}
+                            title={saveNoteLabel}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gray-100 dark:bg-white/8 hover:bg-gray-200 dark:hover:bg-white/15 text-gray-500 dark:text-gray-400 transition-all text-[12px] font-semibold"
+                          >
+                            <span>+</span>
+                            <span>{saveNoteLabel}</span>
+                          </button>
                         </div>
                       )}
                     </div>
@@ -1089,6 +1144,23 @@ export default function ChatInterface({ user }: { user: UserProp }) {
               >
                 Tekrar dene
               </button>
+            </div>
+          )}
+        </div>
+
+        {/* Saved Notes */}
+        <div className="rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 p-4">
+          <p className="text-[9px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3">{notesTitle}</p>
+          {notes.length === 0 ? (
+            <p className="text-[12px] text-gray-400 dark:text-gray-500">{noNotesLabel}</p>
+          ) : (
+            <div className="space-y-2">
+              {notes.slice(0, 5).map((note) => (
+                <div key={note.id} className="rounded-xl bg-white dark:bg-white/5 border border-gray-200 dark:border-gray-800 p-3">
+                  {note.title && <p className="text-[12px] font-semibold text-gray-800 dark:text-gray-200 line-clamp-2">{note.title}</p>}
+                  <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-1 line-clamp-3 whitespace-pre-wrap">{note.content}</p>
+                </div>
+              ))}
             </div>
           )}
         </div>

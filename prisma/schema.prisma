@@ -29,6 +29,7 @@ model User {
   conversations      Conversation[]
   posts              Post[]
   vocabulary         VocabularyWord[]
+  learningNotes      LearningNote[]
   createdAt          DateTime         @default(now())
   updatedAt          DateTime         @updatedAt
   accounts           Account[]
@@ -52,6 +53,18 @@ model VocabularyWord {
   nextReviewAt   DateTime?
 
   @@index([userId])
+}
+
+model LearningNote {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String?
+  content   String   @db.Text
+  source    String?
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
 }
 
 model Conversation {

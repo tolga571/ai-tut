@@ -10,6 +10,7 @@ import {
   buildMemoryBlock,
   getTopicInstruction,
   normalizeLearnedWords,
+  stripCorrectionEmoji,
 } from "@/lib/chatHelpers";
 import type { UserMemory } from "@/lib/chatHelpers";
 
@@ -99,6 +100,7 @@ CORRECTION RULES:
 - Only correct clear grammar or spelling mistakes, not stylistic choices
 - Bold the error with ✏️ marker in the correction field
 - Explain the rule briefly and encouragingly in ${nativeLang}
+- The correction field must only discuss mistakes in the student's newest message. Never repeat a previous correction or recap older grammar feedback unless the exact same mistake appears again in the newest message.
 - If no mistake, set "correction" to "" (empty string)
 
 WORDS RULES:
@@ -213,7 +215,7 @@ export async function POST(req: Request) {
       interestArea: userProfile?.interestArea,
       knownWords: recentVocab.map((v) => v.word),
       recentMistakes: recentMistakeMessages
-        .map((m) => m.correction?.replace(/^✏️\s*/, "").trim())
+        .map((m) => stripCorrectionEmoji(m.correction))
         .filter((c): c is string => Boolean(c)),
     };
 
@@ -227,7 +229,7 @@ export async function POST(req: Request) {
               : JSON.stringify({
                   content: msg.content,
                   translation: msg.translation,
-                  correction: msg.correction ?? "",
+                  correction: "",
                 }),
         },
       ],
@@ -250,7 +252,7 @@ export async function POST(req: Request) {
           ),
           generationConfig: { responseMimeType: "application/json" },
         });
-        const chat = model.startChat({ history: chatHistory.slice(0, -1) });
+        const chat = model.startChat({ history: chatHistory });
         const aiResult = await chat.sendMessage(message);
         aiResponseText = aiResult.response.text();
         if (aiResponseText) break;
@@ -285,18 +287,7 @@ export async function POST(req: Request) {
         const conv = await tx.conversation.create({
           data: {
             userId,
-            ...(topicId
-              ? {
-                  topicId,
-                  topicLabel:
-                    (topicId === "cafe" && "Kafede sipariş") ||
-                    (topicId === "travel-hotel" && "Otel resepsiyonu") ||
-                    (topicId === "job-interview" && "İş görüşmesi") ||
-                    (topicId === "friends" && "Günlük sohbet") ||
-                    (topicId === "small-talk" && "Small talk") ||
-                    topicId,
-                }
-              : {}),
+            ...(topicId ? { topicId } : {}),
           },
         });
         persistedConvId = conv.id;

@@ -18,10 +18,18 @@ export const registerSchema = z.object({
   }
 });
 
+const VALID_TOPIC_IDS = ["cafe", "travel-hotel", "job-interview", "friends", "small-talk"] as const;
+
 export const chatMessageSchema = z.object({
   message:        z.string().min(1).max(2000).trim(),
-  conversationId: z.string().optional(),
-  topicId:        z.string().optional(),
+  conversationId: z.string().min(1).max(200).optional(),
+  topicId:        z.enum(VALID_TOPIC_IDS).optional(),
+});
+
+export const noteSchema = z.object({
+  title:   z.string().min(1).max(120).trim().optional(),
+  content: z.string().min(1).max(5000).trim(),
+  source:  z.string().min(1).max(50).trim().optional(),
 });
 
 export const profileSchema = z.object({
