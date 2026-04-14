@@ -900,7 +900,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
                               <button
                                 onClick={() => saveCorrectionAsNote(correction)}
                                 title={saveNoteLabel}
-                                className="inline-flex flex-shrink-0 items-center gap-1 px-2 py-1 rounded-lg bg-white/70 dark:bg-white/8 hover:bg-white dark:hover:bg-white/15 text-red-500 dark:text-red-300 border border-red-200/70 dark:border-red-400/20 transition-all text-[11px] font-semibold"
+                                className="inline-flex flex-shrink-0 items-center gap-1 px-2 py-1 rounded-lg bg-white/70 dark:bg-white/15 hover:bg-white dark:hover:bg-white/14 text-red-500 dark:text-red-300 border border-red-200/70 dark:border-red-400/20 transition-all text-[11px] font-semibold"
                               >
                                 <span>+</span>
                                 <span>{saveNoteLabel}</span>
