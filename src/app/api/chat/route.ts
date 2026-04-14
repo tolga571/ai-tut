@@ -23,6 +23,45 @@ const CEFR_GUIDE: Record<string, string> = {
   C2: "near-native mastery, any register, subtle nuance, complex structures",
 };
 
+type TutorCorrection = {
+  original: string;
+  corrected: string;
+  rule: string;
+};
+
+function normalizeTutorCorrections(raw: unknown): TutorCorrection[] {
+  if (!Array.isArray(raw)) return [];
+
+  return raw
+    .map((item) => {
+      if (!item || typeof item !== "object") return null;
+      const correction = item as Record<string, unknown>;
+      const original = correction.original;
+      const corrected = correction.corrected;
+      const rule = correction.rule;
+
+      if (typeof original !== "string" || typeof corrected !== "string") return null;
+
+      return {
+        original: original.trim(),
+        corrected: corrected.trim(),
+        rule: typeof rule === "string" ? rule.trim() : "",
+      };
+    })
+    .filter((item): item is TutorCorrection => Boolean(item?.original && item.corrected))
+    .slice(0, 4);
+}
+
+function serializeCorrections(corrections: TutorCorrection[], fallback: string): string {
+  if (corrections.length === 0) return fallback;
+  return corrections
+    .map((item) => {
+      const rule = item.rule ? ` - ${item.rule}` : "";
+      return `${item.original} -> ${item.corrected}${rule}`;
+    })
+    .join("\n");
+}
+
 
 function buildSystemPrompt(
   targetLang: string,
@@ -47,7 +86,7 @@ ${topicBlock}${memoryBlock}
 
 PERSONALITY:
 - Be warm, friendly, and motivating — like a patient native-speaker friend
-- Show genuine curiosity: ask one engaging follow-up question at the end of EVERY response
+- Show genuine curiosity: ask one engaging follow-up question when the student is doing open conversation practice
 - Celebrate effort and small wins ("Great try!", "Nice sentence!")
 - Use examples and relatable contexts to make language stick
 - If the student seems stuck, offer a hint or rephrase
@@ -65,7 +104,10 @@ You MUST return ONLY a valid JSON object. No markdown, no extra text:
 {
   "content": "<your reply entirely in ${targetLang}>",
   "translation": "<exact ${nativeLang} translation of content>",
-  "correction": "<if the student made a grammar/spelling mistake: write ONLY the correction here in this format: ✏️ [original mistake] → [corrected form] — [short grammar rule explanation in ${nativeLang}]. Leave EMPTY STRING if no mistake.>",
+  "correction": "<legacy plain-text summary of corrections, or empty string if no mistake>",
+  "corrections": [
+    { "original": "<exact mistake from the student's newest message>", "corrected": "<corrected form>", "rule": "<short grammar rule explanation in ${nativeLang}>" }
+  ],
   "words": [
     { "word": "<key ${targetLang} vocabulary word from your reply>", "definition": "<brief definition in ${nativeLang}>" }
   ]
@@ -93,15 +135,17 @@ When refusing, respond warmly in the JSON format below with "content" written in
 CONTENT RULES:
 - Write the full reply in ${targetLang} at CEFR ${cefrLevel} level
 - Adapt reply length to the complexity of the question; provide thorough, comprehensive explanations whenever the topic benefits from more detail
-- ALWAYS end with one curious follow-up question in ${targetLang} (skip only when refusing an off-topic request)
+- Usually end with one curious follow-up question in ${targetLang} during open conversation practice
+- For direct requests such as translate this, correct this, explain this grammar point, or define this word, give the requested help first and make the follow-up question optional
 - Never translate inside "content" — the "translation" field handles that
 
 CORRECTION RULES:
 - Only correct clear grammar or spelling mistakes, not stylistic choices
-- Bold the error with ✏️ marker in the correction field
-- Explain the rule briefly and encouragingly in ${nativeLang}
-- The correction field must only discuss mistakes in the student's newest message. Never repeat a previous correction or recap older grammar feedback unless the exact same mistake appears again in the newest message.
-- If no mistake, set "correction" to "" (empty string)
+- Put each correction in the "corrections" array as structured data with original, corrected, and rule
+- Explain each rule briefly and encouragingly in ${nativeLang}
+- Corrections must only discuss mistakes in the student's newest message. Never repeat a previous correction or recap older grammar feedback unless the exact same mistake appears again in the newest message.
+- If no mistake, set "correction" to "" and "corrections" to []
+- Keep "correction" as a compact legacy summary matching the corrections array
 
 WORDS RULES:
 - Extract 2-4 useful vocabulary words directly from your "content" reply that are worth learning
@@ -230,6 +274,7 @@ export async function POST(req: Request) {
                   content: msg.content,
                   translation: msg.translation,
                   correction: "",
+                  corrections: [],
                 }),
         },
       ],
@@ -266,17 +311,23 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "AI response unavailable, please try again" }, { status: 502 });
     }
 
-    let parsedResult: { content?: unknown; translation?: unknown; correction?: unknown; words?: unknown };
+    let parsedResult: { content?: unknown; translation?: unknown; correction?: unknown; corrections?: unknown; words?: unknown };
     try {
       parsedResult = JSON.parse(aiResponseText);
     } catch {
-      parsedResult = { content: aiResponseText, translation: "", correction: "", words: [] };
+      parsedResult = { content: aiResponseText, translation: "", correction: "", corrections: [], words: [] };
     }
 
+    const normalizedContent = typeof parsedResult.content === "string" ? parsedResult.content : aiResponseText;
+    const normalizedTranslation = typeof parsedResult.translation === "string" ? parsedResult.translation : "";
+    const legacyCorrection = typeof parsedResult.correction === "string" ? parsedResult.correction : "";
+    const corrections = normalizeTutorCorrections(parsedResult.corrections);
+
     const normalizedResult = {
-      content: typeof parsedResult.content === "string" ? parsedResult.content : aiResponseText,
-      translation: typeof parsedResult.translation === "string" ? parsedResult.translation : "",
-      correction: typeof parsedResult.correction === "string" ? parsedResult.correction : "",
+      content: normalizedContent,
+      translation: normalizedTranslation,
+      correction: serializeCorrections(corrections, legacyCorrection),
+      corrections,
       words: normalizeLearnedWords(parsedResult.words),
     };
 
@@ -322,7 +373,7 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({
-      message: { ...persisted.savedAiMsg, words: normalizedResult.words },
+      message: { ...persisted.savedAiMsg, corrections: normalizedResult.corrections, words: normalizedResult.words },
       conversationId: persisted.conversationId,
       xp: persisted.updatedUser.xp,
       xpAwarded: 10,

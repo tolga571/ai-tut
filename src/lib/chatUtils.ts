@@ -13,16 +13,17 @@ export function parseCorrection(
   text: string
 ): { original: string; corrected: string; rule: string } | null {
   const cleaned = text.replace(/^✏️\s*/, "").trim();
-  const arrowIdx = cleaned.indexOf("→");
+  const arrow = cleaned.includes("→") ? "→" : "->";
+  const arrowIdx = cleaned.indexOf(arrow);
   if (arrowIdx === -1) return null;
   const original = cleaned.slice(0, arrowIdx).trim();
-  const rest = cleaned.slice(arrowIdx + 1).trim();
-  const dashIdx = rest.indexOf("—");
+  const rest = cleaned.slice(arrowIdx + arrow.length).trim();
+  const dashIdx = rest.includes("—") ? rest.indexOf("—") : rest.indexOf(" - ");
   if (dashIdx === -1) return { original, corrected: rest, rule: "" };
   return {
     original,
     corrected: rest.slice(0, dashIdx).trim(),
-    rule: rest.slice(dashIdx + 1).trim(),
+    rule: rest.slice(dashIdx + (rest[dashIdx] === "—" ? 1 : 3)).trim(),
   };
 }
 

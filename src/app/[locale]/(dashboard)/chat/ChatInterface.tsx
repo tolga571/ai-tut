@@ -33,6 +33,8 @@ type WordOfDay = {
 
 type VocabWord = { word: string; definition: string };
 
+type TutorCorrection = { original: string; corrected: string; rule: string };
+
 type LearningNote = {
   id: string;
   title?: string | null;
@@ -47,6 +49,7 @@ type Message = {
   content: string;
   translation?: string;
   correction?: string;
+  corrections?: TutorCorrection[];
   createdAt?: string;
   words?: VocabWord[];
 };
@@ -75,6 +78,7 @@ type StructuredAiPayload = {
   content?: unknown;
   translation?: unknown;
   correction?: unknown;
+  corrections?: unknown;
   words?: unknown;
 };
 
@@ -107,6 +111,22 @@ function normalizeWords(value: unknown): VocabWord[] {
     .filter((item): item is VocabWord => Boolean(item));
 }
 
+function normalizeCorrections(value: unknown): TutorCorrection[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((item) => {
+      if (!item || typeof item !== "object") return null;
+      const correction = item as { original?: unknown; corrected?: unknown; rule?: unknown };
+      if (typeof correction.original !== "string" || typeof correction.corrected !== "string") return null;
+      return {
+        original: correction.original.trim(),
+        corrected: correction.corrected.trim(),
+        rule: typeof correction.rule === "string" ? correction.rule.trim() : "",
+      };
+    })
+    .filter((item): item is TutorCorrection => Boolean(item?.original && item.corrected));
+}
+
 function normalizeMessage(message: Message): Message {
   if (typeof message.content !== "string") return message;
 
@@ -118,6 +138,7 @@ function normalizeMessage(message: Message): Message {
     content: payload.content,
     translation: message.translation || (typeof payload.translation === "string" ? payload.translation : undefined),
     correction: message.correction || (typeof payload.correction === "string" ? payload.correction : undefined),
+    corrections: message.corrections?.length ? message.corrections : normalizeCorrections(payload.corrections),
     words: message.words?.length ? message.words : normalizeWords(payload.words),
   };
 }
@@ -462,7 +483,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
     }
   };
 
-  const saveCorrectionAsNote = async (correction: NonNullable<ReturnType<typeof parseCorrection>>) => {
+  const saveCorrectionAsNote = async (correction: TutorCorrection) => {
     const correctionLine = `${correction.original} -> ${correction.corrected}`;
     const sections = [
       correctionLine,
@@ -839,12 +860,14 @@ export default function ChatInterface({ user }: { user: UserProp }) {
           ) : (
             <div className="max-w-3xl mx-auto space-y-5">
               {messages.map((msg) => {
-                const corrections = msg.correction
-                  ? msg.correction
-                    .split(/\n+/)
-                    .map((item) => parseCorrection(item))
-                    .filter((item): item is NonNullable<ReturnType<typeof parseCorrection>> => Boolean(item))
-                  : [];
+                const corrections = msg.corrections?.length
+                  ? msg.corrections
+                  : msg.correction
+                    ? msg.correction
+                      .split(/\n+/)
+                      .map((item) => parseCorrection(item))
+                      .filter((item): item is TutorCorrection => Boolean(item))
+                    : [];
                 const isUser     = msg.role === "user";
 
                 return (
