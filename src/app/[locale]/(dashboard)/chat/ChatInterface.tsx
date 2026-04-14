@@ -462,6 +462,32 @@ export default function ChatInterface({ user }: { user: UserProp }) {
     }
   };
 
+  const saveCorrectionAsNote = async (correction: NonNullable<ReturnType<typeof parseCorrection>>) => {
+    const correctionLine = `${correction.original} -> ${correction.corrected}`;
+    const sections = [
+      correctionLine,
+      correction.rule ? `Rule: ${correction.rule}` : "",
+    ].filter(Boolean);
+
+    try {
+      const res = await fetch("/api/notes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: correctionLine.slice(0, 80),
+          content: sections.join("\n\n"),
+          source: "grammar",
+        }),
+      });
+      if (!res.ok) throw new Error();
+      const note = await res.json() as LearningNote;
+      setNotes((prev) => [note, ...prev].slice(0, 20));
+      toast.success(savedNoteLabel);
+    } catch {
+      toast.error(saveNoteErrorLabel);
+    }
+  };
+
   const filteredConversations = conversations.filter((c) =>
     !searchQuery.trim() || getConvTitle(c).toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -868,8 +894,18 @@ export default function ChatInterface({ user }: { user: UserProp }) {
                           style={{ background: "rgba(248,113,113,0.07)", border: "1px solid rgba(248,113,113,0.2)" }}
                         >
                           <span className="text-sm flex-shrink-0 mt-px">✏️</span>
-                          <div className="min-w-0">
-                            <p className="font-semibold text-red-500 dark:text-red-400 text-[11px] uppercase tracking-wider mb-1">{correctionTitle}</p>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-start justify-between gap-3 mb-1">
+                              <p className="font-semibold text-red-500 dark:text-red-400 text-[11px] uppercase tracking-wider">{correctionTitle}</p>
+                              <button
+                                onClick={() => saveCorrectionAsNote(correction)}
+                                title={saveNoteLabel}
+                                className="inline-flex flex-shrink-0 items-center gap-1 px-2 py-1 rounded-lg bg-white/70 dark:bg-white/8 hover:bg-white dark:hover:bg-white/15 text-red-500 dark:text-red-300 border border-red-200/70 dark:border-red-400/20 transition-all text-[11px] font-semibold"
+                              >
+                                <span>+</span>
+                                <span>{saveNoteLabel}</span>
+                              </button>
+                            </div>
                             <div className="flex items-center gap-2 flex-wrap">
                               <span className="line-through text-gray-400 dark:text-gray-500">{correction.original}</span>
                               <span className="text-gray-400">→</span>
