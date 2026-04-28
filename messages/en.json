@@ -154,7 +154,29 @@
     "suggestion1": "How do I introduce myself?",
     "suggestion2": "Help me order food at a restaurant",
     "suggestion3": "Correct my grammar as I practice",
-    "suggestion4": "Let's have a casual conversation"
+    "suggestion4": "Let's have a casual conversation",
+    "tabs": {
+      "chat": "Chat",
+      "grammar": "Grammar",
+      "vocab": "Vocab"
+    },
+    "actions": {
+      "copy": "Copy",
+      "deleteConversation": "Delete conversation",
+      "openVocabBank": "Open Vocabulary Bank"
+    },
+    "features": {
+      "autoTranslate": "Automatic Translation",
+      "grammarCoach": "Grammar Coach"
+    },
+    "dailyGoal": {
+      "title": "Daily Goal",
+      "target": "{count} message target",
+      "sent": "{count} / {goal} messages sent",
+      "completed": "Goal completed!",
+      "remaining": "{count} messages left",
+      "statsLoadError": "Could not load today's stats."
+    }
   },
   "profile": {
     "backToChat": "Back to Chat",
