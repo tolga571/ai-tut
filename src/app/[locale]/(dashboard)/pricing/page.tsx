@@ -94,7 +94,7 @@ export default function PricingPage() {
     // router.replace yerine hard navigation — update() Set-Cookie'nin
     // middleware tarafından okunmasını garantilemek için tam sayfa yüklemesi yapılır.
     window.location.href = `/${locale}/dashboard`;
-  }, [update, router, locale, t]);
+  }, [update, locale, t]);
 
   useEffect(() => {
     if (searchParams.get("checkout") === "success") {
