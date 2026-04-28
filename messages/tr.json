@@ -149,7 +149,29 @@
     "suggestion1": "Kendimi nasıl tanıtırım?",
     "suggestion2": "Restoranda yemek sipariş etmeme yardım et",
     "suggestion3": "Pratik yaparken dilbilgimi düzelt",
-    "suggestion4": "Günlük bir sohbet yapalım"
+    "suggestion4": "Günlük bir sohbet yapalım",
+    "tabs": {
+      "chat": "Sohbet",
+      "grammar": "Gramer",
+      "vocab": "Kelime"
+    },
+    "actions": {
+      "copy": "Kopyala",
+      "deleteConversation": "Konuşmayı sil",
+      "openVocabBank": "Kelime Bankasını Aç"
+    },
+    "features": {
+      "autoTranslate": "Otomatik Çeviri",
+      "grammarCoach": "Gramer Koçu"
+    },
+    "dailyGoal": {
+      "title": "Günlük Hedef",
+      "target": "{count} mesaj hedefi",
+      "sent": "{count} / {goal} mesaj gönderildi",
+      "completed": "Hedef tamamlandı!",
+      "remaining": "{count} mesaj kaldı",
+      "statsLoadError": "Bugün için istatistik yüklenemedi."
+    }
   },
   "profile": {
     "backToChat": "Sohbete Dön",

@@ -180,6 +180,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
   const [notes,          setNotes]          = useState<LearningNote[]>([]);
   const [wodLoading,     setWodLoading]     = useState(true);
   const [activeTab,      setActiveTab]      = useState<"chat" | "grammar" | "vocab">("chat");
+  const [dailyMsgCount,  setDailyMsgCount]  = useState<number | null>(null);
 
   const endRef        = useRef<HTMLDivElement>(null);
   const inputRef      = useRef<HTMLTextAreaElement>(null);
@@ -187,9 +188,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
   const searchParams  = useSearchParams();
   const convFromUrl   = searchParams?.get("conv");
 
-  // Daily messages count (user messages in loaded messages)
-  const dailyMsgCount = messages.filter((m) => m.role === "user").length;
-  const goalPct       = Math.min(Math.round((dailyMsgCount / DAILY_GOAL) * 100), 100);
+  const goalPct       = Math.min(Math.round(((dailyMsgCount ?? 0) / DAILY_GOAL) * 100), 100);
   const youLabel      = locale === "tr" ? "Sen" : "You";
   const aiLabel       = locale === "tr" ? "AI Tutor · Çevrimiçi" : "AI Tutor · Online";
   const correctionTitle = locale === "tr" ? "Gramer Düzeltmesi" : "Grammar Correction";
@@ -201,6 +200,11 @@ export default function ChatInterface({ user }: { user: UserProp }) {
   const noNotesLabel = locale === "tr" ? "Henüz not yok." : "No notes yet.";
   const listenLabel   = locale === "tr" ? "Dinle" : "Listen";
   const stopLabel     = locale === "tr" ? "Durdur" : "Stop";
+  const copyLabel     = t("actions.copy");
+  const copySuccessLabel = locale === "tr" ? "Mesaj kopyalandı" : "Message copied";
+  const copyErrorLabel = locale === "tr" ? "Mesaj kopyalanamadı" : "Could not copy message";
+  const ttsUnsupportedLabel = locale === "tr" ? "Bu tarayıcıda sesli okuma desteklenmiyor" : "Text-to-speech is not supported in this browser";
+  const ttsErrorLabel = locale === "tr" ? "Sesli okuma başlatılamadı" : "Could not start text-to-speech";
 
   // ── Effects ───────────────────────────────────────────────────────────────
 
@@ -219,6 +223,14 @@ export default function ChatInterface({ user }: { user: UserProp }) {
     if (showComingSoon) document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showComingSoon]);
+
+  useEffect(() => {
+    return () => {
+      if (typeof window !== "undefined" && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const check = () => {
@@ -246,6 +258,25 @@ export default function ChatInterface({ user }: { user: UserProp }) {
       .then((data: LearningNote[]) => { if (Array.isArray(data)) setNotes(data); })
       .catch(() => {});
   }, []);
+
+  const fetchDailyMessageCount = useCallback(async () => {
+    try {
+      const res = await fetch("/api/user/progress", { cache: "no-store" });
+      if (!res.ok) throw new Error("daily progress unavailable");
+      const data = await res.json() as {
+        days?: Array<{ date: string; messages: number; words: number }>;
+      };
+      const today = new Date().toISOString().slice(0, 10);
+      const todayStats = data.days?.find((d) => d.date === today);
+      setDailyMsgCount(typeof todayStats?.messages === "number" ? todayStats.messages : 0);
+    } catch {
+      setDailyMsgCount(null);
+    }
+  }, []);
+
+  useEffect(() => {
+    void fetchDailyMessageCount();
+  }, [fetchDailyMessageCount]);
 
   // ── Cache helpers ─────────────────────────────────────────────────────────
 
@@ -290,6 +321,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
       if (res.ok) {
         const data = await res.json();
         setActiveConvId(data.id || null);
+        setSelectedTopic(typeof data.topicId === "string" ? data.topicId : null);
         setMessages((data.messages || []).map((message: Message) => normalizeMessage(message)));
       }
     } catch { toast.error(t("loadError")); }
@@ -332,8 +364,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
     if (isMobile) setSidebarOpen(false);
   };
 
-  const handleDeleteConversation = async (e: React.MouseEvent, convId: string) => {
-    e.stopPropagation();
+  const handleDeleteConversation = async (convId: string) => {
     if (!confirm(t("deleteConfirm"))) return;
     setDeletingId(convId);
     try {
@@ -393,6 +424,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
       }
       setMessages((prev) => [...prev, normalizeMessage(data.message as Message)]);
       if (typeof data.xp === "number") setUserXp(data.xp);
+      void fetchDailyMessageCount();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : t("sendError"));
       setMessages((prev) => prev.slice(0, -1));
@@ -402,34 +434,51 @@ export default function ChatInterface({ user }: { user: UserProp }) {
   // ── Copy & TTS ────────────────────────────────────────────────────────────
 
   const copyMessage = async (id: string, text: string) => {
-    await navigator.clipboard.writeText(text);
-    setCopiedId(id);
-    setTimeout(() => setCopiedId(null), 2000);
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedId(id);
+      toast.success(copySuccessLabel);
+      setTimeout(() => setCopiedId(null), 2000);
+    } catch {
+      toast.error(copyErrorLabel);
+    }
   };
 
   const speakMessage = (id: string, text: string) => {
-    if (typeof window === "undefined" || !window.speechSynthesis) return;
+    if (typeof window === "undefined" || !window.speechSynthesis) {
+      toast.error(ttsUnsupportedLabel);
+      return;
+    }
     if (speakingId === id) { window.speechSynthesis.cancel(); setSpeakingId(null); return; }
-    window.speechSynthesis.cancel();
-    const chunks = splitTextForSpeechPauses(text);
-    const lang   = toSpeechLang(targetLang);
-    const voice  = pickVoice(lang);
-    const utts   = chunks.map((chunk) => {
-      const u = new SpeechSynthesisUtterance(chunk);
-      u.lang = lang; u.rate = WARM_TTS.rate; u.pitch = WARM_TTS.pitch; u.volume = 1;
-      if (voice) u.voice = voice;
-      return u;
-    });
-    setSpeakingId(id);
-    let idx = 0;
-    const next = () => {
-      if (idx >= utts.length) { setSpeakingId(null); return; }
-      const u = utts[idx++];
-      u.onend  = () => { if (idx >= utts.length) { setSpeakingId(null); return; } window.setTimeout(next, WARM_TTS.interChunkMs); };
-      u.onerror = () => setSpeakingId(null);
-      window.speechSynthesis.speak(u);
-    };
-    next();
+
+    try {
+      window.speechSynthesis.cancel();
+      const chunks = splitTextForSpeechPauses(text);
+      const lang   = toSpeechLang(targetLang);
+      const voice  = pickVoice(lang);
+      const utts   = chunks.map((chunk) => {
+        const u = new SpeechSynthesisUtterance(chunk);
+        u.lang = lang; u.rate = WARM_TTS.rate; u.pitch = WARM_TTS.pitch; u.volume = 1;
+        if (voice) u.voice = voice;
+        return u;
+      });
+      setSpeakingId(id);
+      let idx = 0;
+      const next = () => {
+        if (idx >= utts.length) { setSpeakingId(null); return; }
+        const u = utts[idx++];
+        u.onend  = () => { if (idx >= utts.length) { setSpeakingId(null); return; } window.setTimeout(next, WARM_TTS.interChunkMs); };
+        u.onerror = () => {
+          setSpeakingId(null);
+          toast.error(ttsErrorLabel);
+        };
+        window.speechSynthesis.speak(u);
+      };
+      next();
+    } catch {
+      setSpeakingId(null);
+      toast.error(ttsErrorLabel);
+    }
   };
 
   // ── Utilities ─────────────────────────────────────────────────────────────
@@ -600,34 +649,38 @@ export default function ChatInterface({ user }: { user: UserProp }) {
           ) : (
             <div className="space-y-0.5">
               {filteredConversations.map((conv) => (
-                <button
-                  type="button"
+                <div
                   key={conv.id}
-                  onClick={() => handleSelectConversation(conv.id)}
-                  className={`group w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl transition-all text-left ${
+                  className={`group w-full flex items-center gap-2.5 px-2.5 py-2 rounded-xl transition-all ${
                     activeConvId === conv.id
                       ? "bg-indigo-500/10 dark:bg-indigo-500/15 border border-indigo-500/20"
                       : "border border-transparent hover:bg-gray-100 dark:hover:bg-white/5"
                   }`}
                 >
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm flex-shrink-0 ${
-                    activeConvId === conv.id
-                      ? "bg-gradient-to-br from-indigo-500 to-purple-500 text-white"
-                      : "bg-gray-100 dark:bg-white/8"
-                  }`}>
-                    {conv.topicId ? (TOPIC_ICONS[conv.topicId] ?? "💬") : "💬"}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[13px] font-medium truncate leading-tight text-gray-900 dark:text-gray-100">{getConvTitle(conv)}</p>
-                    <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{getRelativeTime(conv.updatedAt, locale)}</p>
-                  </div>
-                  <span
-                    role="button"
-                    tabIndex={0}
-                    onClick={(e) => handleDeleteConversation(e as unknown as React.MouseEvent, conv.id)}
-                    onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handleDeleteConversation(e as unknown as React.MouseEvent, conv.id); }}
-                    aria-label="Konuşmayı sil"
-                    className={`opacity-0 group-hover:opacity-100 p-1 rounded-md hover:bg-red-500/15 text-gray-400 hover:text-red-400 transition-all flex-shrink-0 ${deletingId === conv.id ? "opacity-30 pointer-events-none" : ""}`}
+                  <button
+                    type="button"
+                    onClick={() => handleSelectConversation(conv.id)}
+                    aria-current={activeConvId === conv.id ? "true" : undefined}
+                    className="flex min-w-0 flex-1 items-center gap-2.5 text-left"
+                  >
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm flex-shrink-0 ${
+                      activeConvId === conv.id
+                        ? "bg-gradient-to-br from-indigo-500 to-purple-500 text-white"
+                        : "bg-gray-100 dark:bg-white/8"
+                    }`}>
+                      {conv.topicId ? (TOPIC_ICONS[conv.topicId] ?? "💬") : "💬"}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[13px] font-medium truncate leading-tight text-gray-900 dark:text-gray-100">{getConvTitle(conv)}</p>
+                      <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{getRelativeTime(conv.updatedAt, locale)}</p>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteConversation(conv.id)}
+                    aria-label={t("actions.deleteConversation")}
+                    disabled={deletingId === conv.id}
+                    className={`p-1 rounded-md hover:bg-red-500/15 text-gray-400 hover:text-red-400 transition-all flex-shrink-0 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 ${deletingId === conv.id ? "opacity-30 pointer-events-none" : ""}`}
                   >
                     {deletingId === conv.id ? (
                       <div className="w-3 h-3 border-2 border-red-400/40 border-t-red-400 rounded-full animate-spin" />
@@ -636,8 +689,8 @@ export default function ChatInterface({ user }: { user: UserProp }) {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                       </svg>
                     )}
-                  </span>
-                </button>
+                  </button>
+                </div>
               ))}
             </div>
           )}
@@ -646,9 +699,9 @@ export default function ChatInterface({ user }: { user: UserProp }) {
         {/* Nav links */}
         <nav className="px-2 pt-2 border-t border-gray-200 dark:border-gray-800">
           {[
-            { href: "/dashboard", icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6", label: "Dashboard" },
-            { href: "/vocabulary", icon: "M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253", label: "Kelime Bankası" },
-            { href: "/progress", icon: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z", label: "İlerleme" },
+            { href: "/dashboard", icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6", label: tNav("dashboard") },
+            { href: "/vocabulary", icon: "M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253", label: tNav("vocabulary") },
+            { href: "/progress", icon: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z", label: tNav("progress") },
           ].map(({ href, icon, label }) => (
             <Link
               key={href}
@@ -722,9 +775,9 @@ export default function ChatInterface({ user }: { user: UserProp }) {
             style={{ background: isDark ? "rgba(255,255,255,0.05)" : "#f3f4f6" }}
           >
             {([
-              { id: "chat",    label: "💬 Sohbet" },
-              { id: "grammar", label: "📖 Gramer" },
-              { id: "vocab",   label: "🔤 Vocab"  },
+              { id: "chat",    label: `💬 ${t("tabs.chat")}` },
+              { id: "grammar", label: `📖 ${t("tabs.grammar")}` },
+              { id: "vocab",   label: `🔤 ${t("tabs.vocab")}` },
             ] as const).map((tab) => (
               <button
                 key={tab.id}
@@ -829,7 +882,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
               href="/vocabulary"
               className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-[13px] font-semibold hover:opacity-90 transition-all"
             >
-              Kelime Bankasını Aç
+              {t("actions.openVocabBank")}
             </Link>
           </div>
         )}
@@ -983,7 +1036,7 @@ export default function ChatInterface({ user }: { user: UserProp }) {
                           </button>
                           <button
                             onClick={() => copyMessage(msg.id, msg.content)}
-                            title="Kopyala"
+                            title={copyLabel}
                             className="p-1.5 rounded-lg bg-gray-100 dark:bg-white/8 hover:bg-gray-200 dark:hover:bg-white/15 text-gray-500 dark:text-gray-400 transition-all"
                           >
                             {copiedId === msg.id ? (
@@ -1124,11 +1177,11 @@ export default function ChatInterface({ user }: { user: UserProp }) {
           <div className="flex items-center gap-4 pt-2 px-1">
             <div className="flex items-center gap-1.5 text-[11px] text-gray-400 dark:text-gray-500">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />
-              Otomatik Çeviri
+              {t("features.autoTranslate")}
             </div>
             <div className="flex items-center gap-1.5 text-[11px] text-gray-400 dark:text-gray-500">
               <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 inline-block" />
-              Gramer Koçu
+              {t("features.grammarCoach")}
             </div>
             {selectedTopic && (
               <div className="flex items-center gap-1.5 text-[11px] text-indigo-400">
@@ -1254,9 +1307,9 @@ export default function ChatInterface({ user }: { user: UserProp }) {
 
         {/* Today's Goal */}
         <div className="rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800 p-4">
-          <p className="text-[9px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3">Günlük Hedef</p>
+          <p className="text-[9px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3">{t("dailyGoal.title")}</p>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[13px] font-semibold text-gray-900 dark:text-white">{DAILY_GOAL} mesaj hedefi</span>
+            <span className="text-[13px] font-semibold text-gray-900 dark:text-white">{t("dailyGoal.target", { count: DAILY_GOAL })}</span>
             <span className="text-[18px] font-black text-indigo-500">{goalPct}%</span>
           </div>
           <div className="h-2 bg-gray-200 dark:bg-white/8 rounded-full overflow-hidden">
@@ -1266,8 +1319,9 @@ export default function ChatInterface({ user }: { user: UserProp }) {
             />
           </div>
           <p className="text-[11.5px] text-gray-400 dark:text-gray-500 mt-2">
-            {dailyMsgCount} / {DAILY_GOAL} mesaj gönderildi
-            {dailyMsgCount >= DAILY_GOAL ? " 🎉 Hedef tamamlandı!" : ` — ${DAILY_GOAL - dailyMsgCount} mesaj kaldı`}
+            {dailyMsgCount === null
+              ? t("dailyGoal.statsLoadError")
+              : `${t("dailyGoal.sent", { count: dailyMsgCount, goal: DAILY_GOAL })}${dailyMsgCount >= DAILY_GOAL ? ` 🎉 ${t("dailyGoal.completed")}` : ` — ${t("dailyGoal.remaining", { count: DAILY_GOAL - dailyMsgCount })}`}`}
           </p>
         </div>
 

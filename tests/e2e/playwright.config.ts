@@ -86,6 +86,7 @@ export default defineConfig({
         'auth.spec.ts',
         'register.spec.ts',       // R1-R4: kayıt akışı, DB doğrulama, validasyon
         'dashboard.spec.ts',
+        'chat-smoke.spec.ts',
         'vocabulary.spec.ts',
         'api-security.spec.ts',   // S1 (kimliksiz) + S3/S4 (planlı kullanıcı gerekir)
         'ai-scope.spec.ts',       // S7, S8, S9 — Gemini testleri
