@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 const LANG_TO_COUNTRY: Record<string, string> = {
   af: "za",
   ar: "sa",
@@ -57,6 +58,15 @@ export function FlagIcon({ code, className = "w-5 h-4" }: FlagIconProps) {
       className={`${className} inline-block rounded-[2px] object-cover align-middle`}
       loading="lazy"
       decoding="async"
+      onError={(e) => {
+        const target = e.currentTarget;
+        target.onerror = null;
+        target.style.display = "none";
+        const span = document.createElement("span");
+        span.textContent = "🌐";
+        span.className = "text-sm";
+        target.parentNode?.insertBefore(span, target);
+      }}
     />
   );
 }

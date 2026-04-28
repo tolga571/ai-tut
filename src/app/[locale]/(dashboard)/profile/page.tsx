@@ -32,7 +32,9 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (!user) return;
-    if (user.name && name === "") setName(user.name);
+    if (user.name) {
+      setName((prev) => (prev === "" ? user.name ?? "" : prev));
+    }
     if (user.nativeLang) setNativeLang(user.nativeLang);
     if (user.targetLang) setTargetLang(user.targetLang);
     if (user.cefrLevel) setCefrLevel(user.cefrLevel as CefrLevel);
